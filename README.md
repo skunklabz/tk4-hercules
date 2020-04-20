@@ -14,8 +14,10 @@ You will then need a 3270 terminal to connect to your local instance to port 327
 Once I get more experience with using MVS running on Hercules, I'd like to identify which directories require persistence. Right now restarting the container will cause data loss.
 
 Right now I believe the directories that probably require to be mapped are:
+```
 /tk4/conf
 /tk4/local_conf
 /tk4/log
 /tk4/pch
 /tk4/prt
+```
