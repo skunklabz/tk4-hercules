@@ -1,0 +1,8 @@
+version: "3.3"
+
+services:
+  hercules:
+    image: kgodoy/hercules-tk4
+    ports:
+      - "3270:3270"
+      - "8038:8038"
