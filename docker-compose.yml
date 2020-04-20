@@ -6,3 +6,16 @@ services:
     ports:
       - "3270:3270"
       - "8038:8038"
+    volumes:
+      - hertk4_conf:/tk4/conf
+      - hertk4_local_conf:/tk4/local_conf
+      - hertk4_log:/tk4/log
+      - hertk4_pch:/tk4/pch
+      - hertk4_prt:/tk4/prt
+
+volumes:
+  hertk4_conf:
+  hertk4_local_conf:
+  hertk4_log:
+  hertk4_pch:
+  hertk4_prt:
