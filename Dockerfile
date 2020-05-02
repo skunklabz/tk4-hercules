@@ -13,5 +13,6 @@ RUN rm -rf /tk4-/hercules/darwin && \
 FROM ubuntu:18.04
 WORKDIR /tk4-/
 COPY --from=builder /tk4-/ .
+VOLUME [ "/tk4-/conf","/tk4-/local_conf","/tk4-/local_scripts","/tk4-/prt","/tk4-/dasd" ]
 CMD ["/tk4-/mvs"]
 EXPOSE 3270 8038
