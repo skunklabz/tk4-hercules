@@ -1,7 +1,7 @@
 # Docker tk4-hercules
 ## The MVS 3.8j Tur(n)key 4- System on the Hercules Mainframe Emulator running inside a Docker container
 
-### Usage
+## Usage
 To run this on your local machine simply run:
 
 `docker run -ti -p 3270:3270 -p8038:8038 skunklabz/tk4-hercules`
