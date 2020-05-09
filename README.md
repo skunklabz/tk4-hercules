@@ -28,15 +28,19 @@ docker run -d \
 ```
 
 ### Description of persisted directories
-- /tk4/conf
+- /tk4-/conf
   - This is where the master configuration file tk4-.cnf is stored
-- /tk4/local_conf
+- /tk4-/local_conf
   - Scripts for initialization and unattended operations
-- /tk4/local_scripts
+- /tk4-/local_scripts
   - There are 10 files located here that are meant for user applied modifications and are run after Hercules initialization, when operating in manual mode or after MVS 3.8j initialization when operating in unattended mode
-- /tk4/prt
+- /tk4-/prt
   - Used for simulated line printer devices
-- /tk4/pch
+- /tk4-/pch
   - Card punch devices output stored here
-- /tk4/dasd
+- /tk4-/dasd
   - This contains all of the simulated CKD DASD volumes. Count key data or CKD is a direct-access storage device (DASD)
+- /tk4-/jcl
+  - contains the SYSGEN Job Control Files
+- /tk4-/log
+  - contains log files created during sysgen
