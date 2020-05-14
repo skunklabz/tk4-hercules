@@ -44,3 +44,7 @@ docker run -d \
   - contains the SYSGEN Job Control Files
 - /tk4-/log
   - contains log files created during sysgen
+
+## Running on Azure Cloud Container Instances
+Check out the skunklabz video on how to run this on Azure Container Instances.
+link: https://youtu.be/Y-JDRwk_wFY
