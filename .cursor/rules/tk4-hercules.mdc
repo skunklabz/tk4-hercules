@@ -1,0 +1,89 @@
+---
+description: Docker-based Hercules Mainframe Emulator with IBM MVS 3.8j - Project guidelines and domain knowledge
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# tk4-hercules Project Rules
+
+This project containerizes the Hercules mainframe emulator running IBM MVS 3.8j (Turnkey 4-). 
+Focus on educational mainframe computing, historical preservation, and Docker best practices.
+
+## Docker Best Practices
+- Use multi-stage builds to minimize image size
+- Pin base image versions for reproducibility
+- Consider security updates for base images (current: Ubuntu 18.04)
+- Use COPY instead of ADD when not extracting archives
+- Set non-root USER when possible for security
+- Use .dockerignore to exclude unnecessary files
+- Optimize layer caching by ordering commands properly
+
+## Mainframe & Heritage System Knowledge
+- MVS 3.8j is IBM's Multiple Virtual Storage operating system from 1981
+- JCL (Job Control Language) is the scripting language for MVS batch jobs
+- DASD (Direct Access Storage Device) refers to disk storage volumes
+- 3270 terminals are the standard mainframe terminal protocol
+- Hercules emulator requires specific configuration files (.cnf)
+- TK4- is a pre-configured turnkey MVS system for education
+
+## Container Architecture Guidelines
+- Maintain the 8 volume mount points for persistence:
+  - /tk4-/conf (master configuration)
+  - /tk4-/local_conf (initialization scripts)
+  - /tk4-/local_scripts (user modifications)
+  - /tk4-/prt (line printer output)
+  - /tk4-/pch (card punch output)
+  - /tk4-/dasd (disk volumes)
+  - /tk4-/jcl (job control files)
+  - /tk4-/log (system logs)
+- Expose ports 3270 (terminal) and 8038 (web console)
+- Use CMD rather than ENTRYPOINT for the /tk4-/mvs startup script
+
+## Security Considerations
+- Avoid running as root inside container when possible
+- Use specific versions rather than 'latest' tags
+- Consider security scanning for base image vulnerabilities
+- Document any security implications of exposed ports
+
+## Documentation Standards
+- Maintain clear README with usage examples
+- Document all environment variables and configuration options
+- Include troubleshooting section for common issues
+- Provide educational context about mainframe concepts
+- Keep YouTube links and external resources updated
+
+## Code Style
+- Use consistent indentation in Dockerfile (spaces preferred)
+- Group related RUN commands to reduce layers
+- Add meaningful labels (LABEL) for metadata
+- Use meaningful names for intermediate build stages
+- Comment complex operations, especially mainframe-specific setup
+
+## Educational Focus
+- Explain mainframe concepts when adding features
+- Consider backward compatibility with existing educational materials
+- Maintain simplicity for learning purposes
+- Document historical context of MVS 3.8j and System/370 architecture
+
+## Performance Optimization
+- Minimize image layers and size
+- Cache dependencies appropriately in multi-stage builds
+- Consider init system if running multiple processes
+- Optimize for container startup time
+
+## Compatibility Notes
+- TK4- system expects specific directory structure under /tk4-/
+- Hercules requires proper CPU architecture emulation
+- MVS 3.8j has specific memory and storage requirements
+- 3270 terminal protocols must be preserved for authenticity
+
+## Development Workflow - Trunk-Based Development
+- Always create feature branches from `main` for new development work
+- Use descriptive branch names: `feature/description` or `fix/description`
+- Implement and test all changes on feature branches before merging
+- Require pull requests for all merges back to `main`
+- Ensure thorough testing on feature branches before creating pull requests
+- Code review must be completed before merging to `main`
+- Keep feature branches short-lived and focused on single features/fixes
+- Rebase feature branches on `main` before creating pull requests
+- Never commit directly to `main` - all changes must go through pull requests 
