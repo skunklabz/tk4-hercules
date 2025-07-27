@@ -32,6 +32,23 @@ Download and install [x3270](http://x3270.bgp.nu/) or use a web-based 3270 emula
 
 ## Quick Start
 
+### Prerequisites: Obtaining TK4- Distribution
+
+The TK4- distribution is available from the official source. You have several options:
+
+1. **Option A: Automatic Download (Recommended)**
+   - The Dockerfile will automatically download the distribution during build
+   - Simply run `./build.sh` and the download will happen automatically
+
+2. **Option B: Manual Download**
+   - Download from: https://wotho.pebble-beach.ch/tk4-/tk4-_v1.00_current.zip (~238MB)
+   - Place the file in the project root directory before building
+   - Use `./download-tk4.sh` for additional download options
+
+3. **Option C: Use Pre-built Image**
+   - Use the pre-built Docker image: `docker pull skunklabz/tk4-hercules:latest`
+   - Skip the build step and go directly to running the container
+
 ### Option 1: Using Docker Compose (Recommended)
 The easiest way to get started with persistence:
 
@@ -39,6 +56,12 @@ The easiest way to get started with persistence:
 # Clone the repository
 git clone https://github.com/skunklabz/tk4-hercules.git
 cd tk4-hercules
+
+# Build the image (will automatically download TK4- distribution):
+./build.sh
+
+# Test the container:
+./test.sh
 
 # Start the container with persistence
 docker-compose up -d
@@ -152,6 +175,10 @@ docker run -d \
 2. **Can't connect via 3270**: Verify your terminal emulator is properly installed
 3. **Slow startup**: The system takes about 5 minutes to fully boot - this is normal
 4. **Permission errors**: Ensure Docker has proper permissions to create volumes
+5. **Architecture compatibility issues**: If you encounter binary compatibility errors:
+   - On Apple Silicon (M1/M2): Try building with `docker build --platform linux/amd64`
+   - On x86_64: Use the default build process
+   - The TK4- distribution includes binaries for multiple architectures
 
 ### Logging Off
 
@@ -177,12 +204,77 @@ docker stop <container-id>
 
 ## Technical Details
 
-- **Base Image**: Ubuntu 18.04
-- **Hercules Version**: Latest stable
+- **Base Image**: Ubuntu 22.04 LTS
+- **Hercules Version**: 4.4.1
 - **MVS Version**: 3.8j Service Level 8505
 - **Architecture**: System/370 emulation
 - **Terminal Protocol**: 3270
 - **Web Console**: Port 8038
+- **Resource Limits**: 2GB RAM, 2 CPU cores (configurable)
+- **Security**: Non-root user creation, no-new-privileges flag
+- **Logging**: JSON format with rotation (10MB max, 3 files)
+
+## Build Process
+
+### Available Scripts
+
+- **`./download-tk4.sh`** - Helper script to find TK4- distribution sources
+- **`./build.sh`** - Builds the Docker image with proper tagging
+- **`./build-platform.sh`** - Platform-aware build script (recommended for Apple Silicon)
+- **`./test.sh`** - Tests the container functionality and health
+
+### Building from Source
+
+1. **Build the Image (Recommended)**
+   ```bash
+   # For Apple Silicon (M1/M2) - Platform-aware build
+   ./build-platform.sh
+   
+   # For x86_64 or standard build
+   ./build.sh
+   ```
+   The Dockerfile will automatically download the TK4- distribution during the build process.
+
+2. **Alternative: Manual Download**
+   ```bash
+   ./download-tk4.sh
+   # Follow the instructions to download tk4-_v1.00_current.zip manually
+   ./build.sh
+   ```
+
+3. **Test the Container**
+   ```bash
+   ./test.sh
+   ```
+
+4. **Run with Docker Compose**
+   ```bash
+   docker-compose up -d
+   ```
+
+## Recent Improvements (v1.01)
+
+### Security Enhancements
+- **LTS Upgrade**: Migrated from Ubuntu 18.04 to Ubuntu 22.04 LTS for extended security support
+- **Non-root User**: Created dedicated `hercules` user for improved security
+- **Security Options**: Added `no-new-privileges` flag to prevent privilege escalation
+- **Certificate Updates**: Included `ca-certificates` package for secure downloads
+
+### Performance & Resource Management
+- **Resource Limits**: Configurable CPU and memory limits (2GB RAM, 2 CPU cores default)
+- **Multi-stage Build**: Optimized Docker build process for smaller image size
+- **Log Rotation**: JSON logging with automatic rotation (10MB max, 3 files)
+- **Build Optimization**: Added `.dockerignore` for faster builds
+
+### Container Best Practices
+- **Health Checks**: Improved reliability with better process monitoring
+- **Environment Variables**: Added version tracking and timezone configuration
+- **Metadata**: Enhanced container labels for better management
+- **Error Handling**: Better download verification and error reporting
+
+### Architecture Compatibility
+- **Platform Support**: Enhanced support for ARM64 (Apple Silicon) and x86_64 architectures
+- **Cross-platform Builds**: Improved build process for different CPU architectures
 
 ## Contributing
 

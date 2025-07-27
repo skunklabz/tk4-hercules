@@ -17,15 +17,43 @@ services:
       - tk4-jcl:/tk4-/jcl
       - tk4-log:/tk4-/log
     restart: unless-stopped
+    # Resource limits for better container management
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '2.0'
+        reservations:
+          memory: 1G
+          cpus: '1.0'
+    # Security improvements
+    security_opt:
+      - no-new-privileges:true
+    # Environment variables
+    environment:
+      - TZ=UTC
+      - HERCULES_VERSION=4.4.1
+      - MVS_VERSION=3.8j
+    # Health check with improved reliability
     healthcheck:
       test: ["CMD", "ps", "aux", "|", "grep", "-v", "grep", "|", "grep", "mvs", "||", "exit", "1"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 300s
+    # Labels for better container management
     labels:
       - "com.skunklabz.description=MVS 3.8j Tur(n)key 4- System on Hercules Mainframe Emulator"
       - "com.skunklabz.maintainer=Ken Godoy - skunklabz"
+      - "com.skunklabz.version=1.01"
+      - "com.skunklabz.base-image=ubuntu:22.04"
+      - "com.skunklabz.architecture=mainframe-emulation"
+    # Logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
 volumes:
   tk4-conf:

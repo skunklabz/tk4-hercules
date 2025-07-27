@@ -8,9 +8,16 @@ README.md
 *.md
 docs/
 
-# Development files
-.cursor/
+# Docker files (except Dockerfile)
+docker-compose*.yml
+.dockerignore
+
+# Allow TK4- distribution file
+!tk4-_v1.00_current.zip
+
+# IDE and editor files
 .vscode/
+.idea/
 *.swp
 *.swo
 *~
@@ -31,25 +38,25 @@ logs/
 # Temporary files
 *.tmp
 *.temp
+tmp/
 temp/
-
-# IDE and editor files
-.idea/
-*.iml
-.project
-.classpath
-.settings/
 
 # Build artifacts
 build/
 dist/
-target/
+node_modules/
 
-# Docker files (except Dockerfile)
-docker-compose*.yml
-.dockerignore
+# Test files
+test/
+tests/
+*.test.js
+*.spec.js
 
 # Environment files
 .env
 .env.local
-.env.*.local 
+.env.*.local
+
+# Backup files
+*.bak
+*.backup 
