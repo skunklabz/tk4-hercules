@@ -1,11 +1,11 @@
 # Multi-stage build to minimize final image size
 FROM ubuntu:22.04 AS builder
 
-# Set environment variables for non-interactive installation
+# Prevent interactive prompts during package installation
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=UTC
 
-# Install required packages for building with security updates
+# Install build dependencies with security updates
 RUN apt-get update && apt-get upgrade -yq && apt-get install -yq \
     unzip \
     wget \
@@ -14,7 +14,6 @@ RUN apt-get update && apt-get upgrade -yq && apt-get install -yq \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Set working directory
 WORKDIR /tk4-/
 
 # Download TK4- distribution from the official source
@@ -40,13 +39,13 @@ RUN if [ -d /tk4-/hercules ]; then \
 # Final runtime image
 FROM ubuntu:22.04
 
-# Set environment variables
+# Prevent interactive prompts and set version information
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=UTC
 ENV HERCULES_VERSION="4.4.1"
 ENV MVS_VERSION="3.8j"
 
-# Install necessary libraries for ARM64 compatibility
+# Install runtime libraries for cross-platform compatibility
 RUN apt-get update && apt-get install -yq \
     libc6 \
     libstdc++6 \
@@ -62,17 +61,16 @@ LABEL org.opencontainers.image.licenses="MIT"
 LABEL org.opencontainers.image.version="${MVS_VERSION}"
 LABEL org.opencontainers.image.title="TK4- Hercules Mainframe Emulator"
 
-# Set working directory
 WORKDIR /tk4-/
 
-# Copy built application from builder stage
+# Copy TK4- distribution from builder stage
 COPY --from=builder /tk4-/ .
 
 # Create non-root user for security (Hercules may require root for some operations)
 RUN groupadd -r hercules && useradd -r -g hercules -s /bin/bash hercules \
     && chown -R hercules:hercules /tk4-/
 
-# Create necessary directories and set permissions
+# Create persistence directories and set ownership
 RUN mkdir -p /tk4-/conf /tk4-/local_conf /tk4-/local_scripts /tk4-/prt /tk4-/dasd /tk4-/pch /tk4-/jcl /tk4-/log \
     && chown -R hercules:hercules /tk4-/
 
@@ -83,12 +81,11 @@ VOLUME [ "/tk4-/conf", "/tk4-/local_conf", "/tk4-/local_scripts", "/tk4-/prt", "
 # Expose ports for 3270 terminal and web console
 EXPOSE 3270 8038
 
-# Health check to verify the container is running properly
+# Monitor MVS process health
 HEALTHCHECK --interval=30s --timeout=10s --start-period=300s --retries=3 \
     CMD ps aux | grep -v grep | grep mvs || exit 1
 
-# Switch to non-root user (commented out as Hercules may need root access)
+# Hercules may require root access for device emulation
 # USER hercules
 
-# Start the MVS system
 CMD ["/tk4-/mvs"]

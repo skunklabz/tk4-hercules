@@ -1,0 +1,143 @@
+# Comment Management Rules
+
+## General Principles
+- **Remove unnecessary comments** that don't add value to understanding the code
+- **Keep comments that explain "why"** not "what" the code does
+- **Prefer self-documenting code** over comments when possible
+- **Maintain comments that provide context** not available in the code itself
+
+## Comments to Remove
+
+### Redundant Comments
+- Comments that simply repeat what the code obviously does
+- Comments like "// Set variable to 5" when the code is `variable = 5`
+- Comments that describe obvious function names or variable names
+- Comments that just restate the method signature
+
+### Obsolete Comments
+- TODO comments older than 30 days (unless actively being worked on)
+- FIXME comments that have been resolved
+- Comments about deprecated features or workarounds no longer needed
+- Comments referencing old versions or outdated information
+
+### Commented-Out Code
+- Entire blocks of commented-out code
+- Commented-out function calls or variable assignments
+- Dead code that serves no purpose
+- Debug code that was left in production
+
+### Excessive Inline Comments
+- Comments on every line of simple code
+- Comments that break up readable code unnecessarily
+- Comments that make the code harder to read
+- Comments that are longer than the code they describe
+
+## Comments to Keep
+
+### Business Logic Explanations
+- Comments explaining complex business rules
+- Comments about why certain decisions were made
+- Comments about edge cases or special handling
+- Comments explaining algorithms or mathematical operations
+
+### Platform/Environment Context
+- Comments about platform-specific workarounds
+- Comments explaining environment requirements
+- Comments about compatibility issues
+- Comments about deployment considerations
+
+### Historical Context
+- Comments explaining why certain approaches were chosen
+- Comments about legacy system integration
+- Comments about historical bugs or issues
+- Comments explaining educational or learning context
+
+### Complex Operations
+- Comments explaining non-obvious code behavior
+- Comments about performance considerations
+- Comments explaining security measures
+- Comments about data transformations or mappings
+
+## Language-Specific Guidelines
+
+### Shell Scripts
+- Keep comments explaining complex command pipelines
+- Remove comments about basic shell commands
+- Keep comments about environment setup and requirements
+- Remove comments that just echo the command name
+
+### Dockerfiles
+- Keep comments explaining multi-stage build logic
+- Keep comments about security considerations
+- Remove comments about basic Docker commands
+- Keep comments about platform-specific optimizations
+
+### JavaScript/TypeScript
+- Keep JSDoc comments for public APIs
+- Remove comments that just describe obvious variable names
+- Keep comments explaining complex async operations
+- Remove comments about basic language features
+
+### Python
+- Keep docstrings for functions and classes
+- Remove comments that just repeat the code
+- Keep comments explaining complex list comprehensions
+- Remove comments about basic Python syntax
+
+## Implementation Guidelines
+
+### When Reviewing Code
+1. **Identify redundant comments** - Look for comments that don't add value
+2. **Check for commented-out code** - Remove dead code blocks
+3. **Review TODO comments** - Remove or update old TODOs
+4. **Assess comment necessity** - Ask "does this comment help understanding?"
+
+### When Writing Code
+1. **Write self-documenting code first** - Use clear names and structure
+2. **Add comments only when necessary** - Explain why, not what
+3. **Keep comments concise** - Brevity is better than verbosity
+4. **Update comments with code changes** - Don't let comments become stale
+
+### Comment Quality Checklist
+- [ ] Does this comment explain something not obvious from the code?
+- [ ] Is this comment still accurate and up-to-date?
+- [ ] Does this comment add value for future developers?
+- [ ] Is this comment concise and clear?
+- [ ] Would removing this comment make the code harder to understand?
+
+## Examples
+
+### Good Comments (Keep)
+```python
+# Use UTC to avoid timezone issues in distributed systems
+timestamp = datetime.utcnow()
+
+# Skip validation for admin users to prevent circular dependency
+if user.is_admin:
+    return True
+```
+
+### Bad Comments (Remove)
+```python
+# Set timestamp to current time
+timestamp = datetime.utcnow()
+
+# Check if user is admin
+if user.is_admin:
+    return True
+```
+
+### Commented-Out Code (Remove)
+```python
+# def old_function():
+#     return "deprecated"
+```
+
+### TODO Comments (Review and Remove if Old)
+```python
+# TODO: Implement caching (2023-01-15) - Remove if older than 30 days
+```
+description: Code comment management and cleanup guidelines
+globs: ["**/*.sh", "**/*.py", "**/*.js", "**/*.ts", "**/*.jsx", "**/*.tsx", "**/*.java", "**/*.c", "**/*.cpp", "**/*.h", "**/*.hpp", "**/*.go", "**/*.rs", "**/*.php", "**/*.rb", "**/*.cs", "**/*.dockerfile", "**/Dockerfile*"]
+alwaysApply: true
+---

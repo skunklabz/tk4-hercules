@@ -59,6 +59,19 @@ Focus on educational mainframe computing, historical preservation, and Docker be
 - Use meaningful names for intermediate build stages
 - Comment complex operations, especially mainframe-specific setup
 
+## Comment Management
+- Follow the comprehensive comment management rules in `.cursor/rules/comment-management.mdc`
+- Remove unnecessary comments that don't add value
+- Keep comments that explain "why" not "what"
+- Remove commented-out code blocks
+- Remove TODO comments that are older than 30 days
+- Remove redundant comments that just repeat the code
+- Keep comments that explain complex business logic or mainframe concepts
+- Remove comments that are obvious from the code itself
+- Keep comments that document workarounds or platform-specific issues
+- Remove excessive inline comments that clutter the code
+- Keep comments that explain historical context or educational value
+
 ## Educational Focus
 - Explain mainframe concepts when adding features
 - Consider backward compatibility with existing educational materials
