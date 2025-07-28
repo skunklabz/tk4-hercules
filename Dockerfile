@@ -60,6 +60,7 @@ ENV MVS_VERSION="3.8j"
 RUN apk add --no-cache \
     libc6-compat \
     libstdc++ \
+    bash \
     && rm -rf /var/cache/apk/*
 
 # Metadata
@@ -98,4 +99,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=300s --retries=3 \
 # Hercules may require root access for device emulation
 # USER hercules
 
-CMD ["/tk4-/mvs"]
+CMD ["./mvs"]
