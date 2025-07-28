@@ -1,12 +1,21 @@
 # TK4-Hercules Makefile
 # Common development tasks for the project
 
-.PHONY: help build start stop test validate clean docs build-ghcr push-ghcr
+.PHONY: help build start stop test validate clean docs build-ghcr push-ghcr version bump-patch bump-minor bump-major
+
+# Version management
+VERSION := $(shell cat VERSION)
 
 # Default target
 help:
 	@echo "TK4-Hercules Development Commands"
 	@echo "================================="
+	@echo ""
+	@echo "Version Management:"
+	@echo "  version       - Show current version"
+	@echo "  bump-patch    - Bump patch version (1.1.0 → 1.1.1)"
+	@echo "  bump-minor    - Bump minor version (1.1.0 → 1.2.0)"
+	@echo "  bump-major    - Bump major version (1.1.0 → 2.0.0)"
 	@echo ""
 	@echo "Build Commands:"
 	@echo "  build        - Build the Docker container"
@@ -40,6 +49,40 @@ help:
 	@echo "  ci-validate  - Run CI validation"
 	@echo "  ci-full      - Run full CI pipeline"
 	@echo ""
+
+# Version management commands
+version:
+	@echo "Current version: $(VERSION)"
+
+bump-patch:
+	@echo "Bumping patch version..."
+	@$(eval NEW_VERSION := $(shell echo $(VERSION) | awk -F. '{print $$1"."$$2"."$$3+1}'))
+	@echo $(NEW_VERSION) > VERSION
+	@echo "Version bumped to: $(NEW_VERSION)"
+	@echo "Don't forget to:"
+	@echo "  1. Update CHANGELOG.md with new version"
+	@echo "  2. Commit the version bump"
+	@echo "  3. Create a release tag: git tag v$(NEW_VERSION)"
+
+bump-minor:
+	@echo "Bumping minor version..."
+	@$(eval NEW_VERSION := $(shell echo $(VERSION) | awk -F. '{print $$1"."$$2+1".0"}'))
+	@echo $(NEW_VERSION) > VERSION
+	@echo "Version bumped to: $(NEW_VERSION)"
+	@echo "Don't forget to:"
+	@echo "  1. Update CHANGELOG.md with new version"
+	@echo "  2. Commit the version bump"
+	@echo "  3. Create a release tag: git tag v$(NEW_VERSION)"
+
+bump-major:
+	@echo "Bumping major version..."
+	@$(eval NEW_VERSION := $(shell echo $(VERSION) | awk -F. '{print $$1+1".0.0"}'))
+	@echo $(NEW_VERSION) > VERSION
+	@echo "Version bumped to: $(NEW_VERSION)"
+	@echo "Don't forget to:"
+	@echo "  1. Update CHANGELOG.md with new version"
+	@echo "  2. Commit the version bump"
+	@echo "  3. Create a release tag: git tag v$(NEW_VERSION)"
 
 # Build commands
 build:
@@ -163,7 +206,7 @@ status:
 info:
 	@echo "TK4-Hercules Project Information"
 	@echo "================================"
-	@echo "Version: 1.1.0"
+	@echo "Version: $(VERSION)"
 	@echo "Mainframe: IBM MVS 3.8j (TK4-)"
 	@echo "Emulator: Hercules"
 	@echo "Container: Docker"

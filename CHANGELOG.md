@@ -8,26 +8,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Docker image optimization documentation (docs/IMAGE_OPTIMIZATION.md)
-- Comprehensive .dockerignore file for build context optimization
+- Semantic Versioning (SemVer) implementation with centralized VERSION file
+- Automated version bumping commands in Makefile
+- Comprehensive SemVer documentation (docs/SEMVER.md)
+- Automated release workflow with GitHub Actions
+- Version management integration with CI/CD pipeline
 
 ### Changed
-- **BREAKING**: Switched base image from Ubuntu 22.04 to Alpine Linux 3.19
-- Optimized Docker image size from 1.06GB to 427MB (60% reduction)
-- Improved multi-stage build with better layer optimization
-- Removed unnecessary platform binaries (Darwin, Windows, ARM)
-- Removed documentation and demo files from final image
-- Updated build scripts to reflect Alpine base image
-- Enhanced package management with Alpine's apk
-
-### Performance
-- 60% reduction in Docker image size (1.06GB → 427MB)
-- 77% faster build times (~30s → ~7s)
-- Reduced bandwidth usage for deployments
-- Lower storage costs and improved CI/CD performance
+- Transitioned to trunk-based development workflow
+- Updated GitHub Actions to focus on main branch only
+- Centralized version management using VERSION file
+- Enhanced release process with automated version bumping
+- Improved documentation for version management
 
 ### Fixed
-- Updated script paths in documentation
+- Version consistency across all project files
+- Automated version validation in CI pipeline
 
 ## [1.1.0] - 2025-07-27
 

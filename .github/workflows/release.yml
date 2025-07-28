@@ -1,62 +1,122 @@
 name: Release
 
 on:
-  push:
-    tags:
-      - 'v*'
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version_type:
+        description: 'Version bump type'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+        - patch
+        - minor
+        - major
 
 jobs:
   release:
+    name: Create Release
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
     
-    - name: Set up Docker Buildx
+    - name: Get current version
+      id: version
+      run: |
+        CURRENT_VERSION=$(cat VERSION)
+        echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+        echo "Current version: $CURRENT_VERSION"
+    
+    - name: Determine new version
+      id: new_version
+      run: |
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          VERSION_TYPE="${{ github.event.inputs.version_type }}"
+        else
+          # Extract version from release tag
+          VERSION_TYPE="patch"
+        fi
+        
+        CURRENT_VERSION="${{ steps.version.outputs.current_version }}"
+        
+        case $VERSION_TYPE in
+          "major")
+            NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. '{print $1+1".0.0"}')
+            ;;
+          "minor")
+            NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. '{print $1"."$2+1".0"}')
+            ;;
+          "patch")
+            NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. '{print $1"."$2"."$3+1"}')
+            ;;
+        esac
+        
+        echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+        echo "New version: $NEW_VERSION"
+    
+    - name: Update VERSION file
+      run: |
+        echo "${{ steps.new_version.outputs.new_version }}" > VERSION
+        echo "Updated VERSION file to ${{ steps.new_version.outputs.new_version }}"
+    
+    - name: Update CHANGELOG
+      run: |
+        NEW_VERSION="${{ steps.new_version.outputs.new_version }}"
+        TODAY=$(date +%Y-%m-%d)
+        
+        # Move unreleased changes to new version
+        sed -i "s/## \[Unreleased\]/## \[$NEW_VERSION\] - $TODAY\n\n## [Unreleased]/" CHANGELOG.md
+        
+        echo "Updated CHANGELOG.md for version $NEW_VERSION"
+    
+    - name: Build Docker image
       uses: docker/setup-buildx-action@v3
     
-    - name: Log in to Docker Hub
-      uses: docker/login-action@v3
-      with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-    
-    - name: Extract metadata
-      id: meta
-      uses: docker/metadata-action@v5
-      with:
-        images: tk4-hercules
-        tags: |
-          type=ref,event=branch
-          type=ref,event=pr
-          type=semver,pattern={{version}}
-          type=semver,pattern={{major}}.{{minor}}
-          type=sha
-    
-    - name: Build and push Docker image
+    - name: Build and push to GitHub Container Registry
       uses: docker/build-push-action@v5
       with:
         context: .
         push: true
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
+        tags: |
+          ghcr.io/skunklabz/tk4-hercules:latest
+          ghcr.io/skunklabz/tk4-hercules:${{ steps.new_version.outputs.new_version }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
     
-    - name: Create Release
+    - name: Create Git tag
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add VERSION CHANGELOG.md
+        git commit -m "chore: bump version to ${{ steps.new_version.outputs.new_version }}"
+        git tag -a "v${{ steps.new_version.outputs.new_version }}" -m "Release v${{ steps.new_version.outputs.new_version }}"
+        git push origin HEAD:${{ github.ref }}
+        git push origin "v${{ steps.new_version.outputs.new_version }}"
+    
+    - name: Create Release Notes
+      id: release_notes
+      run: |
+        # Extract changes from CHANGELOG.md for the new version
+        NEW_VERSION="${{ steps.new_version.outputs.new_version }}"
+        RELEASE_NOTES=$(awk "/## \[$NEW_VERSION\]/,/## \[/" CHANGELOG.md | head -n -1 | tail -n +2)
+        echo "release_notes<<EOF" >> $GITHUB_OUTPUT
+        echo "$RELEASE_NOTES" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+    
+    - name: Create GitHub Release
+      if: github.event_name == 'workflow_dispatch'
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
+        tag_name: v${{ steps.new_version.outputs.new_version }}
+        release_name: Release v${{ steps.new_version.outputs.new_version }}
+        body: ${{ steps.release_notes.outputs.release_notes }}
         draft: false
-        prerelease: false
-    
-    - name: Upload Release Assets
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./docs/LEARNING_GUIDE.md
-        asset_name: LEARNING_GUIDE.md
-        asset_content_type: text/markdown 
+        prerelease: false 

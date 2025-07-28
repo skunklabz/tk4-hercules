@@ -1,7 +1,7 @@
 
 # tk4-hercules Project Rules
 
-**Version**: 1.1.0 (2025-07-27)
+**Version**: $(shell cat VERSION) (2025-07-27)
 
 This project containerizes the Hercules mainframe emulator running IBM MVS 3.8j (Turnkey 4-). 
 Focus on educational mainframe computing, historical preservation, and Docker best practices.
@@ -136,7 +136,7 @@ Focus on educational mainframe computing, historical preservation, and Docker be
 - Follow Semantic Versioning (SemVer) for releases
 - Update CHANGELOG.md with all changes following Keep a Changelog format
 - Include dates in version entries (YYYY-MM-DD format)
-- Current version: 1.1.0 (2025-07-27)
+- Current version: $(shell cat VERSION) (2025-07-27)
 
 ### Open Source Standards
 - Follow established open source project patterns
