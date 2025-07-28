@@ -342,8 +342,8 @@ main() {
         
         # Try multiple ways to get PR number
         if [ -n "${GITHUB_REF:-}" ] && echo "$GITHUB_REF" | grep -q "refs/pull/"; then
-            # Extract PR number from GITHUB_REF (refs/pull/5/head -> 5)
-            PR_NUMBER=$(echo "$GITHUB_REF" | sed -n 's/refs\/pull\/\([0-9]*\)\/head/\1/p')
+            # Extract PR number from GITHUB_REF (refs/pull/5/merge -> 5 or refs/pull/5/head -> 5)
+            PR_NUMBER=$(echo "$GITHUB_REF" | sed -n 's/refs\/pull\/\([0-9]*\)\/.*/\1/p')
             echo "PR_NUMBER from GITHUB_REF: $PR_NUMBER"
         elif [ -n "${GITHUB_EVENT_NAME:-}" ] && [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
             # Try to get from event file if available
