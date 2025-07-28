@@ -29,6 +29,12 @@ help:
 	@echo "  docs         - Generate documentation"
 	@echo "  lint         - Run linting checks"
 	@echo ""
+	@echo "CI/CD Commands:"
+	@echo "  ci-lint      - Run CI linting checks"
+	@echo "  ci-test      - Run CI tests"
+	@echo "  ci-validate  - Run CI validation"
+	@echo "  ci-full      - Run full CI pipeline"
+	@echo ""
 
 # Build commands
 build:
@@ -101,6 +107,25 @@ ci-test: build test
 
 ci-validate: validate
 	@echo "CI validation completed"
+
+ci-lint:
+	@echo "Running CI linting checks..."
+	@shellcheck scripts/**/*.sh || true
+	@echo "Checking script permissions..."
+	@for script in scripts/**/*.sh; do \
+		if [ -f "$$script" ]; then \
+			if [ ! -x "$$script" ]; then \
+				echo "❌ Script $$script is not executable"; \
+				exit 1; \
+			fi; \
+		fi; \
+	done
+	@echo "Validating YAML files..."
+	@docker-compose config
+	@echo "✅ CI linting checks completed"
+
+ci-full: ci-lint ci-validate ci-test
+	@echo "✅ Full CI pipeline completed"
 
 # Release helpers
 release-prep: test validate

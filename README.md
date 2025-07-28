@@ -3,6 +3,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://www.docker.com/)
 [![Mainframe](https://img.shields.io/badge/Mainframe-MVS%203.8j-green.svg)](https://en.wikipedia.org/wiki/MVS)
+[![CI](https://github.com/skunklabz/tk4-hercules/workflows/CI/badge.svg)](https://github.com/skunklabz/tk4-hercules/actions?query=workflow%3ACI)
+[![PR Checks](https://github.com/skunklabz/tk4-hercules/workflows/Pull%20Request%20Checks/badge.svg)](https://github.com/skunklabz/tk4-hercules/actions?query=workflow%3A%22Pull+Request+Checks%22)
 
 ## The MVS 3.8j Tur(n)key 4- System on the Hercules Mainframe Emulator
 
@@ -300,11 +302,50 @@ Use `make help` to see all available commands:
 - **Platform Support**: Enhanced support for ARM64 (Apple Silicon) and x86_64 architectures
 - **Cross-platform Builds**: Improved build process for different CPU architectures
 
+## 🔄 CI/CD Pipeline
+
+This project uses comprehensive GitHub Actions workflows for automated testing, linting, and security scanning:
+
+### Automated Workflows
+
+- **CI Pipeline**: Runs on every push and pull request with comprehensive testing
+- **Pull Request Checks**: Fast validation for PRs with incremental testing
+- **Nightly Builds**: Daily comprehensive testing and stability checks
+- **Dependency Monitoring**: Weekly security and dependency updates
+- **Release Automation**: Automated releases with Docker image publishing
+
+### Local Testing
+
+Test the CI pipeline locally before pushing:
+
+```bash
+# Run full CI pipeline locally
+make ci-full
+
+# Run individual components
+make ci-lint      # Linting and code quality checks
+make ci-validate  # Validation tests
+make ci-test      # Full functional tests
+```
+
+### Quality Gates
+
+- ✅ Shell script linting with shellcheck
+- ✅ YAML syntax validation
+- ✅ Docker image building and testing
+- ✅ Security vulnerability scanning
+- ✅ Documentation validation
+- ✅ Exercise content verification
+- ✅ Container stability testing
+
+For detailed workflow documentation, see [`.github/workflows/README.md`](.github/workflows/README.md).
+
 ## 📁 Project Structure
 
 ```
 tk4-hercules/
 ├── .github/                    # GitHub templates and workflows
+│   └── workflows/             # CI/CD workflows
 ├── .cursor/                    # Cursor IDE configuration
 ├── assets/                     # Static assets and configurations
 ├── config/                     # Configuration files

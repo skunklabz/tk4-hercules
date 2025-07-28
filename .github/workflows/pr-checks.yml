@@ -1,0 +1,136 @@
+name: Pull Request Checks
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  quick-checks:
+    name: Quick Validation
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Install shellcheck
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y shellcheck
+    
+    - name: Run shellcheck on changed files
+      run: |
+        echo "🔍 Running shellcheck on changed shell scripts..."
+        # Get list of changed shell scripts
+        CHANGED_SCRIPTS=$(git diff --name-only ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} | grep '\.sh$' || true)
+        
+        if [ -n "$CHANGED_SCRIPTS" ]; then
+          echo "Changed shell scripts: $CHANGED_SCRIPTS"
+          for script in $CHANGED_SCRIPTS; do
+            if [ -f "$script" ]; then
+              echo "Checking $script..."
+              shellcheck "$script" || {
+                echo "❌ Shellcheck failed for $script"
+                exit 1
+              }
+            fi
+          done
+        else
+          echo "No shell scripts changed"
+        fi
+    
+    - name: Validate YAML syntax
+      run: |
+        echo "📋 Validating YAML files..."
+        # Check docker-compose.yml
+        docker-compose config
+        
+        # Check GitHub workflow files
+        for file in .github/workflows/*.yml; do
+          echo "Validating $file"
+          python3 -c "import yaml; yaml.safe_load(open('$file'))"
+        done
+    
+    - name: Check script permissions
+      run: |
+        echo "🔐 Checking script permissions..."
+        CHANGED_SCRIPTS=$(git diff --name-only ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} | grep '\.sh$' || true)
+        
+        for script in $CHANGED_SCRIPTS; do
+          if [ -f "$script" ]; then
+            if [ ! -x "$script" ]; then
+              echo "❌ Script $script is not executable"
+              exit 1
+            else
+              echo "✅ $script is executable"
+            fi
+          fi
+        done
+    
+    - name: Run quick validation
+      run: |
+        echo "🔍 Running quick validation..."
+        chmod +x scripts/validation/*.sh
+        ./scripts/validation/quick-validate.sh
+    
+    - name: Check for TODO comments
+      run: |
+        echo "📝 Checking for TODO comments in changed files..."
+        CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} || true)
+        
+        if [ -n "$CHANGED_FILES" ]; then
+          for file in $CHANGED_FILES; do
+            if [ -f "$file" ] && [[ "$file" != *.md ]]; then
+              if grep -q "TODO" "$file"; then
+                echo "⚠️  TODO comments found in $file"
+                exit 1
+              fi
+            fi
+          done
+        fi
+    
+    - name: Test Makefile
+      run: |
+        echo "🔧 Testing Makefile..."
+        make help
+
+  documentation:
+    name: Documentation Checks
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Check for broken links in changed docs
+      run: |
+        echo "🔍 Checking for broken links in changed documentation..."
+        CHANGED_DOCS=$(git diff --name-only ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} | grep '\.md$' || true)
+        
+        if [ -n "$CHANGED_DOCS" ]; then
+          for doc in $CHANGED_DOCS; do
+            if [ -f "$doc" ]; then
+              echo "Checking $doc for broken links..."
+              # Check for localhost links
+              if grep -q "http://localhost\|http://127.0.0.1" "$doc"; then
+                echo "❌ Found localhost links in $doc"
+                exit 1
+              fi
+            fi
+          done
+        fi
+    
+    - name: Validate CHANGELOG format
+      run: |
+        echo "📝 Validating CHANGELOG format..."
+        if git diff --name-only ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} | grep -q "CHANGELOG.md"; then
+          if [ -f "CHANGELOG.md" ]; then
+            # Check for proper date format (YYYY-MM-DD)
+            if grep -q "^## \[.*\] - [0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}" CHANGELOG.md; then
+              echo "✅ CHANGELOG has proper date format"
+            else
+              echo "❌ CHANGELOG missing proper date format"
+              exit 1
+            fi
+          fi
+        fi 
