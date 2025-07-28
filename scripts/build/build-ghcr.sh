@@ -25,35 +25,33 @@ if ! docker info | grep -q "ghcr.io"; then
     echo "Or set up authentication via GitHub Actions"
 fi
 
-# Build the image with platform support
-echo "📦 Building Docker image..."
-docker build --platform linux/amd64 -t ${GHCR_LATEST_TAG} -t ${GHCR_VERSION_TAG} .
+# Build the image with multi-platform support
+echo "📦 Building Docker image for multiple platforms..."
+docker buildx create --use --name tk4-hercules-builder || true
+
+# Ask for confirmation before building and pushing
+if [ "$1" != "--no-prompt" ]; then
+    read -p "🚀 Build and push to GitHub Container Registry? (y/N): " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        echo "⏭️  Skipping build and push."
+        echo ""
+        echo "📤 To build and push manually:"
+        echo "   docker buildx build --platform linux/amd64,linux/arm64 -t ${GHCR_LATEST_TAG} -t ${GHCR_VERSION_TAG} --push ."
+        exit 0
+    fi
+fi
+
+# Build and push to GHCR
+echo "📤 Building and pushing to GitHub Container Registry..."
+docker buildx build --platform linux/amd64,linux/arm64 -t ${GHCR_LATEST_TAG} -t ${GHCR_VERSION_TAG} --push .
 
 if [ $? -eq 0 ]; then
-    echo "✅ Build completed successfully!"
+    echo "✅ Build and push completed successfully!"
     echo ""
-    echo "📋 Image details:"
-    docker images ${GHCR_IMAGE_NAME} --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}\t{{.CreatedAt}}"
-    echo ""
-    
-    # Ask for confirmation before pushing
-    if [ "$1" != "--no-prompt" ]; then
-        read -p "🚀 Push to GitHub Container Registry? (y/N): " -n 1 -r
-        echo
-        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-            echo "⏭️  Skipping push. Images are ready locally."
-            echo ""
-            echo "📤 To push manually:"
-            echo "   docker push ${GHCR_LATEST_TAG}"
-            echo "   docker push ${GHCR_VERSION_TAG}"
-            exit 0
-        fi
-    fi
-    
-    # Push to GHCR
-    echo "📤 Pushing to GitHub Container Registry..."
-    docker push ${GHCR_LATEST_TAG}
-    docker push ${GHCR_VERSION_TAG}
+    echo "📋 Multi-platform images pushed:"
+    echo "   ${GHCR_LATEST_TAG} (linux/amd64, linux/arm64)"
+    echo "   ${GHCR_VERSION_TAG} (linux/amd64, linux/arm64)"
     
     echo "✅ Push completed successfully!"
     echo ""

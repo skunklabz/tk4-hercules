@@ -1,7 +1,7 @@
 # TK4-Hercules Makefile
 # Common development tasks for the project
 
-.PHONY: help build start stop test validate clean docs build-ghcr push-ghcr version bump-patch bump-minor bump-major
+.PHONY: help build build-platform build-multi start stop test test-arm64 validate clean docs build-ghcr push-ghcr version bump-patch bump-minor bump-major
 
 # Version management
 VERSION := $(shell cat VERSION)
@@ -20,6 +20,7 @@ help:
 	@echo "Build Commands:"
 	@echo "  build        - Build the Docker container"
 	@echo "  build-platform - Build for specific platform"
+	@echo "  build-multi  - Build multi-platform images (AMD64 + ARM64)"
 	@echo "  build-ghcr   - Build for GitHub Container Registry"
 	@echo ""
 	@echo "Registry Commands:"
@@ -36,6 +37,7 @@ help:
 	@echo "Testing Commands:"
 	@echo "  test         - Run comprehensive tests (LOCAL ONLY)"
 	@echo "  test-quick   - Run quick validation"
+	@echo "  test-arm64   - Test ARM64 support"
 	@echo "  validate     - Validate exercise content"
 	@echo "  test-local   - Run full local test suite"
 	@echo ""
@@ -94,6 +96,10 @@ build-platform:
 	@echo "Building for specific platform..."
 	@./scripts/build/build-platform.sh
 
+build-multi:
+	@echo "Building multi-platform images..."
+	@./scripts/build/build-multi-platform.sh
+
 build-ghcr:
 	@echo "Building for GitHub Container Registry..."
 	@./scripts/build/build-ghcr.sh --no-prompt
@@ -144,6 +150,10 @@ test-local:
 	@echo "  - Container startup and connectivity"
 	@echo "  - Basic mainframe functionality"
 	@./scripts/test/test-exercises.sh
+
+test-arm64:
+	@echo "Testing ARM64 support..."
+	@./scripts/test/test-arm64.sh
 
 validate:
 	@echo "Validating exercise content..."

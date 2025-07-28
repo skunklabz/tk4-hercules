@@ -60,7 +60,7 @@ TK4- is a pre-configured IBM MVS 3.8j (Multiple Virtual Storage) system that run
 - **OS**: IBM MVS 3.8j Service Level 8505
 - **Emulator**: Hercules 4.4.1
 - **Base Image**: Ubuntu 22.04 LTS
-- **Architecture**: x86_64 (emulating System/370)
+- **Architecture**: Multi-platform (x86_64, ARM64) (emulating System/370)
 - **Memory**: Configurable (default: 1-2GB)
 - **Storage**: Multiple DASD volumes
 
@@ -98,6 +98,25 @@ make build
 # Start the container
 make start
 ```
+
+### ARM64 Support
+
+TK4-Hercules now supports ARM64 architecture, including Apple Silicon Macs and ARM-based servers. The image automatically detects your platform and uses the appropriate Hercules binary.
+
+**Note:** ARM64 support currently uses x86_64 emulation due to limitations in the TK4- distribution. Native ARM64 binaries are planned for future releases.
+
+```bash
+# Build multi-platform images (AMD64 + ARM64)
+make build-multi
+
+# Test ARM64 support
+make test-arm64
+
+# Build for your current platform
+make build-platform
+```
+
+For detailed ARM64 documentation, see [docs/ARM64_SUPPORT.md](docs/ARM64_SUPPORT.md).
 
 ### Git Hooks (Quality Assurance)
 

@@ -24,9 +24,9 @@ echo "🔍 Detected platform: ${PLATFORM}"
 
 # Determine build platform
 if [[ "$PLATFORM" == "arm64" || "$PLATFORM" == "aarch64" ]]; then
-    echo "🍎 Apple Silicon detected - building for linux/amd64 compatibility"
-    BUILD_PLATFORM="linux/amd64"
-    PLATFORM_SUFFIX="-amd64"
+    echo "🍎 Apple Silicon detected - building for native linux/arm64"
+    BUILD_PLATFORM="linux/arm64"
+    PLATFORM_SUFFIX="-arm64"
 else
     echo "🖥️  x86_64 detected - building for native platform"
     BUILD_PLATFORM="linux/amd64"

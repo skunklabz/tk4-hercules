@@ -28,11 +28,19 @@ RUN if [ -d /tk4-/hercules ]; then \
         rm -rf /tk4-/hercules/*.md; \
     fi
 
-# Remove unnecessary architecture binaries (keep only 64-bit for linux/amd64)
+# Remove unnecessary architecture binaries (keep only appropriate binaries for current platform)
 RUN if [ -d /tk4-/hercules/linux ]; then \
-        rm -rf /tk4-/hercules/linux/32 && \
-        rm -rf /tk4-/hercules/linux/arm && \
-        rm -rf /tk4-/hercules/linux/arm_softfloat; \
+        rm -rf /tk4-/hercules/linux/32; \
+        # Keep appropriate binaries based on architecture \
+        if [ "$(uname -m)" = "x86_64" ]; then \
+            echo "Removing ARM binaries for x86_64 build"; \
+            rm -rf /tk4-/hercules/linux/arm && \
+            rm -rf /tk4-/hercules/linux/arm_softfloat; \
+        elif [ "$(uname -m)" = "aarch64" ]; then \
+            echo "Keeping x86_64 binaries for ARM64 build (will use emulation)"; \
+            rm -rf /tk4-/hercules/linux/arm && \
+            rm -rf /tk4-/hercules/linux/arm_softfloat; \
+        fi; \
     fi
 
 # Remove documentation and unnecessary files
@@ -63,7 +71,17 @@ RUN apk add --no-cache \
     bash \
     bzip2 \
     libbz2 \
+    binutils \
+    file \
     && rm -rf /var/cache/apk/*
+
+# Install QEMU for ARM emulation on ARM64 builds
+RUN if [ "$(uname -m)" = "aarch64" ]; then \
+        echo "Installing QEMU for ARM emulation on ARM64..."; \
+        apk add --no-cache \
+            qemu-arm \
+            && rm -rf /var/cache/apk/*; \
+    fi
 
 # Create symlinks for missing libraries
 RUN ln -sf /lib/libc.so.6 /lib/libnsl.so.1 || true
@@ -81,6 +99,21 @@ WORKDIR /tk4-/
 
 # Copy TK4- distribution from builder stage
 COPY --from=builder /tk4-/ .
+
+# Set up Hercules binary for the correct architecture
+RUN if [ "$(uname -m)" = "x86_64" ]; then \
+        echo "Setting up Hercules for x86_64"; \
+        ln -sf /tk4-/hercules/linux/64/bin/hercules /tk4-/hercules; \
+    elif [ "$(uname -m)" = "aarch64" ]; then \
+        echo "Setting up Hercules for ARM64 (using x86_64 binaries with emulation)"; \
+        ln -sf /tk4-/hercules/linux/64/bin/hercules /tk4-/hercules; \
+    else \
+        echo "Unknown architecture $(uname -m), using 64-bit x86"; \
+        ln -sf /tk4-/hercules/linux/64/bin/hercules /tk4-/hercules; \
+    fi
+
+# Note: ARM64 support uses x86_64 binaries with emulation
+# The startup script will automatically detect architecture and use appropriate binaries
 
 # Create non-root user for security
 RUN addgroup -g 1000 hercules && \

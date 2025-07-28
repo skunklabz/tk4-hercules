@@ -2,7 +2,8 @@ services:
   tk4-hercules:
     # Use GHCR image as primary, fallback to local build
     image: ${IMAGE_NAME:-ghcr.io/skunklabz/tk4-hercules:latest}
-    platform: linux/amd64
+    # Platform will be auto-detected for multi-platform images
+    # platform: linux/amd64  # Commented out to allow auto-detection
     container_name: tk4-hercules
     ports:
       - "3270:3270"   # 3270 terminal protocol
