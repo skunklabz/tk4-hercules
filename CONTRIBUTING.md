@@ -1,94 +1,52 @@
 # Contributing to TK4-Hercules
 
-Thank you for your interest in contributing to TK4-Hercules! This project aims to provide an educational mainframe computing environment using the Hercules emulator and IBM MVS 3.8j (Turnkey 4-).
-
-## Table of Contents
-
-- [Getting Started](#getting-started)
-- [Development Workflow](#development-workflow)
-- [Code Style Guidelines](#code-style-guidelines)
-- [Testing Guidelines](#testing-guidelines)
-- [Documentation Standards](#documentation-standards)
-- [Pull Request Process](#pull-request-process)
-- [Mainframe Knowledge](#mainframe-knowledge)
-
-## Getting Started
-
-### Prerequisites
-
-- Docker and Docker Compose
-- Git
-- Basic understanding of mainframe concepts (MVS, JCL, TSO)
-- Familiarity with shell scripting (Bash)
-
-### Development Environment Setup
-
-1. Fork and clone the repository:
-   ```bash
-   git clone https://github.com/your-username/tk4-hercules.git
-   cd tk4-hercules
-   ```
-
-2. Build the container:
-   ```bash
-   ./scripts/build/build.sh
-   ```
-
-3. Start the mainframe:
-   ```bash
-   docker-compose up -d
-   ```
-
-4. Connect to the mainframe:
-   - Terminal: `telnet localhost 3270`
-   - Web console: http://localhost:8038
+Thank you for your interest in contributing to the TK4-Hercules project! This document provides guidelines for contributing to this educational mainframe emulator project.
 
 ## Development Workflow
 
-### Branch Strategy
+This project follows **trunk-based development** principles for efficient collaboration and continuous integration.
 
-We follow a **trunk-based development** approach:
+### Branching Strategy
 
-- **main**: Production-ready code
-- **feature/***: New features and improvements
-- **fix/***: Bug fixes and patches
-- **docs/***: Documentation updates
+- **`main`**: The primary branch containing stable, deployable code
+- **Feature branches**: Short-lived branches for individual features/fixes
+- **No long-lived development branches**: All work flows directly to `main`
 
-### Creating a Feature Branch
+### Workflow Steps
 
-```bash
-git checkout main
-git pull origin main
-git checkout -b feature/your-feature-name
-```
+1. **Create a feature branch from `main`**:
+   ```bash
+   git checkout main
+   git pull origin main
+   git checkout -b feature/your-feature-name
+   ```
 
-### Commit Message Format
+2. **Make small, focused commits**:
+   ```bash
+   git add .
+   git commit -m "feat: add new mainframe exercise"
+   ```
 
-Use conventional commit format:
+3. **Push your branch and create a pull request**:
+   ```bash
+   git push origin feature/your-feature-name
+   ```
 
-```
-type(scope): description
+4. **Automated testing**: GitHub Actions will run tests and linting on your PR
 
-[optional body]
+5. **Code review**: Get approval from maintainers
 
-[optional footer]
-```
+6. **Merge to `main`**: Once approved, merge your PR to `main`
 
-Types:
-- `feat`: New feature
-- `fix`: Bug fix
-- `docs`: Documentation changes
-- `style`: Code style changes
-- `refactor`: Code refactoring
-- `test`: Test additions/changes
-- `chore`: Maintenance tasks
+7. **Delete the feature branch**: Clean up after successful merge
 
-Examples:
-```
-feat(docker): add multi-stage build for smaller image size
-fix(exercises): correct JCL syntax in exercise 03
-docs(readme): update installation instructions
-```
+### Best Practices
+
+- **Small batches**: Keep changes small and focused
+- **Frequent commits**: Commit at least once per day
+- **Quick merges**: Merge feature branches within 1-2 days
+- **Automated testing**: Ensure all tests pass before merging
+- **Code review**: All changes require review before merging
 
 ## Code Style Guidelines
 

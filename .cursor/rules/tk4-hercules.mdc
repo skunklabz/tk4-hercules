@@ -1,8 +1,3 @@
----
-description: Docker-based Hercules Mainframe Emulator with IBM MVS 3.8j - Project guidelines and domain knowledge
-globs: ["**/*"]
-alwaysApply: true
----
 
 # tk4-hercules Project Rules
 
@@ -179,16 +174,22 @@ Focus on educational mainframe computing, historical preservation, and Docker be
 - **scripts/validation/**: Validation scripts (quick-validate.sh, validate-exercises.sh)
 
 ### Trunk-Based Development
-- Always create feature branches from `main` for new development work
-- Use descriptive branch names: `feature/description` or `fix/description`
-- Implement and test all changes on feature branches before merging
-- Require pull requests for all merges back to `main`
-- Ensure thorough testing on feature branches before creating pull requests
-- Code review must be completed before merging to `main`
-- Keep feature branches short-lived and focused on single features/fixes
-- Rebase feature branches on `main` before creating pull requests
-- Never commit directly to `main` - all changes must go through pull requests
+- **Single main branch**: All development flows through `main`
+- **Short-lived feature branches**: Create branches for individual features/fixes
+- **Frequent merges**: Merge feature branches within 1-2 days
+- **Small batches**: Keep changes small and focused
+- **Continuous integration**: All changes are tested on pull requests
+- **No long-lived development branches**: Eliminate integration complexity
+- **Direct to main**: Feature branches merge directly to `main`
+- **Automated testing**: GitHub Actions run on all pull requests
+- **Code review required**: All changes must be reviewed before merging
+- **Quick feedback loop**: Small changes enable rapid iteration
 
+### GitHub Integration
+- Use provided issue templates for bug reports and feature requests
+- Follow the pull request template for all PRs
+- GitHub Actions handle CI/CD automation
+- Automated testing and validation on pull requests 
 ### GitHub Integration
 - Use provided issue templates for bug reports and feature requests
 - Follow the pull request template for all PRs
