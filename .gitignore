@@ -34,6 +34,9 @@ dist/
 *.tar.gz
 *.zip
 
+# Don't ignore scripts/build directory
+!scripts/build/
+
 # Temporary files
 tmp/
 temp/

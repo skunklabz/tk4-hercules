@@ -23,6 +23,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Updated script paths in documentation
 
+## [1.1.0] - 2025-07-27
+
+### Added
+- Repository restructuring for better organization
+- Comprehensive CONTRIBUTING.md guide
+- CHANGELOG.md for version tracking
+- Organized scripts into build, test, and validation directories
+- Moved documentation to dedicated docs/ directory
+- Moved exercises to examples/ directory
+- GitHub Actions CI/CD workflows
+- Makefile for development tasks
+- Issue and PR templates
+- Security policy and code of conduct
+- MIT License
+- Comprehensive .gitignore
+- Project structure documentation
+
+### Changed
+- Improved project structure following common standards
+- Enhanced documentation organization
+- Better separation of concerns in directory structure
+- Updated README.md with new structure and commands
+- Reorganized all scripts into logical subdirectories
+
+### Fixed
+- Updated script paths in documentation
+- Fixed .gitignore to properly include scripts/build directory
+
 ## [1.0.0] - 2024-01-XX
 
 ### Added
@@ -55,8 +83,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Version History
 
-- **1.0.0**: Initial release with basic mainframe functionality
-- **Unreleased**: Repository restructuring and documentation improvements
+- **1.1.0**: Repository restructuring and documentation improvements (2025-07-27)
+- **1.0.0**: Initial release with basic mainframe functionality (2024-01-XX)
 
 ## Contributing
 

@@ -118,7 +118,7 @@ status:
 info:
 	@echo "TK4-Hercules Project Information"
 	@echo "================================"
-	@echo "Version: 1.0.0"
+	@echo "Version: 1.1.0"
 	@echo "Mainframe: IBM MVS 3.8j (TK4-)"
 	@echo "Emulator: Hercules"
 	@echo "Container: Docker"

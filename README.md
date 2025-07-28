@@ -276,7 +276,7 @@ Use `make help` to see all available commands:
    docker-compose up -d
    ```
 
-## Recent Improvements (v1.01)
+## Recent Improvements (v1.1.0)
 
 ### Security Enhancements
 - **LTS Upgrade**: Migrated from Ubuntu 18.04 to Ubuntu 22.04 LTS for extended security support

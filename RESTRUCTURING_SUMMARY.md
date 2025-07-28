@@ -1,5 +1,8 @@
 # Repository Restructuring Summary
 
+**Version**: 1.1.0  
+**Date**: 2025-07-27
+
 ## Overview
 
 The TK4-Hercules repository has been restructured to follow common open source standards and best practices. This document summarizes the changes made and the new organization.
