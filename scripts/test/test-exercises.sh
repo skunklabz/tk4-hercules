@@ -333,8 +333,21 @@ main() {
     
     # Test 3: Start test container (use working GHCR image)
     echo -e "${BLUE}🐳 Starting test container...${NC}"
-    # Use working GHCR image instead of local build
-    IMAGE_NAME=ghcr.io/skunklabz/tk4-hercules:latest docker compose up -d --force-recreate
+    # Use PR-specific image in CI, fallback to latest
+    if [ "${CI:-false}" = "true" ] && [ -n "${GITHUB_REF:-}" ]; then
+        # Extract PR number from GITHUB_REF (refs/pull/5/head -> 5)
+        PR_NUMBER=$(echo "$GITHUB_REF" | sed -n 's/refs\/pull\/\([0-9]*\)\/head/\1/p')
+        if [ -n "$PR_NUMBER" ]; then
+            IMAGE_NAME="ghcr.io/skunklabz/tk4-hercules:pr-$PR_NUMBER"
+        else
+            IMAGE_NAME="ghcr.io/skunklabz/tk4-hercules:latest"
+        fi
+    else
+        IMAGE_NAME="ghcr.io/skunklabz/tk4-hercules:latest"
+    fi
+    
+    echo "Using image: $IMAGE_NAME"
+    IMAGE_NAME="$IMAGE_NAME" docker compose up -d --force-recreate
     
     # Wait for container to be ready
     if ! wait_for_mainframe; then
