@@ -34,9 +34,10 @@ help:
 	@echo "  shell        - Open shell in running container"
 	@echo ""
 	@echo "Testing Commands:"
-	@echo "  test         - Run all tests"
+	@echo "  test         - Run comprehensive tests (LOCAL ONLY)"
 	@echo "  test-quick   - Run quick validation"
 	@echo "  validate     - Validate exercise content"
+	@echo "  test-local   - Run full local test suite"
 	@echo ""
 	@echo "Development Commands:"
 	@echo "  clean        - Clean up containers and images"
@@ -127,12 +128,22 @@ shell:
 
 # Testing commands
 test:
-	@echo "Running comprehensive tests..."
+	@echo "Running comprehensive tests (LOCAL ONLY)..."
+	@echo "⚠️  This command is for local development only!"
+	@echo "   CI runs quick validation instead."
 	@./scripts/test/test-exercises.sh
 
 test-quick:
 	@echo "Running quick validation..."
 	@./scripts/validation/quick-validate.sh
+
+test-local:
+	@echo "Running full local test suite..."
+	@echo "This includes:"
+	@echo "  - Exercise file validation"
+	@echo "  - Container startup and connectivity"
+	@echo "  - Basic mainframe functionality"
+	@./scripts/test/test-exercises.sh
 
 validate:
 	@echo "Validating exercise content..."

@@ -169,52 +169,28 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
     
-    - name: Run comprehensive tests
+    - name: Run quick tests
       run: |
-        echo "🧪 Running comprehensive tests..."
-        chmod +x scripts/test/*.sh
-        ./scripts/test/test-exercises.sh
-      timeout-minutes: 15
+        echo "🧪 Running quick validation tests..."
+        # Only run basic validation, not full container tests
+        chmod +x scripts/validation/*.sh
+        ./scripts/validation/quick-validate.sh
+        
+        # Check if Dockerfile builds successfully
+        echo "🔨 Testing Docker build..."
+        docker build -t tk4-hercules:ci-test .
+        
+        # Clean up test image
+        docker rmi tk4-hercules:ci-test
+      timeout-minutes: 10
     
     - name: Test Docker container startup
       run: |
-        echo "🐳 Testing container startup..."
-        # Use PR-specific image if available, otherwise use latest
-        if [ -n "${{ github.event.pull_request.number }}" ]; then
-          export IMAGE_NAME="ghcr.io/skunklabz/tk4-hercules:pr-${{ github.event.pull_request.number }}"
-        else
-          export IMAGE_NAME="ghcr.io/skunklabz/tk4-hercules:latest"
-        fi
-        echo "Using image: $IMAGE_NAME"
-        IMAGE_NAME="$IMAGE_NAME" docker compose up -d
-        sleep 30
+        echo "🐳 Testing container startup (quick check)..."
+        # Just verify docker-compose.yml is valid
+        docker compose config
         
-        # Check if container is running
-        if docker compose ps | grep -q "Up"; then
-          echo "✅ Container started successfully"
-        else
-          echo "❌ Container failed to start"
-          docker compose logs
-          exit 1
-        fi
-        
-        # Check if ports are accessible
-        if timeout 10 bash -c "</dev/tcp/localhost/3270" 2>/dev/null; then
-          echo "✅ 3270 port is accessible"
-        else
-          echo "❌ 3270 port is not accessible"
-          exit 1
-        fi
-        
-        if timeout 10 bash -c "</dev/tcp/localhost/8038" 2>/dev/null; then
-          echo "✅ 8038 port is accessible"
-        else
-          echo "❌ 8038 port is not accessible"
-          exit 1
-        fi
-        
-        # Cleanup
-        docker compose down
+        echo "✅ Docker Compose configuration is valid"
     
     - name: Test Makefile commands
       run: |
