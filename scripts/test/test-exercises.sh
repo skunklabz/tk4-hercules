@@ -330,7 +330,7 @@ main() {
     
     echo -e "${BLUE}🐳 Starting test container...${NC}"
     # Use local image and explicit container name
-    IMAGE_NAME=tk4-hercules:test docker-compose -p tk4herculestest up -d --force-recreate
+    IMAGE_NAME=tk4-hercules:test docker compose -p tk4herculestest up -d --force-recreate
     
     # Wait for container to be ready
     if ! wait_for_mainframe; then
