@@ -110,20 +110,20 @@ login-ghcr:
 # Container management
 start:
 	@echo "Starting TK4-Hercules mainframe..."
-	@docker-compose up -d
+	@docker compose up -d
 
 stop:
 	@echo "Stopping TK4-Hercules mainframe..."
-	@docker-compose down
+	@docker compose down
 
 restart: stop start
 	@echo "Restarted TK4-Hercules mainframe"
 
 logs:
-	@docker-compose logs -f
+	@docker compose logs -f
 
 shell:
-	@docker-compose exec tk4-hercules /bin/bash
+	@docker compose exec tk4-hercules /bin/bash
 
 # Testing commands
 test:
@@ -141,7 +141,7 @@ validate:
 # Development commands
 clean:
 	@echo "Cleaning up containers and images..."
-	@docker-compose down -v
+	@docker compose down -v
 	@docker rmi tk4-hercules:latest 2>/dev/null || true
 	@docker rmi ghcr.io/skunklabz/tk4-hercules:latest 2>/dev/null || true
 	@docker system prune -f
@@ -184,7 +184,7 @@ ci-lint:
 		fi; \
 	done
 	@echo "Validating YAML files..."
-	@docker-compose config
+	@docker compose config
 	@echo "✅ CI linting checks completed"
 
 ci-full: ci-lint ci-validate ci-test
@@ -197,7 +197,7 @@ release-prep: test validate
 # Utility commands
 status:
 	@echo "Container status:"
-	@docker-compose ps
+	@docker compose ps
 	@echo ""
 	@echo "Port status:"
 	@echo "3270 (Terminal): $(shell netstat -an 2>/dev/null | grep :3270 || echo 'Not listening')"

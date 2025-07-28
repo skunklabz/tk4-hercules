@@ -57,16 +57,16 @@ jobs:
     - name: Test container stability
       run: |
         echo "🐳 Testing container stability..."
-        docker-compose up -d
+        docker compose up -d
         
         # Wait for container to be ready
         sleep 60
         
         # Test container stays running for 10 minutes
         for i in {1..60}; do
-          if ! docker-compose ps | grep -q "Up"; then
+          if ! docker compose ps | grep -q "Up"; then
             echo "❌ Container stopped unexpectedly"
-            docker-compose logs
+            docker compose logs
             exit 1
           fi
           echo "✅ Container still running (minute $i/60)"
@@ -74,7 +74,7 @@ jobs:
         done
         
         # Cleanup
-        docker-compose down
+        docker compose down
     
     - name: Test all Makefile commands
       run: |
@@ -88,7 +88,7 @@ jobs:
     - name: Check system resources
       run: |
         echo "💾 Checking system resource usage..."
-        docker-compose up -d
+        docker compose up -d
         sleep 30
         
         # Check memory usage
@@ -100,7 +100,7 @@ jobs:
         echo "Disk usage:"
         echo "$DISK_USAGE"
         
-        docker-compose down
+        docker compose down
     
     - name: Generate test report
       run: |

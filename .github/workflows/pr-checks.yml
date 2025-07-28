@@ -43,7 +43,7 @@ jobs:
       run: |
         echo "📋 Validating YAML files..."
         # Check docker-compose.yml
-        docker-compose config
+        docker compose config
         
         # Check GitHub workflow files
         for file in .github/workflows/*.yml; do

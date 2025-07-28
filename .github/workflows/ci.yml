@@ -46,7 +46,7 @@ jobs:
       run: |
         echo "📋 Validating YAML files..."
         # Check docker-compose.yml
-        docker-compose config
+        docker compose config
         
         # Check GitHub workflow files
         for file in .github/workflows/*.yml; do
@@ -165,15 +165,15 @@ jobs:
     - name: Test Docker container startup
       run: |
         echo "🐳 Testing container startup..."
-        docker-compose up -d
+        docker compose up -d
         sleep 30
         
         # Check if container is running
-        if docker-compose ps | grep -q "Up"; then
+        if docker compose ps | grep -q "Up"; then
           echo "✅ Container started successfully"
         else
           echo "❌ Container failed to start"
-          docker-compose logs
+          docker compose logs
           exit 1
         fi
         
@@ -193,7 +193,7 @@ jobs:
         fi
         
         # Cleanup
-        docker-compose down
+        docker compose down
     
     - name: Test Makefile commands
       run: |
