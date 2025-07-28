@@ -94,7 +94,6 @@ jobs:
           "docs"
           "examples"
           ".github/ISSUE_TEMPLATE"
-          ".github/PULL_REQUEST_TEMPLATE"
           ".github/workflows"
         )
         
@@ -106,6 +105,14 @@ jobs:
             echo "✅ $dir exists"
           fi
         done
+        
+        # Check for pull request template (can be file or directory)
+        if [ ! -f ".github/PULL_REQUEST_TEMPLATE.md" ] && [ ! -d ".github/PULL_REQUEST_TEMPLATE" ]; then
+          echo "❌ Required pull request template missing (neither .github/PULL_REQUEST_TEMPLATE.md nor .github/PULL_REQUEST_TEMPLATE/ found)"
+          exit 1
+        else
+          echo "✅ Pull request template exists"
+        fi
     
     - name: Check for TODO comments
       run: |
