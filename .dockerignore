@@ -1,26 +1,54 @@
-# Git and version control
-.git
-.gitignore
-.gitattributes
-
 # Documentation
 README.md
-*.md
+CONTRIBUTING.md
+CHANGELOG.md
+CODE_OF_CONDUCT.md
+SECURITY.md
+LICENSE
 docs/
+*.md
 
-# Docker files (except Dockerfile)
-docker-compose*.yml
-.dockerignore
-
-# Allow TK4- distribution file
-!tk4-_v1.00_current.zip
-
-# IDE and editor files
+# Development files
+.git/
+.gitignore
+.github/
+.cursor/
 .vscode/
-.idea/
 *.swp
 *.swo
 *~
+
+# Scripts (not needed in container)
+scripts/
+Makefile
+
+# Configuration files (mounted at runtime)
+config/
+docker-compose.yml
+docker-compose.*.yml
+
+# Examples (not needed in container)
+examples/
+
+# Tools (not needed in container)
+tools/
+
+# Assets (not needed in container)
+assets/
+
+# Test files
+test/
+*.test
+*_test.sh
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
 
 # OS generated files
 .DS_Store
@@ -31,32 +59,16 @@ docker-compose*.yml
 ehthumbs.db
 Thumbs.db
 
-# Logs
-*.log
-logs/
-
-# Temporary files
-*.tmp
-*.temp
-tmp/
-temp/
+# IDE files
+.idea/
+*.iml
+.project
+.classpath
+.settings/
 
 # Build artifacts
+*.tar.gz
+*.zip
+*.tar
 build/
-dist/
-node_modules/
-
-# Test files
-test/
-tests/
-*.test.js
-*.spec.js
-
-# Environment files
-.env
-.env.local
-.env.*.local
-
-# Backup files
-*.bak
-*.backup 
+dist/ 

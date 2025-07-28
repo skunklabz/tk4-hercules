@@ -1,7 +1,7 @@
 # TK4-Hercules Makefile
 # Common development tasks for the project
 
-.PHONY: help build start stop test validate clean docs
+.PHONY: help build start stop test validate clean docs build-ghcr push-ghcr
 
 # Default target
 help:
@@ -11,6 +11,11 @@ help:
 	@echo "Build Commands:"
 	@echo "  build        - Build the Docker container"
 	@echo "  build-platform - Build for specific platform"
+	@echo "  build-ghcr   - Build for GitHub Container Registry"
+	@echo ""
+	@echo "Registry Commands:"
+	@echo "  push-ghcr    - Build and push to GitHub Container Registry"
+	@echo "  login-ghcr   - Login to GitHub Container Registry"
 	@echo ""
 	@echo "Container Commands:"
 	@echo "  start        - Start the mainframe container"
@@ -44,6 +49,20 @@ build:
 build-platform:
 	@echo "Building for specific platform..."
 	@./scripts/build/build-platform.sh
+
+build-ghcr:
+	@echo "Building for GitHub Container Registry..."
+	@./scripts/build/build-ghcr.sh --no-prompt
+
+# Registry commands
+push-ghcr:
+	@echo "Building and pushing to GitHub Container Registry..."
+	@./scripts/build/build-ghcr.sh
+
+login-ghcr:
+	@echo "Logging into GitHub Container Registry..."
+	@echo "Please ensure you have a GitHub token with 'write:packages' permission"
+	@echo "Run: echo \$GITHUB_TOKEN | docker login ghcr.io -u skunklabz --password-stdin"
 
 # Container management
 start:
@@ -81,6 +100,7 @@ clean:
 	@echo "Cleaning up containers and images..."
 	@docker-compose down -v
 	@docker rmi tk4-hercules:latest 2>/dev/null || true
+	@docker rmi ghcr.io/skunklabz/tk4-hercules:latest 2>/dev/null || true
 	@docker system prune -f
 
 docs:
@@ -147,6 +167,7 @@ info:
 	@echo "Mainframe: IBM MVS 3.8j (TK4-)"
 	@echo "Emulator: Hercules"
 	@echo "Container: Docker"
+	@echo "Registry: GitHub Container Registry (ghcr.io)"
 	@echo ""
 	@echo "Documentation:"
 	@echo "- README.md: Quick start guide"

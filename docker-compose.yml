@@ -2,7 +2,8 @@ version: '3.8'
 
 services:
   tk4-hercules:
-    image: skunklabz/tk4-hercules:latest
+    # Use GHCR image as primary, fallback to Docker Hub
+    image: ghcr.io/skunklabz/tk4-hercules:latest
     container_name: tk4-hercules
     ports:
       - "3270:3270"   # 3270 terminal protocol
@@ -48,6 +49,7 @@ services:
       - "com.skunklabz.version=1.01"
       - "com.skunklabz.base-image=ubuntu:22.04"
       - "com.skunklabz.architecture=mainframe-emulation"
+      - "com.skunklabz.registry=ghcr.io"
     # Logging configuration
     logging:
       driver: "json-file"

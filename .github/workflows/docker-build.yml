@@ -1,0 +1,74 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: skunklabz/tk4-hercules
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Log in to Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Extract metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=sha,prefix={{branch}}-
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        platforms: linux/amd64
+        push: ${{ github.event_name != 'pull_request' }}
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+    - name: Run tests
+      if: github.event_name != 'pull_request'
+      run: |
+        echo "Running container tests..."
+        docker run --rm -d --name test-tk4 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+        sleep 30
+        docker ps | grep test-tk4 || exit 1
+        docker stop test-tk4
+
+    - name: Update documentation
+      if: github.event_name != 'pull_request'
+      run: |
+        echo "✅ Docker image built and pushed successfully!"
+        echo "🔗 GHCR URL: https://ghcr.io/skunklabz/tk4-hercules"
+        echo "📋 Available tags:"
+        docker images ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}" 

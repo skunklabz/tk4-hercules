@@ -1,386 +1,183 @@
 # TK4-Hercules
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://www.docker.com/)
-[![Mainframe](https://img.shields.io/badge/Mainframe-MVS%203.8j-green.svg)](https://en.wikipedia.org/wiki/MVS)
-[![CI](https://github.com/skunklabz/tk4-hercules/workflows/CI/badge.svg)](https://github.com/skunklabz/tk4-hercules/actions?query=workflow%3ACI)
-[![PR Checks](https://github.com/skunklabz/tk4-hercules/workflows/Pull%20Request%20Checks/badge.svg)](https://github.com/skunklabz/tk4-hercules/actions?query=workflow%3A%22Pull+Request+Checks%22)
+A Docker containerized IBM MVS 3.8j (Turnkey 4-) mainframe emulator using Hercules for educational mainframe computing and historical preservation.
 
-## The MVS 3.8j Tur(n)key 4- System on the Hercules Mainframe Emulator
-
-This project containerizes the Hercules mainframe emulator running IBM MVS 3.8j (Turnkey 4-), providing an educational platform for learning about mainframe computing and historical IBM System/370 architecture.
-
-## 🚀 Quick Start
-
-```bash
-# Clone the repository
-git clone https://github.com/your-username/tk4-hercules.git
-cd tk4-hercules
-
-# Build and start the mainframe
-make dev-setup
-
-# Connect to the mainframe
-telnet localhost 3270
-# or visit http://localhost:8038
-```
-
-## What is this?
-
-**Hercules** is an open source software implementation of the mainframe System/370 and ESA/390 architectures, in addition to the latest 64-bit z/Architecture. Hercules runs under Linux, Windows, Solaris, FreeBSD, and Mac OS X.
-
-**MVS 3.8j Tur(n)key 4- ("TK4-")** is a ready-to-use OS/VS2 MVS 3.8j system built specifically to run under the Hercules System/370, ESA/390, and z/Architecture Emulator. It is an extension of the original MVS Tur(n)key Version 3 System ("TK3") created by Volker Bandke in 2002.
-
-## Prerequisites
-
-Before running the container, you'll need a 3270 terminal emulator to connect to the mainframe:
-
-### Linux
-```bash
-# Ubuntu/Debian
-sudo apt-get install c3270
-
-# CentOS/RHEL/Fedora
-sudo yum install c3270
-```
-
-### macOS
-```bash
-brew install c3270
-```
-
-### Windows
-Download and install [x3270](http://x3270.bgp.nu/) or use a web-based 3270 emulator.
+[![Docker Build](https://github.com/skunklabz/tk4-hercules/workflows/Build%20and%20Push%20Docker%20Image/badge.svg)](https://github.com/skunklabz/tk4-hercules/actions)
+[![GitHub Container Registry](https://img.shields.io/badge/GHCR-ghcr.io%2Fskunklabz%2Ftk4--hercules-blue)](https://ghcr.io/skunklabz/tk4-hercules)
 
 ## Quick Start
 
-### Prerequisites: Obtaining TK4- Distribution
+### Using GitHub Container Registry (Recommended)
 
-The TK4- distribution is available from the official source. You have several options:
+```bash
+# Pull and run the latest image
+docker run -d \
+  --name tk4-hercules \
+  -p 3270:3270 \
+  -p 8038:8038 \
+  ghcr.io/skunklabz/tk4-hercules:latest
 
-1. **Option A: Automatic Download (Recommended)**
-   - The Dockerfile will automatically download the distribution during build
-   - Simply run `./build.sh` and the download will happen automatically
+# Or use Docker Compose
+docker-compose up -d
+```
 
-2. **Option B: Manual Download**
-   - Download from: https://wotho.pebble-beach.ch/tk4-/tk4-_v1.00_current.zip (~238MB)
-   - Place the file in the project root directory before building
-   - Use `./download-tk4.sh` for additional download options
+### Using Docker Hub
 
-3. **Option C: Use Pre-built Image**
-   - Use the pre-built Docker image: `docker pull skunklabz/tk4-hercules:latest`
-   - Skip the build step and go directly to running the container
+```bash
+# Pull and run from Docker Hub
+docker run -d \
+  --name tk4-hercules \
+  -p 3270:3270 \
+  -p 8038:8038 \
+  skunklabz/tk4-hercules:latest
+```
 
-### Option 1: Using Docker Compose (Recommended)
-The easiest way to get started with persistence:
+### Connect to the Mainframe
+
+```bash
+# Connect via telnet (3270 terminal)
+telnet localhost 3270
+
+# Or access the web console
+open http://localhost:8038
+```
+
+## What is TK4-?
+
+TK4- is a pre-configured IBM MVS 3.8j (Multiple Virtual Storage) system that runs on the Hercules mainframe emulator. It's designed for educational purposes and historical preservation of mainframe computing.
+
+### Features
+
+- **IBM MVS 3.8j**: Complete mainframe operating system from 1981
+- **Hercules Emulator**: Industry-standard mainframe emulation
+- **3270 Terminal Support**: Authentic mainframe terminal experience
+- **Web Console**: Modern web interface for system monitoring
+- **Educational Tools**: Pre-loaded with learning materials and examples
+- **Persistent Storage**: 8 volume mount points for data persistence
+
+### System Specifications
+
+- **OS**: IBM MVS 3.8j Service Level 8505
+- **Emulator**: Hercules 4.4.1
+- **Base Image**: Ubuntu 22.04 LTS
+- **Architecture**: x86_64 (emulating System/370)
+- **Memory**: Configurable (default: 1-2GB)
+- **Storage**: Multiple DASD volumes
+
+## Available Images
+
+### GitHub Container Registry (GHCR)
+
+- **Latest**: `ghcr.io/skunklabz/tk4-hercules:latest`
+- **Versioned**: `ghcr.io/skunklabz/tk4-hercules:v1.01`
+- **Branch**: `ghcr.io/skunklabz/tk4-hercules:main`
+
+### Docker Hub
+
+- **Latest**: `skunklabz/tk4-hercules:latest`
+- **Versioned**: `skunklabz/tk4-hercules:v1.01`
+
+## Development
+
+### Prerequisites
+
+- Docker and Docker Compose
+- Git
+- Make (optional, for convenience commands)
+
+### Building Locally
 
 ```bash
 # Clone the repository
 git clone https://github.com/skunklabz/tk4-hercules.git
 cd tk4-hercules
 
-# Build the image (will automatically download TK4- distribution):
+# Build the image
 make build
 
-# Test the container:
+# Start the container
+make start
+```
+
+### Development Commands
+
+```bash
+# Build and push to GHCR
+make push-ghcr
+
+# Run tests
 make test
 
-# Start the container with persistence
-docker-compose up -d
+# Clean up
+make clean
 
-# View logs
-docker-compose logs -f
+# Show all available commands
+make help
 ```
 
-### Option 2: Basic Usage (No Persistence)
-To run this on your local machine simply run:
+## Documentation
 
-```bash
-docker run -ti -p 3270:3270 -p 8038:8038 skunklabz/tk4-hercules
-```
+- **[Learning Guide](docs/LEARNING_GUIDE.md)**: Educational content and tutorials
+- **[Registry Setup](docs/REGISTRY_SETUP.md)**: GitHub Container Registry configuration
+- **[Testing Guide](docs/TESTING.md)**: Testing procedures and validation
+- **[Project Structure](docs/PROJECT_STRUCTURE.md)**: Repository organization
+- **[Contributing](CONTRIBUTING.md)**: How to contribute to the project
 
-After about 5 minutes, you'll see the MVS console prompt where you can start learning about MVS 3.8j.
+## Examples and Exercises
 
-### Connecting to Your Mainframe
+The `examples/` directory contains educational materials:
 
-1. **Using 3270 Terminal Emulator:**
-   ```bash
-   c3270 localhost:3270
-   ```
+- **[Getting Started](examples/start-here.md)**: First steps with the mainframe
+- **[File Systems](examples/02-file-systems.md)**: Understanding MVS file systems
+- **[JCL Jobs](examples/03-first-jcl-job.md)**: Job Control Language examples
+- **[Challenges](examples/challenges/)**: Advanced exercises and projects
 
-2. **Using Web Console:**
-   Open your browser and navigate to `http://localhost:8038/`
+## Ports and Services
 
-### Logging into MVS
+- **3270**: Mainframe terminal protocol (telnet)
+- **8038**: Web console interface (HTTP)
 
-1. When you connect via 3270, you'll see the TSO login screen
-2. Press Enter once
-3. Use `herc01` as the username
-4. Use `CUL8TR` as the password
-5. Press Enter twice
+## Volume Mounts
 
-Congratulations! You've successfully started a mainframe emulator, booted an operating system, and logged into your new mainframe environment.
+The container uses 8 persistent volume mounts:
 
-## Running Your First Job
+- `/tk4-/conf`: Master configuration
+- `/tk4-/local_conf`: Initialization scripts
+- `/tk4-/local_scripts`: User modifications
+- `/tk4-/prt`: Line printer output
+- `/tk4-/pch`: Card punch output
+- `/tk4-/dasd`: Disk volumes
+- `/tk4-/jcl`: Job control files
+- `/tk4-/log`: System logs
 
-MVS 3.8j comes with several compilers including COBOL. Here's how to run a sample COBOL job:
+## Security
 
-> **Note**: The following step-by-step instructions are adapted from the excellent tutorial by [Bradrico Rigg](https://bradricorigg.medium.com/run-your-own-mainframe-using-hercules-mainframe-emulator-and-mvs-3-8j-tk4-55fa7c982553) on Medium.
+- Non-root user execution (where possible)
+- Resource limits for CPU and memory
+- Security options enabled
+- Regular base image updates
 
-1. From the TSO Applications screen, select `1` and press Enter to launch RFE
-2. Select `3` and press Enter to launch the UTILITIES menu
-3. Select `4` and press Enter to launch the RFE DSLIST menu
-4. Type `SYS2` and press Enter to show files and directories
-5. Navigate to `SYS2.JCLLIB` and type `V` then Enter
-6. Use F8 to find the `TESTCOB` file
-7. Navigate to the file and type `V` (all the way to the left), then press Enter
-8. Type `submit` and press Enter to submit the job
-9. Press Enter to return to the editor, then F3 six times to return to the main menu
+## Support
 
-The job output will be displayed on the Hercules console.
-
-## Persistence Setup
-
-To run with persistence so that you don't lose your data after stopping the docker container, use the following command:
-
-```bash
-docker run -d \
---mount source=tk4-conf,target=/tk4-/conf \
---mount source=tk4-local_conf,target=/tk4-/local_conf \
---mount source=tk4-local_scripts,target=/tk4-/local_scripts \
---mount source=tk4-prt,target=/tk4-/prt \
---mount source=tk4-dasd,target=/tk4-/dasd \
---mount source=tk4-pch,target=/tk4-/pch \
---mount source=tk4-jcl,target=/tk4-/jcl \
---mount source=tk4-log,target=/tk4-/log \
--p 3270:3270 \
--p 8038:8038 skunklabz/tk4-hercules
-```
-
-### Description of Persisted Directories
-
-- **/tk4-/conf**
-  - Master configuration file tk4-.cnf is stored here
-- **/tk4-/local_conf**
-  - Scripts for initialization and unattended operations
-- **/tk4-/local_scripts**
-  - 10 files for user-applied modifications, run after Hercules initialization
-- **/tk4-/prt**
-  - Simulated line printer devices output
-- **/tk4-/pch**
-  - Card punch devices output
-- **/tk4-/dasd**
-  - All simulated CKD DASD volumes (Count Key Data - direct-access storage device)
-- **/tk4-/jcl**
-  - SYSGEN Job Control Files
-- **/tk4-/log**
-  - Log files created during sysgen
-
-## Educational Resources
-
-### 🎓 Learning Guide
-- **[TK4-Hercules Learning Guide](docs/LEARNING_GUIDE.md)** - Comprehensive hands-on exercises and tutorials for learning mainframe computing concepts
-- **[Individual Exercises](examples/README.md)** - Step-by-step exercises organized by difficulty level
-
-### YouTube Videos
-- **Containerizing the Mainframe**: https://youtu.be/uRf6A6_GWzw
-- **Running on Azure Cloud Container Instances**: https://youtu.be/Y-JDRwk_wFY
-
-### Additional Learning Resources
-- [Hercules Main Page](http://www.hercules-390.eu/) - The main Hercules website
-- [TK4- Download Page](http://wotho.ethz.ch/tk4-/) - Official TK4- distribution
-- [Mosix Channel](https://www.youtube.com/user/mosix5760) - Excellent resource for MVS learning
-- [Jay Moseley's Site](http://www.jaymoseley.com/) - Invaluable resource for MVS programming and system maintenance
-- [Bradrico Rigg's MVS Tutorial](https://bradricorigg.medium.com/run-your-own-mainframe-using-hercules-mainframe-emulator-and-mvs-3-8j-tk4-55fa7c982553) - Comprehensive step-by-step guide for getting started with MVS 3.8j
-
-## Troubleshooting
-
-### Common Issues
-
-1. **Container won't start**: Ensure ports 3270 and 8038 are not already in use
-2. **Can't connect via 3270**: Verify your terminal emulator is properly installed
-3. **Slow startup**: The system takes about 5 minutes to fully boot - this is normal
-4. **Permission errors**: Ensure Docker has proper permissions to create volumes
-5. **Architecture compatibility issues**: If you encounter binary compatibility errors:
-   - On Apple Silicon (M1/M2): Try building with `docker build --platform linux/amd64`
-   - On x86_64: Use the default build process
-   - The TK4- distribution includes binaries for multiple architectures
-
-### Logging Off
-
-To properly log off from MVS:
-1. Press F3 at the main TSO Applications menu
-2. Type `logoff` and press Enter
-
-### Stopping the Container
-
-**If using Docker Compose:**
-```bash
-docker-compose down
-```
-
-**If using Docker run:**
-```bash
-# Find the container ID
-docker ps
-
-# Stop the container
-docker stop <container-id>
-```
-
-## Technical Details
-
-- **Base Image**: Ubuntu 22.04 LTS
-- **Hercules Version**: 4.4.1
-- **MVS Version**: 3.8j Service Level 8505
-- **Architecture**: System/370 emulation
-- **Terminal Protocol**: 3270
-- **Web Console**: Port 8038
-- **Resource Limits**: 2GB RAM, 2 CPU cores (configurable)
-- **Security**: Non-root user creation, no-new-privileges flag
-- **Logging**: JSON format with rotation (10MB max, 3 files)
-
-## Build Process
-
-### Available Commands
-
-Use `make help` to see all available commands:
-
-- **`make build`** - Builds the Docker image with proper tagging
-- **`make build-platform`** - Platform-aware build script (recommended for Apple Silicon)
-- **`make test`** - Tests the container functionality and health
-- **`make test-quick`** - Quick validation of exercise files and content
-- **`make validate`** - Comprehensive testing of all exercises with running mainframe
-- **`make start`** - Start the mainframe container
-- **`make stop`** - Stop the mainframe container
-- **`make logs`** - View container logs
-- **`make shell`** - Open shell in running container
-
-### Building from Source
-
-1. **Build the Image (Recommended)**
-   ```bash
-   # For Apple Silicon (M1/M2) - Platform-aware build
-   make build-platform
-   
-   # For x86_64 or standard build
-   make build
-   ```
-   The Dockerfile will automatically download the TK4- distribution during the build process.
-
-2. **Test the Container**
-   ```bash
-   make test
-   ```
-
-4. **Run with Docker Compose**
-   ```bash
-   docker-compose up -d
-   ```
-
-## Recent Improvements (v1.1.0)
-
-### Security Enhancements
-- **LTS Upgrade**: Migrated from Ubuntu 18.04 to Ubuntu 22.04 LTS for extended security support
-- **Non-root User**: Created dedicated `hercules` user for improved security
-- **Security Options**: Added `no-new-privileges` flag to prevent privilege escalation
-- **Certificate Updates**: Included `ca-certificates` package for secure downloads
-
-### Performance & Resource Management
-- **Resource Limits**: Configurable CPU and memory limits (2GB RAM, 2 CPU cores default)
-- **Multi-stage Build**: Optimized Docker build process for smaller image size
-- **Log Rotation**: JSON logging with automatic rotation (10MB max, 3 files)
-- **Build Optimization**: Added `.dockerignore` for faster builds
-
-### Container Best Practices
-- **Health Checks**: Improved reliability with better process monitoring
-- **Environment Variables**: Added version tracking and timezone configuration
-- **Metadata**: Enhanced container labels for better management
-- **Error Handling**: Better download verification and error reporting
-
-### Architecture Compatibility
-- **Platform Support**: Enhanced support for ARM64 (Apple Silicon) and x86_64 architectures
-- **Cross-platform Builds**: Improved build process for different CPU architectures
-
-## 🔄 CI/CD Pipeline
-
-This project uses comprehensive GitHub Actions workflows for automated testing, linting, and security scanning:
-
-### Automated Workflows
-
-- **CI Pipeline**: Runs on every push and pull request with comprehensive testing
-- **Pull Request Checks**: Fast validation for PRs with incremental testing
-- **Nightly Builds**: Daily comprehensive testing and stability checks
-- **Dependency Monitoring**: Weekly security and dependency updates
-- **Release Automation**: Automated releases with Docker image publishing
-
-### Local Testing
-
-Test the CI pipeline locally before pushing:
-
-```bash
-# Run full CI pipeline locally
-make ci-full
-
-# Run individual components
-make ci-lint      # Linting and code quality checks
-make ci-validate  # Validation tests
-make ci-test      # Full functional tests
-```
-
-### Quality Gates
-
-- ✅ Shell script linting with shellcheck
-- ✅ YAML syntax validation
-- ✅ Docker image building and testing
-- ✅ Security vulnerability scanning
-- ✅ Documentation validation
-- ✅ Exercise content verification
-- ✅ Container stability testing
-
-For detailed workflow documentation, see [`.github/workflows/README.md`](.github/workflows/README.md).
-
-## 📁 Project Structure
-
-```
-tk4-hercules/
-├── .github/                    # GitHub templates and workflows
-│   └── workflows/             # CI/CD workflows
-├── .cursor/                    # Cursor IDE configuration
-├── assets/                     # Static assets and configurations
-├── config/                     # Configuration files
-├── docs/                       # Documentation
-│   ├── LEARNING_GUIDE.md      # Educational content
-│   └── TESTING.md             # Testing procedures
-├── examples/                   # Educational exercises
-│   ├── challenges/            # Advanced exercises
-│   └── README.md              # Exercise guide
-├── scripts/                    # Build and utility scripts
-│   ├── build/                 # Build scripts
-│   ├── test/                  # Test scripts
-│   └── validation/            # Validation scripts
-├── tools/                      # Development tools
-├── CONTRIBUTING.md            # Contribution guidelines
-├── CHANGELOG.md               # Version history
-├── CODE_OF_CONDUCT.md         # Community guidelines
-├── LICENSE                    # MIT License
-├── Makefile                   # Development commands
-├── README.md                  # This file
-├── SECURITY.md                # Security policy
-├── Dockerfile                 # Container definition
-└── docker-compose.yml         # Container orchestration
-```
-
-## 🤝 Contributing
-
-This project follows trunk-based development:
-- Create feature branches from `main`
-- Use descriptive branch names: `feature/description` or `fix/description`
-- Submit pull requests for all changes
-- Ensure thorough testing before merging
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
+- **Issues**: [GitHub Issues](https://github.com/skunklabz/tk4-hercules/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/skunklabz/tk4-hercules/discussions)
+- **Documentation**: [docs/](docs/) directory
 
 ## License
 
-This project is open source and follows the licensing terms of the original Hercules and TK4- distributions.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- **TK4-**: The original Turnkey 4- system by Volker Bandke
+- **Hercules**: The mainframe emulator by Jay Maynard and contributors
+- **IBM**: For the original MVS 3.8j operating system
+- **Mainframe Community**: For preserving and sharing mainframe knowledge
+
+## Version History
+
+See [CHANGELOG.md](CHANGELOG.md) for detailed version history and changes.
+
+---
+
+**Note**: This is an educational project for learning mainframe computing concepts. The MVS 3.8j system is a historical artifact and should be used for educational purposes only.
