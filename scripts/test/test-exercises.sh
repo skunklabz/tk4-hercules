@@ -331,38 +331,17 @@ main() {
         exit 1
     fi
     
-    # Test 3: Start test container (use working GHCR image)
+    # Test 3: Start test container
     echo -e "${BLUE}🐳 Starting test container...${NC}"
-    # Use PR-specific image in CI, fallback to latest
+    # In CI, use the locally built image; locally, use GHCR latest
     if [ "${CI:-false}" = "true" ]; then
-        # Debug: Print environment variables
-        echo "CI: $CI"
-        echo "GITHUB_REF: $GITHUB_REF"
-        echo "GITHUB_EVENT_NAME: $GITHUB_EVENT_NAME"
-        
-        # Try multiple ways to get PR number
-        if [ -n "${GITHUB_REF:-}" ] && echo "$GITHUB_REF" | grep -q "refs/pull/"; then
-            # Extract PR number from GITHUB_REF (refs/pull/5/merge -> 5 or refs/pull/5/head -> 5)
-            PR_NUMBER=$(echo "$GITHUB_REF" | sed -n 's/refs\/pull\/\([0-9]*\)\/.*/\1/p')
-            echo "PR_NUMBER from GITHUB_REF: $PR_NUMBER"
-        elif [ -n "${GITHUB_EVENT_NAME:-}" ] && [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
-            # Try to get from event file if available
-            if [ -f "$GITHUB_EVENT_PATH" ]; then
-                PR_NUMBER=$(jq -r '.pull_request.number' "$GITHUB_EVENT_PATH" 2>/dev/null || echo "")
-                echo "PR_NUMBER from event file: $PR_NUMBER"
-            fi
-        fi
-        
-        if [ -n "$PR_NUMBER" ] && [ "$PR_NUMBER" != "null" ]; then
-            IMAGE_NAME="ghcr.io/skunklabz/tk4-hercules:pr-$PR_NUMBER"
-            echo "Using PR-specific image: $IMAGE_NAME"
-        else
-            IMAGE_NAME="ghcr.io/skunklabz/tk4-hercules:latest"
-            echo "PR number not found, using latest: $IMAGE_NAME"
-        fi
+        # Use locally built image in CI
+        IMAGE_NAME="tk4-hercules:test"
+        echo "Using locally built image: $IMAGE_NAME"
     else
+        # Use GHCR latest for local development
         IMAGE_NAME="ghcr.io/skunklabz/tk4-hercules:latest"
-        echo "Not in CI, using latest: $IMAGE_NAME"
+        echo "Using GHCR latest: $IMAGE_NAME"
     fi
     
     echo "Final image: $IMAGE_NAME"
