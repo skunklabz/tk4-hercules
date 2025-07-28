@@ -128,21 +128,21 @@ test_code_examples() {
     echo -e "${BLUE}💻 Testing code examples...${NC}"
     
     # Check for TSO command examples
-    if grep -r "```tso" exercises/ > /dev/null 2>&1; then
+    if grep -r "\`\`\`tso" exercises/ > /dev/null 2>&1; then
         log_test "TSO Code Examples" "PASS" "TSO code examples found"
     else
         log_test "TSO Code Examples" "SKIP" "TSO code examples not found"
     fi
     
     # Check for JCL examples
-    if grep -r "```jcl" exercises/ > /dev/null 2>&1; then
+    if grep -r "\`\`\`jcl" exercises/ > /dev/null 2>&1; then
         log_test "JCL Code Examples" "PASS" "JCL code examples found"
     else
         log_test "JCL Code Examples" "FAIL" "JCL code examples missing"
     fi
     
     # Check for COBOL examples
-    if grep -r "```cobol" exercises/ > /dev/null 2>&1; then
+    if grep -r "\`\`\`cobol" exercises/ > /dev/null 2>&1; then
         log_test "COBOL Code Examples" "PASS" "COBOL code examples found"
     else
         log_test "COBOL Code Examples" "SKIP" "COBOL code examples not found"
@@ -266,7 +266,7 @@ test_markdown_formatting() {
     fi
     
     # Check for code blocks
-    if grep -r "^```" exercises/ > /dev/null 2>&1; then
+    if grep -r "^\\\`\\\`\\\`" exercises/ > /dev/null 2>&1; then
         log_test "Code Blocks" "PASS" "Code blocks found"
     else
         log_test "Code Blocks" "FAIL" "Code blocks missing"

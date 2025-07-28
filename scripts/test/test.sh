@@ -18,8 +18,8 @@ echo ""
 # Function to cleanup
 cleanup() {
     echo "🧹 Cleaning up test container..."
-    docker stop ${CONTAINER_NAME} 2>/dev/null || true
-    docker rm ${CONTAINER_NAME} 2>/dev/null || true
+    docker stop "${CONTAINER_NAME}" 2>/dev/null || true
+    docker rm "${CONTAINER_NAME}" 2>/dev/null || true
 }
 
 # Set trap to cleanup on exit
@@ -37,7 +37,7 @@ fi
 # Test 2: Test container startup
 echo ""
 echo "🚀 Test 2: Testing container startup..."
-docker run -d --name ${CONTAINER_NAME} \
+docker run -d --name "${CONTAINER_NAME}" \
     -p 3270:3270 \
     -p 8038:8038 \
     ${IMAGE_NAME}:latest
@@ -48,11 +48,11 @@ sleep 5
 # Test 3: Check if container is running
 echo ""
 echo "🔍 Test 3: Checking container status..."
-if docker ps --format "{{.Names}}" | grep -q ${CONTAINER_NAME}; then
+if docker ps --format "{{.Names}}" | grep -q "${CONTAINER_NAME}"; then
     echo "✅ Container is running"
 else
     echo "❌ Container failed to start"
-    docker logs ${CONTAINER_NAME}
+    docker logs "${CONTAINER_NAME}"
     exit 1
 fi
 
@@ -60,7 +60,7 @@ fi
 echo ""
 echo "💚 Test 4: Checking health status..."
 sleep 10  # Give health check time to run
-HEALTH_STATUS=$(docker inspect --format='{{.State.Health.Status}}' ${CONTAINER_NAME} 2>/dev/null || echo "no-health-check")
+HEALTH_STATUS=$(docker inspect --format='{{.State.Health.Status}}' "${CONTAINER_NAME}" 2>/dev/null || echo "no-health-check")
 echo "Health status: ${HEALTH_STATUS}"
 
 # Test 5: Check if ports are accessible
@@ -82,7 +82,7 @@ fi
 echo ""
 echo "📝 Test 6: Checking container logs..."
 echo "Recent logs:"
-docker logs --tail 10 ${CONTAINER_NAME}
+docker logs --tail 10 "${CONTAINER_NAME}"
 
 echo ""
 echo "🎉 All tests completed!"

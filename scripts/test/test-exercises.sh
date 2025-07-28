@@ -242,7 +242,7 @@ test_exercise_content() {
         log_test "Exercise Navigation" "PASS" "Navigation links found"
     else
         log_test "Exercise Navigation" "FAIL" "Navigation links missing"
-    done
+    fi
 }
 
 # Function to test mainframe connectivity
@@ -325,12 +325,12 @@ main() {
     
     # Test 3: Start test container
     echo -e "${BLUE}🐳 Starting test container...${NC}"
-    docker-compose up -d --force-recreate
+    docker compose up -d --force-recreate
     
     # Wait for container to be ready
     if ! wait_for_mainframe; then
         echo -e "${RED}❌ Failed to start mainframe for testing${NC}"
-        docker-compose down
+        docker compose down
         exit 1
     fi
     
@@ -386,7 +386,7 @@ main() {
     # Cleanup
     echo ""
     echo -e "${BLUE}🧹 Cleaning up test environment...${NC}"
-    docker-compose down
+    docker compose down
     
     echo ""
     echo -e "${BLUE}📋 Detailed results saved to: $LOG_FILE${NC}"
@@ -395,7 +395,7 @@ main() {
 }
 
 # Handle script interruption
-trap 'echo -e "\n${YELLOW}⚠️  Test interrupted. Cleaning up...${NC}"; docker-compose down; exit 1' INT TERM
+trap 'echo -e "\n${YELLOW}⚠️  Test interrupted. Cleaning up...${NC}"; docker compose down; exit 1' INT TERM
 
 # Run main function
 main "$@" 
