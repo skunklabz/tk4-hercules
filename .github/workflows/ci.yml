@@ -162,6 +162,13 @@ jobs:
         chmod +x scripts/validation/*.sh
         ./scripts/validation/quick-validate.sh
     
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    
     - name: Run comprehensive tests
       run: |
         echo "🧪 Running comprehensive tests..."
@@ -172,7 +179,14 @@ jobs:
     - name: Test Docker container startup
       run: |
         echo "🐳 Testing container startup..."
-        docker compose up -d
+        # Use PR-specific image if available, otherwise use latest
+        if [ -n "${{ github.event.pull_request.number }}" ]; then
+          export IMAGE_NAME="ghcr.io/skunklabz/tk4-hercules:pr-${{ github.event.pull_request.number }}"
+        else
+          export IMAGE_NAME="ghcr.io/skunklabz/tk4-hercules:latest"
+        fi
+        echo "Using image: $IMAGE_NAME"
+        IMAGE_NAME="$IMAGE_NAME" docker compose up -d
         sleep 30
         
         # Check if container is running
