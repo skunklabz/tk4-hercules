@@ -1,7 +1,27 @@
-# Docker tk4-hercules
-## The MVS 3.8j Tur(n)key 4- System on the Hercules Mainframe Emulator running inside a Docker container
+# TK4-Hercules
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://www.docker.com/)
+[![Mainframe](https://img.shields.io/badge/Mainframe-MVS%203.8j-green.svg)](https://en.wikipedia.org/wiki/MVS)
+
+## The MVS 3.8j Tur(n)key 4- System on the Hercules Mainframe Emulator
 
 This project containerizes the Hercules mainframe emulator running IBM MVS 3.8j (Turnkey 4-), providing an educational platform for learning about mainframe computing and historical IBM System/370 architecture.
+
+## 🚀 Quick Start
+
+```bash
+# Clone the repository
+git clone https://github.com/your-username/tk4-hercules.git
+cd tk4-hercules
+
+# Build and start the mainframe
+make dev-setup
+
+# Connect to the mainframe
+telnet localhost 3270
+# or visit http://localhost:8038
+```
 
 ## What is this?
 
@@ -58,10 +78,10 @@ git clone https://github.com/skunklabz/tk4-hercules.git
 cd tk4-hercules
 
 # Build the image (will automatically download TK4- distribution):
-./build.sh
+make build
 
 # Test the container:
-./test.sh
+make test
 
 # Start the container with persistence
 docker-compose up -d
@@ -156,6 +176,10 @@ docker run -d \
 
 ## Educational Resources
 
+### 🎓 Learning Guide
+- **[TK4-Hercules Learning Guide](docs/LEARNING_GUIDE.md)** - Comprehensive hands-on exercises and tutorials for learning mainframe computing concepts
+- **[Individual Exercises](examples/README.md)** - Step-by-step exercises organized by difficulty level
+
 ### YouTube Videos
 - **Containerizing the Mainframe**: https://youtu.be/uRf6A6_GWzw
 - **Running on Azure Cloud Container Instances**: https://youtu.be/Y-JDRwk_wFY
@@ -216,35 +240,35 @@ docker stop <container-id>
 
 ## Build Process
 
-### Available Scripts
+### Available Commands
 
-- **`./download-tk4.sh`** - Helper script to find TK4- distribution sources
-- **`./build.sh`** - Builds the Docker image with proper tagging
-- **`./build-platform.sh`** - Platform-aware build script (recommended for Apple Silicon)
-- **`./test.sh`** - Tests the container functionality and health
+Use `make help` to see all available commands:
+
+- **`make build`** - Builds the Docker image with proper tagging
+- **`make build-platform`** - Platform-aware build script (recommended for Apple Silicon)
+- **`make test`** - Tests the container functionality and health
+- **`make test-quick`** - Quick validation of exercise files and content
+- **`make validate`** - Comprehensive testing of all exercises with running mainframe
+- **`make start`** - Start the mainframe container
+- **`make stop`** - Stop the mainframe container
+- **`make logs`** - View container logs
+- **`make shell`** - Open shell in running container
 
 ### Building from Source
 
 1. **Build the Image (Recommended)**
    ```bash
    # For Apple Silicon (M1/M2) - Platform-aware build
-   ./build-platform.sh
+   make build-platform
    
    # For x86_64 or standard build
-   ./build.sh
+   make build
    ```
    The Dockerfile will automatically download the TK4- distribution during the build process.
 
-2. **Alternative: Manual Download**
+2. **Test the Container**
    ```bash
-   ./download-tk4.sh
-   # Follow the instructions to download tk4-_v1.00_current.zip manually
-   ./build.sh
-   ```
-
-3. **Test the Container**
-   ```bash
-   ./test.sh
+   make test
    ```
 
 4. **Run with Docker Compose**
@@ -276,13 +300,45 @@ docker stop <container-id>
 - **Platform Support**: Enhanced support for ARM64 (Apple Silicon) and x86_64 architectures
 - **Cross-platform Builds**: Improved build process for different CPU architectures
 
-## Contributing
+## 📁 Project Structure
+
+```
+tk4-hercules/
+├── .github/                    # GitHub templates and workflows
+├── .cursor/                    # Cursor IDE configuration
+├── assets/                     # Static assets and configurations
+├── config/                     # Configuration files
+├── docs/                       # Documentation
+│   ├── LEARNING_GUIDE.md      # Educational content
+│   └── TESTING.md             # Testing procedures
+├── examples/                   # Educational exercises
+│   ├── challenges/            # Advanced exercises
+│   └── README.md              # Exercise guide
+├── scripts/                    # Build and utility scripts
+│   ├── build/                 # Build scripts
+│   ├── test/                  # Test scripts
+│   └── validation/            # Validation scripts
+├── tools/                      # Development tools
+├── CONTRIBUTING.md            # Contribution guidelines
+├── CHANGELOG.md               # Version history
+├── CODE_OF_CONDUCT.md         # Community guidelines
+├── LICENSE                    # MIT License
+├── Makefile                   # Development commands
+├── README.md                  # This file
+├── SECURITY.md                # Security policy
+├── Dockerfile                 # Container definition
+└── docker-compose.yml         # Container orchestration
+```
+
+## 🤝 Contributing
 
 This project follows trunk-based development:
 - Create feature branches from `main`
 - Use descriptive branch names: `feature/description` or `fix/description`
 - Submit pull requests for all changes
 - Ensure thorough testing before merging
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
 ## License
 

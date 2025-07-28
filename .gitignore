@@ -1,0 +1,115 @@
+# TK4-Hercules .gitignore
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# Logs
+*.log
+logs/
+exercise-test-results.log
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# Build artifacts
+build/
+dist/
+*.tar.gz
+*.zip
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# TK4- distribution files (large, should be downloaded)
+tk4-_v1.00_current.zip
+tk4-*.zip
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Node.js (if any tools use it)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python (if any tools use it)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Test coverage
+coverage/
+.coverage
+*.coverage
+
+# Documentation build
+docs/_build/
+site/
+
+# Local configuration
+config/local.*
+*.local
+
+# Security
+*.key
+*.pem
+*.crt
+*.p12
+*.pfx
+
+# Archives
+*.7z
+*.dmg
+*.gz
+*.iso
+*.tar
+*.tgz
+*.zip
+
+# Compiled files
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# Package files
+*.deb
+*.rpm
+*.msi 
