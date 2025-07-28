@@ -39,48 +39,6 @@ jobs:
         echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
         echo "Current version: $CURRENT_VERSION"
     
-    - name: Determine new version
-      id: new_version
-      run: |
-        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-          VERSION_TYPE="${{ github.event.inputs.version_type }}"
-        else
-          # For main branch pushes, bump patch version
-          VERSION_TYPE="patch"
-        fi
-        
-        CURRENT_VERSION="${{ steps.version.outputs.current_version }}"
-        
-        case $VERSION_TYPE in
-          "major")
-            NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. '{print $1+1".0.0"}')
-            ;;
-          "minor")
-            NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. '{print $1"."$2+1".0"}')
-            ;;
-          "patch")
-            NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. '{print $1"."$2"."$3+1}')
-            ;;
-        esac
-        
-        echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
-        echo "New version: $NEW_VERSION"
-    
-    - name: Update VERSION file
-      run: |
-        echo "${{ steps.new_version.outputs.new_version }}" > VERSION
-        echo "Updated VERSION file to ${{ steps.new_version.outputs.new_version }}"
-    
-    - name: Update CHANGELOG
-      run: |
-        NEW_VERSION="${{ steps.new_version.outputs.new_version }}"
-        TODAY=$(date +%Y-%m-%d)
-        
-        # Move unreleased changes to new version
-        sed -i "s/## \[Unreleased\]/## \[$NEW_VERSION\] - $TODAY\n\n## [Unreleased]/" CHANGELOG.md
-        
-        echo "Updated CHANGELOG.md for version $NEW_VERSION"
-    
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
     
@@ -99,7 +57,7 @@ jobs:
         push: true
         tags: |
           ghcr.io/skunklabz/tk4-hercules:latest
-          ghcr.io/skunklabz/tk4-hercules:${{ steps.new_version.outputs.new_version }}
+          ghcr.io/skunklabz/tk4-hercules:${{ steps.version.outputs.current_version }}
           ghcr.io/skunklabz/tk4-hercules:main
         cache-from: type=gha
         cache-to: type=gha,mode=max
@@ -108,18 +66,15 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add VERSION CHANGELOG.md
-        git commit -m "chore: bump version to ${{ steps.new_version.outputs.new_version }}"
-        git tag -a "v${{ steps.new_version.outputs.new_version }}" -m "Release v${{ steps.new_version.outputs.new_version }}"
-        git push origin HEAD:${{ github.ref }}
-        git push origin "v${{ steps.new_version.outputs.new_version }}"
+        git tag -a "v${{ steps.version.outputs.current_version }}" -m "Release v${{ steps.version.outputs.current_version }}"
+        git push origin "v${{ steps.version.outputs.current_version }}"
     
     - name: Create Release Notes
       id: release_notes
       run: |
-        # Extract changes from CHANGELOG.md for the new version
-        NEW_VERSION="${{ steps.new_version.outputs.new_version }}"
-        RELEASE_NOTES=$(awk "/## \[$NEW_VERSION\]/,/## \[/" CHANGELOG.md | head -n -1 | tail -n +2)
+        # Extract changes from CHANGELOG.md for the current version
+        CURRENT_VERSION="${{ steps.version.outputs.current_version }}"
+        RELEASE_NOTES=$(awk "/## \[$CURRENT_VERSION\]/,/## \[/" CHANGELOG.md | head -n -1 | tail -n +2)
         echo "release_notes<<EOF" >> $GITHUB_OUTPUT
         echo "$RELEASE_NOTES" >> $GITHUB_OUTPUT
         echo "EOF" >> $GITHUB_OUTPUT
@@ -130,8 +85,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: v${{ steps.new_version.outputs.new_version }}
-        release_name: Release v${{ steps.new_version.outputs.new_version }}
+        tag_name: v${{ steps.version.outputs.current_version }}
+        release_name: Release v${{ steps.version.outputs.current_version }}
         body: ${{ steps.release_notes.outputs.release_notes }}
         draft: false
         prerelease: false
@@ -141,6 +96,6 @@ jobs:
         echo "Running post-release validation..."
         ./scripts/validation/quick-validate.sh
         
-        echo "✅ Release v${{ steps.new_version.outputs.new_version }} created successfully!"
-        echo "🔗 Release URL: https://github.com/${{ github.repository }}/releases/tag/v${{ steps.new_version.outputs.new_version }}"
-        echo "🐳 Docker Image: ghcr.io/skunklabz/tk4-hercules:${{ steps.new_version.outputs.new_version }}" 
+        echo "✅ Release v${{ steps.version.outputs.current_version }} created successfully!"
+        echo "🔗 Release URL: https://github.com/${{ github.repository }}/releases/tag/v${{ steps.version.outputs.current_version }}"
+        echo "🐳 Docker Image: ghcr.io/skunklabz/tk4-hercules:${{ steps.version.outputs.current_version }}" 
