@@ -61,7 +61,7 @@ log_test() {
 wait_for_mainframe() {
     echo -e "${BLUE}⏳ Waiting for mainframe to be ready...${NC}"
     
-    local max_attempts=12  # Reduced from 30 for faster CI
+    local max_attempts=12  # 12 attempts * 5 seconds = 60 seconds timeout
     local attempt=1
     
     while [ $attempt -le $max_attempts ]; do
@@ -71,14 +71,15 @@ wait_for_mainframe() {
             return 1
         fi
         
-        # Check if Hercules process is running
-        if docker exec "$CONTAINER_NAME" pgrep -f "hercules" > /dev/null 2>&1; then
-            echo -e "${GREEN}✅ Mainframe is ready! (Hercules process running)${NC}"
+        # Check if ports are accessible, which is a better indicator of readiness for CI
+        if timeout 5 bash -c "</dev/tcp/localhost/3270" 2>/dev/null && \
+           timeout 5 bash -c "</dev/tcp/localhost/8038" 2>/dev/null; then
+            echo -e "${GREEN}✅ Mainframe is ready! (Ports are accessible)${NC}"
             return 0
         fi
         
         echo -n "."
-        sleep 5  # Reduced from 10 for faster CI
+        sleep 5  # Check every 5 seconds
         ((attempt++))
     done
     
