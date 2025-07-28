@@ -35,7 +35,7 @@ help:
 	@echo "  shell        - Open shell in running container"
 	@echo ""
 	@echo "Testing Commands:"
-	@echo "  test         - Run comprehensive tests (LOCAL ONLY)"
+	@echo "  test         - Run essential tests (core functionality)"
 	@echo "  test-quick   - Run quick validation"
 	@echo "  test-arm64   - Test ARM64 support"
 	@echo "  validate     - Validate exercise content"
@@ -134,9 +134,11 @@ shell:
 
 # Testing commands
 test:
-	@echo "Running comprehensive tests (LOCAL ONLY)..."
-	@echo "⚠️  This command is for local development only!"
-	@echo "   CI runs quick validation instead."
+	@echo "Running essential tests (core functionality)..."
+	@echo "This tests:"
+	@echo "  - Exercise file structure"
+	@echo "  - Container startup and connectivity"
+	@echo "  - Basic mainframe functionality"
 	@./scripts/test/test-exercises.sh
 
 test-quick:
