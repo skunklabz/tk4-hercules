@@ -323,9 +323,13 @@ main() {
         exit 1
     fi
     
-    # Test 3: Start test container
+    # Test 3: Build and start test container
+    echo -e "${BLUE}🐳 Building test container...${NC}"
+    docker build -t tk4-hercules:test .
+    
     echo -e "${BLUE}🐳 Starting test container...${NC}"
-    docker compose up -d --force-recreate
+    # Use local image instead of pulling from GHCR
+    IMAGE_NAME=tk4-hercules:test docker compose up -d --force-recreate
     
     # Wait for container to be ready
     if ! wait_for_mainframe; then
