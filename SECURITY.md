@@ -19,7 +19,7 @@ We take security vulnerabilities seriously. If you discover a security vulnerabi
 Security vulnerabilities should be reported privately to avoid potential exploitation.
 
 ### 2. Report the vulnerability
-Please email your findings to [INSERT SECURITY EMAIL] with the following information:
+Please email your findings to security@skunklabz.com with the following information:
 
 - **Subject**: `[SECURITY] TK4-Hercules Vulnerability Report`
 - **Description**: Detailed description of the vulnerability
@@ -76,7 +76,7 @@ We appreciate security researchers who follow responsible disclosure practices. 
 ## Contact Information
 
 For security-related issues, please contact:
-- **Email**: [INSERT SECURITY EMAIL]
-- **PGP Key**: [INSERT PGP KEY IF AVAILABLE]
+- **Email**: security@skunklabz.com
+- **PGP Key**: Available upon request
 
 For general questions about security, please use the regular issue tracker or discussion forums. 
