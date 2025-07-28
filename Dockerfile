@@ -61,7 +61,12 @@ RUN apk add --no-cache \
     libc6-compat \
     libstdc++ \
     bash \
+    bzip2 \
+    libbz2 \
     && rm -rf /var/cache/apk/*
+
+# Create symlinks for missing libraries
+RUN ln -sf /lib/libc.so.6 /lib/libnsl.so.1 || true
 
 # Metadata
 LABEL maintainer="SKUNKLABZ"
