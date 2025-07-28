@@ -37,22 +37,22 @@ log_result() {
 
 echo -e "${BLUE}📁 Testing exercise files...${NC}"
 
-# Test 1: Check if exercises directory exists
-if [ -d "exercises" ]; then
-    log_result "Exercises Directory" "PASS" "Directory exists"
+# Test 1: Check if examples directory exists
+if [ -d "examples" ]; then
+    log_result "Examples Directory" "PASS" "Directory exists"
 else
-    log_result "Exercises Directory" "FAIL" "Directory missing"
+    log_result "Examples Directory" "FAIL" "Directory missing"
     exit 1
 fi
 
 # Test 2: Check for required files
 required_files=(
-    "exercises/README.md"
-    "exercises/start-here.md"
-    "exercises/01-first-session.md"
-    "exercises/02-file-systems.md"
-    "exercises/03-first-jcl-job.md"
-    "exercises/challenges/01-multi-step-jobs.md"
+    "examples/README.md"
+    "examples/start-here.md"
+    "examples/01-first-session.md"
+    "examples/02-file-systems.md"
+    "examples/03-first-jcl-job.md"
+    "examples/challenges/01-multi-step-jobs.md"
 )
 
 for file in "${required_files[@]}"; do
@@ -68,9 +68,9 @@ echo -e "${BLUE}📖 Testing exercise content...${NC}"
 
 # Test 3: Check for required sections in exercise files
 exercise_files=(
-    "exercises/01-first-session.md"
-    "exercises/02-file-systems.md"
-    "exercises/03-first-jcl-job.md"
+    "examples/01-first-session.md"
+    "examples/02-file-systems.md"
+    "examples/03-first-jcl-job.md"
 )
 
 for file in "${exercise_files[@]}"; do
@@ -102,13 +102,13 @@ echo ""
 echo -e "${BLUE}🔗 Testing navigation links...${NC}"
 
 # Test 4: Check for navigation links
-if grep -r "Next" exercises/ > /dev/null 2>&1; then
+if grep -r "Next" examples/ > /dev/null 2>&1; then
     log_result "Next Links" "PASS" "Next links found"
 else
     log_result "Next Links" "FAIL" "Next links missing"
 fi
 
-if grep -r "Previous" exercises/ > /dev/null 2>&1; then
+if grep -r "Previous" examples/ > /dev/null 2>&1; then
     log_result "Previous Links" "PASS" "Previous links found"
 else
     log_result "Previous Links" "FAIL" "Previous links missing"
@@ -118,13 +118,13 @@ echo ""
 echo -e "${BLUE}💻 Testing code examples...${NC}"
 
 # Test 5: Check for code examples
-if grep -r "jcl" exercises/ > /dev/null 2>&1; then
+if grep -r "jcl" examples/ > /dev/null 2>&1; then
     log_result "JCL Code Examples" "PASS" "JCL examples found"
 else
     log_result "JCL Code Examples" "FAIL" "JCL examples missing"
 fi
 
-if grep -r "tso" exercises/ > /dev/null 2>&1; then
+if grep -r "tso" examples/ > /dev/null 2>&1; then
     log_result "TSO Code Examples" "PASS" "TSO examples found"
 else
     log_result "TSO Code Examples" "FAIL" "TSO examples missing"
@@ -134,13 +134,13 @@ echo ""
 echo -e "${BLUE}👤 Testing user accounts...${NC}"
 
 # Test 6: Check for user account documentation
-if grep -r "HERC01" exercises/ > /dev/null 2>&1; then
+if grep -r "HERC01" examples/ > /dev/null 2>&1; then
     log_result "User Accounts" "PASS" "User accounts documented"
 else
     log_result "User Accounts" "FAIL" "User accounts not documented"
 fi
 
-if grep -r "CUL8TR" exercises/ > /dev/null 2>&1; then
+if grep -r "CUL8TR" examples/ > /dev/null 2>&1; then
     log_result "Passwords" "PASS" "Passwords documented"
 else
     log_result "Passwords" "FAIL" "Passwords not documented"
@@ -153,7 +153,7 @@ echo -e "${BLUE}🔧 Testing commands...${NC}"
 essential_commands=("LISTD" "BROWSE" "ALLOCATE" "DELETE")
 
 for cmd in "${essential_commands[@]}"; do
-    if grep -r "$cmd" exercises/ > /dev/null 2>&1; then
+    if grep -r "$cmd" examples/ > /dev/null 2>&1; then
         log_result "Command: $cmd" "PASS" "Command documented"
     else
         log_result "Command: $cmd" "FAIL" "Command not documented"

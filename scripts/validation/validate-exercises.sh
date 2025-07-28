@@ -49,12 +49,12 @@ test_exercise_structure() {
     echo -e "${BLUE}📁 Testing exercise file structure...${NC}"
     
     local required_files=(
-        "exercises/README.md"
-        "exercises/start-here.md"
-        "exercises/01-first-session.md"
-        "exercises/02-file-systems.md"
-        "exercises/03-first-jcl-job.md"
-        "exercises/challenges/01-multi-step-jobs.md"
+        "examples/README.md"
+        "examples/start-here.md"
+        "examples/01-first-session.md"
+        "examples/02-file-systems.md"
+        "examples/03-first-jcl-job.md"
+        "examples/challenges/01-multi-step-jobs.md"
     )
     
     for file in "${required_files[@]}"; do
@@ -72,9 +72,9 @@ test_exercise_content() {
     
     # Test required sections in exercise files
     local exercise_files=(
-        "exercises/01-first-session.md"
-        "exercises/02-file-systems.md"
-        "exercises/03-first-jcl-job.md"
+        "examples/01-first-session.md"
+        "examples/02-file-systems.md"
+        "examples/03-first-jcl-job.md"
     )
     
     local required_sections=(
@@ -103,20 +103,20 @@ test_navigation_links() {
     echo -e "${BLUE}🔗 Testing navigation links...${NC}"
     
     # Check for navigation sections
-    if grep -r "Navigation" exercises/ > /dev/null 2>&1; then
+    if grep -r "Navigation" examples/ > /dev/null 2>&1; then
         log_test "Navigation Sections" "PASS" "Navigation sections found"
     else
         log_test "Navigation Sections" "FAIL" "Navigation sections missing"
     fi
     
     # Check for next/previous links
-    if grep -r "Next:" exercises/ > /dev/null 2>&1; then
+    if grep -r "Next:" examples/ > /dev/null 2>&1; then
         log_test "Next Links" "PASS" "Next links found"
     else
         log_test "Next Links" "FAIL" "Next links missing"
     fi
     
-    if grep -r "Previous:" exercises/ > /dev/null 2>&1; then
+    if grep -r "Previous:" examples/ > /dev/null 2>&1; then
         log_test "Previous Links" "PASS" "Previous links found"
     else
         log_test "Previous Links" "FAIL" "Previous links missing"
@@ -128,21 +128,21 @@ test_code_examples() {
     echo -e "${BLUE}💻 Testing code examples...${NC}"
     
     # Check for TSO command examples
-    if grep -r "\`\`\`tso" exercises/ > /dev/null 2>&1; then
+    if grep -r "\`\`\`tso" examples/ > /dev/null 2>&1; then
         log_test "TSO Code Examples" "PASS" "TSO code examples found"
     else
         log_test "TSO Code Examples" "SKIP" "TSO code examples not found"
     fi
     
     # Check for JCL examples
-    if grep -r "\`\`\`jcl" exercises/ > /dev/null 2>&1; then
+    if grep -r "\`\`\`jcl" examples/ > /dev/null 2>&1; then
         log_test "JCL Code Examples" "PASS" "JCL code examples found"
     else
         log_test "JCL Code Examples" "FAIL" "JCL code examples missing"
     fi
     
     # Check for COBOL examples
-    if grep -r "\`\`\`cobol" exercises/ > /dev/null 2>&1; then
+    if grep -r "\`\`\`cobol" examples/ > /dev/null 2>&1; then
         log_test "COBOL Code Examples" "PASS" "COBOL code examples found"
     else
         log_test "COBOL Code Examples" "SKIP" "COBOL code examples not found"
@@ -155,9 +155,9 @@ test_learning_objectives() {
     
     # Check for clear objectives in each exercise
     local exercise_files=(
-        "exercises/01-first-session.md"
-        "exercises/02-file-systems.md"
-        "exercises/03-first-jcl-job.md"
+        "examples/01-first-session.md"
+        "examples/02-file-systems.md"
+        "examples/03-first-jcl-job.md"
     )
     
     for file in "${exercise_files[@]}"; do
@@ -177,9 +177,9 @@ test_prerequisites() {
     
     # Check for prerequisites in each exercise
     local exercise_files=(
-        "exercises/01-first-session.md"
-        "exercises/02-file-systems.md"
-        "exercises/03-first-jcl-job.md"
+        "examples/01-first-session.md"
+        "examples/02-file-systems.md"
+        "examples/03-first-jcl-job.md"
     )
     
     for file in "${exercise_files[@]}"; do
@@ -198,14 +198,14 @@ test_user_accounts() {
     echo -e "${BLUE}👤 Testing user accounts documentation...${NC}"
     
     # Check if user accounts are documented
-    if grep -r "HERC01" exercises/ > /dev/null 2>&1; then
+    if grep -r "HERC01" examples/ > /dev/null 2>&1; then
         log_test "User Account Documentation" "PASS" "User accounts documented"
     else
         log_test "User Account Documentation" "FAIL" "User accounts not documented"
     fi
     
     # Check for password information
-    if grep -r "CUL8TR" exercises/ > /dev/null 2>&1; then
+    if grep -r "CUL8TR" examples/ > /dev/null 2>&1; then
         log_test "Password Documentation" "PASS" "Passwords documented"
     else
         log_test "Password Documentation" "FAIL" "Passwords not documented"
@@ -225,7 +225,7 @@ test_command_examples() {
     )
     
     for cmd in "${essential_commands[@]}"; do
-        if grep -r "$cmd" exercises/ > /dev/null 2>&1; then
+        if grep -r "$cmd" examples/ > /dev/null 2>&1; then
             log_test "Command Example: $cmd" "PASS" "Command documented"
         else
             log_test "Command Example: $cmd" "FAIL" "Command not documented"
@@ -246,7 +246,7 @@ test_external_links() {
     )
     
     for link in "${external_links[@]}"; do
-        if grep -r "$link" exercises/ > /dev/null 2>&1; then
+        if grep -r "$link" examples/ > /dev/null 2>&1; then
             log_test "External Link: $link" "PASS" "External link found"
         else
             log_test "External Link: $link" "SKIP" "External link not found - optional"
@@ -259,21 +259,21 @@ test_markdown_formatting() {
     echo -e "${BLUE}📝 Testing markdown formatting...${NC}"
     
     # Check for proper markdown headers
-    if grep -r "^## " exercises/ > /dev/null 2>&1; then
+    if grep -r "^## " examples/ > /dev/null 2>&1; then
         log_test "Markdown Headers" "PASS" "Proper headers found"
     else
         log_test "Markdown Headers" "FAIL" "Headers missing"
     fi
     
     # Check for code blocks
-    if grep -r "^\\\`\\\`\\\`" exercises/ > /dev/null 2>&1; then
+    if grep -r "^\\\`\\\`\\\`" examples/ > /dev/null 2>&1; then
         log_test "Code Blocks" "PASS" "Code blocks found"
     else
         log_test "Code Blocks" "FAIL" "Code blocks missing"
     fi
     
     # Check for emojis (engagement)
-    if grep -r "🎯\|🚀\|💻\|🔧\|📁\|🎓" exercises/ > /dev/null 2>&1; then
+    if grep -r "🎯\|🚀\|💻\|🔧\|📁\|🎓" examples/ > /dev/null 2>&1; then
         log_test "Emoji Usage" "PASS" "Emojis used for engagement"
     else
         log_test "Emoji Usage" "SKIP" "No emojis found (optional)"
@@ -285,7 +285,7 @@ test_exercise_progression() {
     echo -e "${BLUE}📈 Testing exercise progression...${NC}"
     
     # Check that exercises build on each other
-    if grep -r "Exercise 1" exercises/02-file-systems.md > /dev/null 2>&1; then
+    if grep -r "Exercise 1" examples/02-file-systems.md > /dev/null 2>&1; then
         log_test "Exercise Progression" "PASS" "Exercises reference previous ones"
     else
         log_test "Exercise Progression" "SKIP" "Progression references optional"
@@ -298,7 +298,7 @@ main() {
     echo ""
     
     # Check if we're in the right directory
-    if [ ! -d "exercises" ]; then
+    if [ ! -d "examples" ]; then
         echo -e "${RED}❌ Error: Must run from tk4-hercules project root${NC}"
         exit 1
     fi

@@ -204,12 +204,12 @@ test_exercise_files() {
     echo -e "${BLUE}📚 Testing exercise files...${NC}"
     
     local exercise_files=(
-        "exercises/README.md"
-        "exercises/start-here.md"
-        "exercises/01-first-session.md"
-        "exercises/02-file-systems.md"
-        "exercises/03-first-jcl-job.md"
-        "exercises/challenges/01-multi-step-jobs.md"
+        "examples/README.md"
+        "examples/start-here.md"
+        "examples/01-first-session.md"
+        "examples/02-file-systems.md"
+        "examples/03-first-jcl-job.md"
+        "examples/challenges/01-multi-step-jobs.md"
         "LEARNING_GUIDE.md"
     )
     
@@ -230,15 +230,15 @@ test_exercise_content() {
     local required_sections=("Objective" "Prerequisites" "What You'll Learn" "Learning Checkpoint")
     
     for section in "${required_sections[@]}"; do
-        if grep -r "$section" exercises/ > /dev/null 2>&1; then
-            log_test "Exercise Content: $section" "PASS" "Section found in exercises"
+        if grep -r "$section" examples/ > /dev/null 2>&1; then
+            log_test "Exercise Content: $section" "PASS" "Section found in examples"
         else
-            log_test "Exercise Content: $section" "FAIL" "Section missing from exercises"
+            log_test "Exercise Content: $section" "FAIL" "Section missing from examples"
         fi
     done
     
     # Test 2: Check for navigation links
-    if grep -r "Navigation" exercises/ > /dev/null 2>&1; then
+    if grep -r "Navigation" examples/ > /dev/null 2>&1; then
         log_test "Exercise Navigation" "PASS" "Navigation links found"
     else
         log_test "Exercise Navigation" "FAIL" "Navigation links missing"
