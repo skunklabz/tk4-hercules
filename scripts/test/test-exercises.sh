@@ -6,7 +6,7 @@
 set -e  # Exit on any error
 
 # Configuration
-CONTAINER_NAME="tk4-hercules-test"
+CONTAINER_NAME="tk4-hercules"
 TEST_TIMEOUT=300  # 5 minutes timeout for tests
 LOG_FILE="exercise-test-results.log"
 
@@ -329,8 +329,8 @@ main() {
     docker build -t tk4-hercules:test .
     
     echo -e "${BLUE}🐳 Starting test container...${NC}"
-    # Use local image and explicit container name
-    IMAGE_NAME=tk4-hercules:test docker compose -p tk4herculestest up -d --force-recreate
+    # Use local image
+    IMAGE_NAME=tk4-hercules:test docker compose up -d --force-recreate
     
     # Wait for container to be ready
     if ! wait_for_mainframe; then
