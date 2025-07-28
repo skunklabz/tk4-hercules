@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Comprehensive SemVer documentation (docs/SEMVER.md)
 - Automated release workflow with GitHub Actions
 - Version management integration with CI/CD pipeline
+- SemVer-aware Cursor rules for automatic version management
+- AI assistant guidelines for SemVer-compliant changes
 
 ### Changed
 - Transitioned to trunk-based development workflow

@@ -1,0 +1,164 @@
+# SemVer-Aware Development Rules
+
+## Automatic Version Management
+
+When making changes to the project, Cursor should automatically:
+
+1. **Detect the type of change** being made
+2. **Determine the appropriate version bump** (patch/minor/major)
+3. **Update the VERSION file** accordingly
+4. **Update CHANGELOG.md** with the new version entry
+5. **Use conventional commit format** for version-related commits
+
+## Change Type Detection
+
+### MAJOR Version Bump (X.0.0) - Breaking Changes
+Automatically bump MAJOR version when:
+- **Docker configuration changes** that break existing setups
+- **Volume mount point changes** in docker-compose.yml
+- **Environment variable changes** that break existing configurations
+- **Script API changes** that break existing usage
+- **Removal of features** or capabilities
+- **Changes to mainframe setup** that require user intervention
+- **Breaking changes** to GitHub Actions workflows
+- **Major architectural changes** to project structure
+
+### MINOR Version Bump (X.Y.0) - New Features
+Automatically bump MINOR version when:
+- **Adding new features** to the mainframe environment
+- **Creating new exercises** or educational content
+- **Adding new scripts** or utilities
+- **New documentation sections** or guides
+- **New GitHub Actions workflows**
+- **New Docker features** or optimizations
+- **New mainframe capabilities** or tools
+- **Backward-compatible enhancements**
+
+### PATCH Version Bump (X.Y.Z) - Bug Fixes
+Automatically bump PATCH version when:
+- **Fixing bugs** in existing functionality
+- **Updating documentation** and clarifications
+- **Minor improvements** to existing features
+- **Security patches** and vulnerability fixes
+- **Build system optimizations**
+- **CI/CD improvements**
+- **Code quality improvements**
+- **Typo fixes** and minor corrections
+
+## Automatic Actions
+
+### When Making Changes
+
+1. **Read current version**: Always check `VERSION` file first
+2. **Analyze changes**: Determine the impact and type of changes
+3. **Update version**: Modify `VERSION` file with appropriate bump
+4. **Update changelog**: Add new version entry to `CHANGELOG.md`
+5. **Commit changes**: Use conventional commit format
+
+### Version Update Process
+
+```bash
+# Example workflow for a new feature
+# 1. Make the feature changes
+# 2. Determine it's a MINOR bump (new feature)
+# 3. Update VERSION file: 1.1.0 → 1.2.0
+# 4. Update CHANGELOG.md with new version entry
+# 5. Commit with: "feat: add new mainframe exercise (bump to 1.2.0)"
+```
+
+### CHANGELOG.md Format
+
+Always follow this format when adding new versions:
+
+```markdown
+## [1.2.0] - YYYY-MM-DD
+
+### Added
+- New feature description
+
+### Changed
+- Changes to existing functionality
+
+### Fixed
+- Bug fixes and improvements
+
+### Security
+- Security-related changes
+```
+
+## File Update Patterns
+
+### VERSION File
+- Single line with version number (e.g., "1.2.0")
+- No additional formatting or comments
+- Always update when making SemVer-relevant changes
+
+### CHANGELOG.md
+- Add new version entry at the top (after [Unreleased])
+- Include date in YYYY-MM-DD format
+- Categorize changes (Added, Changed, Fixed, Security, etc.)
+- Move relevant items from [Unreleased] to new version
+
+### Commit Messages
+Use conventional commit format with version information:
+- `feat: add new exercise (bump to 1.2.0)`
+- `fix: resolve Docker build issue (bump to 1.1.1)`
+- `BREAKING: change volume mount points (bump to 2.0.0)`
+
+## Examples
+
+### Adding a New Feature
+```bash
+# 1. Make feature changes
+# 2. Update VERSION: 1.1.0 → 1.2.0
+# 3. Update CHANGELOG.md
+# 4. Commit: "feat: add COBOL programming exercise (bump to 1.2.0)"
+```
+
+### Fixing a Bug
+```bash
+# 1. Fix the bug
+# 2. Update VERSION: 1.1.0 → 1.1.1
+# 3. Update CHANGELOG.md
+# 4. Commit: "fix: resolve 3270 connection issue (bump to 1.1.1)"
+```
+
+### Breaking Change
+```bash
+# 1. Make breaking changes
+# 2. Update VERSION: 1.1.0 → 2.0.0
+# 3. Update CHANGELOG.md
+# 4. Commit: "BREAKING: change Docker volume structure (bump to 2.0.0)"
+```
+
+## Validation
+
+Before committing version changes:
+1. **Verify VERSION file** contains correct version
+2. **Check CHANGELOG.md** has proper format and entries
+3. **Ensure all changes** are properly categorized
+4. **Test the changes** to ensure they work as expected
+5. **Use conventional commit format** with version information
+
+## Integration with CI/CD
+
+The GitHub Actions workflows will:
+- Read version from `VERSION` file
+- Validate SemVer format compliance
+- Create appropriate Git tags
+- Build Docker images with version tags
+- Create GitHub releases with proper versioning
+
+## Best Practices
+
+1. **Always check current version** before making changes
+2. **Consider backward compatibility** when making changes
+3. **Document breaking changes** clearly
+4. **Test thoroughly** before version bump
+5. **Use descriptive commit messages** with version information
+6. **Keep changes small** to minimize version bump frequency
+7. **Follow established patterns** for consistency
+description:
+globs:
+alwaysApply: false
+---

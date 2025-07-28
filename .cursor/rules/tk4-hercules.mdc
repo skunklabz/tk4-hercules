@@ -6,6 +6,90 @@
 This project containerizes the Hercules mainframe emulator running IBM MVS 3.8j (Turnkey 4-). 
 Focus on educational mainframe computing, historical preservation, and Docker best practices.
 
+## Semantic Versioning (SemVer) Awareness
+
+### Version Management
+- **Current version**: Always read from `VERSION` file at project root
+- **Version format**: MAJOR.MINOR.PATCH (e.g., 1.1.0)
+- **Automatic versioning**: Update VERSION file when making SemVer-relevant changes
+
+### SemVer Change Detection
+
+When making changes, automatically determine the appropriate version bump:
+
+#### MAJOR Version Bump (X.0.0)
+- **Breaking changes** to Docker configuration or container setup
+- **Incompatible API changes** in scripts or tools
+- **Major architectural changes** to the project structure
+- **Changes to mainframe setup** that break existing functionality
+- **Removal of features** or capabilities
+- **Changes to volume mount points** or persistent storage
+- **Breaking changes** to environment variables or configuration
+
+#### MINOR Version Bump (X.Y.0)
+- **New features** added to the mainframe environment
+- **New exercises** or educational content
+- **New mainframe capabilities** or tools
+- **Backward-compatible enhancements** to existing features
+- **New documentation sections** or guides
+- **New scripts** or utilities
+- **New Docker features** or optimizations
+- **New GitHub Actions workflows**
+
+#### PATCH Version Bump (X.Y.Z)
+- **Bug fixes** in existing functionality
+- **Documentation updates** and clarifications
+- **Minor improvements** to existing features
+- **Security patches** and vulnerability fixes
+- **Build system changes** and optimizations
+- **CI/CD improvements** and workflow updates
+- **Code quality improvements** and refactoring
+- **Typo fixes** and minor corrections
+
+### Automatic Version Updates
+
+When making changes, automatically:
+
+1. **Detect change type** based on the modifications
+2. **Update VERSION file** with appropriate bump
+3. **Update CHANGELOG.md** with new version entry
+4. **Use conventional commit format** for version-related commits
+
+### Version Update Commands
+
+After making changes, use these commands:
+
+```bash
+# For patch changes (bug fixes, minor improvements)
+make bump-patch
+
+# For minor changes (new features, enhancements)
+make bump-minor
+
+# For major changes (breaking changes)
+make bump-major
+```
+
+### CHANGELOG.md Updates
+
+Always update CHANGELOG.md when making changes:
+
+```markdown
+## [Unreleased]
+
+### Added
+- New features or capabilities
+
+### Changed
+- Changes to existing functionality
+
+### Fixed
+- Bug fixes and improvements
+
+### Security
+- Security-related changes
+```
+
 ## Repository Structure & Organization
 
 ### Directory Organization
@@ -167,6 +251,10 @@ Focus on educational mainframe computing, historical preservation, and Docker be
 - **make validate**: Validate exercise content
 - **make clean**: Clean up containers and images
 - **make help**: Show all available commands
+- **make version**: Show current version
+- **make bump-patch**: Bump patch version
+- **make bump-minor**: Bump minor version
+- **make bump-major**: Bump major version
 
 ### Script Organization
 - **scripts/build/**: Build scripts (build.sh, build-platform.sh, download-tk4.sh)
@@ -189,9 +277,19 @@ Focus on educational mainframe computing, historical preservation, and Docker be
 - Use provided issue templates for bug reports and feature requests
 - Follow the pull request template for all PRs
 - GitHub Actions handle CI/CD automation
-- Automated testing and validation on pull requests 
-### GitHub Integration
-- Use provided issue templates for bug reports and feature requests
-- Follow the pull request template for all PRs
-- GitHub Actions handle CI/CD automation
-- Automated testing and validation on pull requests 
+- Automated testing and validation on pull requests
+
+## AI Assistant Guidelines
+
+When making changes as an AI assistant:
+
+1. **Always check the current version** from the VERSION file
+2. **Determine the appropriate version bump** based on the type of change
+3. **Update the VERSION file** when making SemVer-relevant changes
+4. **Update CHANGELOG.md** with new version entry and changes
+5. **Use conventional commit format** for version-related commits
+6. **Consider backward compatibility** when making changes
+7. **Test changes thoroughly** before committing
+8. **Document breaking changes** clearly in CHANGELOG.md
+9. **Follow the established patterns** for version management
+10. **Ensure all version references** are updated consistently 
