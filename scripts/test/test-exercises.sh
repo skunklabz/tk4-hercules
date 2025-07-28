@@ -65,16 +65,12 @@ wait_for_mainframe() {
     local attempt=1
     
     while [ $attempt -le $max_attempts ]; do
-        # Check if container is running
-        if ! docker ps --format "{{.Names}}" | grep -q "$CONTAINER_NAME"; then
-            echo -e "${RED}❌ Container is not running${NC}"
-            return 1
-        fi
+        # Use docker inspect to check health status, the most reliable method
+        local health_status
+        health_status=$(docker inspect --format '{{.State.Health.Status}}' "$CONTAINER_NAME" 2>/dev/null)
         
-        # Check if ports are accessible, which is a better indicator of readiness for CI
-        if timeout 5 bash -c "</dev/tcp/localhost/3270" 2>/dev/null && \
-           timeout 5 bash -c "</dev/tcp/localhost/8038" 2>/dev/null; then
-            echo -e "${GREEN}✅ Mainframe is ready! (Ports are accessible)${NC}"
+        if [ "$health_status" = "healthy" ]; then
+            echo -e "${GREEN}✅ Mainframe is ready! (Health check: healthy)${NC}"
             return 0
         fi
         
@@ -333,8 +329,8 @@ main() {
     docker build -t tk4-hercules:test .
     
     echo -e "${BLUE}🐳 Starting test container...${NC}"
-    # Use local image instead of pulling from GHCR
-    IMAGE_NAME=tk4-hercules:test docker compose up -d --force-recreate
+    # Use local image and explicit container name
+    IMAGE_NAME=tk4-hercules:test docker-compose -p tk4herculestest up -d --force-recreate
     
     # Wait for container to be ready
     if ! wait_for_mainframe; then
