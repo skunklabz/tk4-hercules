@@ -53,7 +53,7 @@ RUN apt-get update && apt-get install -yq \
     && rm -rf /var/lib/apt/lists/*
 
 # Metadata
-LABEL maintainer="Ken Godoy - skunklabz"
+LABEL maintainer="SKUNKLABZ"
 LABEL version="1.01"
 LABEL description="OS/VS2 MVS 3.8j Service Level 8505, Tur(n)key Level 4- Version 1.00 on Ubuntu 22.04 LTS"
 LABEL org.opencontainers.image.source="https://github.com/skunklabz/tk4-hercules"

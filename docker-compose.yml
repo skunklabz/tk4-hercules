@@ -44,7 +44,7 @@ services:
     # Labels for better container management
     labels:
       - "com.skunklabz.description=MVS 3.8j Tur(n)key 4- System on Hercules Mainframe Emulator"
-      - "com.skunklabz.maintainer=Ken Godoy - skunklabz"
+      - "com.skunklabz.maintainer=SKUNKLABZ"
       - "com.skunklabz.version=1.01"
       - "com.skunklabz.base-image=ubuntu:22.04"
       - "com.skunklabz.architecture=mainframe-emulation"
