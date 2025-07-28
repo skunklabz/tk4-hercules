@@ -1,6 +1,8 @@
 name: Release
 
 on:
+  push:
+    branches: [ main ]
   release:
     types: [published]
   workflow_dispatch:
@@ -19,17 +21,21 @@ jobs:
   release:
     name: Create Release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
     
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
     
     - name: Get current version
       id: version
       run: |
-        CURRENT_VERSION=$(cat VERSION)
+        CURRENT_VERSION=$(cat VERSION | tr -d ' ')
         echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
         echo "Current version: $CURRENT_VERSION"
     
@@ -39,7 +45,7 @@ jobs:
         if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
           VERSION_TYPE="${{ github.event.inputs.version_type }}"
         else
-          # Extract version from release tag
+          # For main branch pushes, bump patch version
           VERSION_TYPE="patch"
         fi
         
@@ -75,17 +81,26 @@ jobs:
         
         echo "Updated CHANGELOG.md for version $NEW_VERSION"
     
-    - name: Build Docker image
+    - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
+    
+    - name: Log in to Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
     
     - name: Build and push to GitHub Container Registry
       uses: docker/build-push-action@v5
       with:
         context: .
+        platforms: linux/amd64,linux/arm64
         push: true
         tags: |
           ghcr.io/skunklabz/tk4-hercules:latest
           ghcr.io/skunklabz/tk4-hercules:${{ steps.new_version.outputs.new_version }}
+          ghcr.io/skunklabz/tk4-hercules:main
         cache-from: type=gha
         cache-to: type=gha,mode=max
     
@@ -110,7 +125,7 @@ jobs:
         echo "EOF" >> $GITHUB_OUTPUT
     
     - name: Create GitHub Release
-      if: github.event_name == 'workflow_dispatch'
+      if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -119,4 +134,13 @@ jobs:
         release_name: Release v${{ steps.new_version.outputs.new_version }}
         body: ${{ steps.release_notes.outputs.release_notes }}
         draft: false
-        prerelease: false 
+        prerelease: false
+    
+    - name: Run post-release tests
+      run: |
+        echo "Running post-release validation..."
+        ./scripts/validation/quick-validate.sh
+        
+        echo "✅ Release v${{ steps.new_version.outputs.new_version }} created successfully!"
+        echo "🔗 Release URL: https://github.com/${{ github.repository }}/releases/tag/v${{ steps.new_version.outputs.new_version }}"
+        echo "🐳 Docker Image: ghcr.io/skunklabz/tk4-hercules:${{ steps.new_version.outputs.new_version }}" 

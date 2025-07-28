@@ -143,6 +143,17 @@ ln -sf .git/hooks/pre-push .git/hooks/pre-push
 
 **Note**: Comprehensive tests take 2-3 minutes but catch more issues before they reach CI.
 
+### Automated Releases
+
+The project uses automated releases triggered by pushes to the main branch:
+
+- **Push to main**: Automatically creates a new release
+- **Version bump**: Patch version is incremented (1.1.0 → 1.1.1)
+- **Docker build**: Multi-platform image is built and pushed to GHCR
+- **GitHub release**: Release is created with changelog notes
+
+For major or minor version bumps, use the manual workflow in GitHub Actions.
+
 ### Development Commands
 
 ```bash

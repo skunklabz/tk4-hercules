@@ -58,25 +58,59 @@ make bump-major
 
 ## Release Process
 
-### Manual Release
-1. **Bump version**: Use appropriate `make bump-*` command
-2. **Update CHANGELOG.md**: Add new version entry with changes
-3. **Commit changes**: `git add VERSION CHANGELOG.md && git commit -m "chore: bump version to X.Y.Z"`
-4. **Create tag**: `git tag -a vX.Y.Z -m "Release vX.Y.Z"`
-5. **Push**: `git push origin main && git push origin vX.Y.Z`
+### Automated Release (Recommended)
+The project uses automated releases triggered by pushes to the main branch:
 
-### Automated Release
-Use GitHub Actions workflow for automated releases:
+1. **Push to main**: Automatically triggers release workflow
+2. **Version bump**: Patch version is automatically incremented
+3. **Docker build**: Multi-platform image is built and pushed to GHCR
+4. **Git tag**: New version tag is created and pushed
+5. **GitHub release**: Release is created with changelog notes
+
+**Example workflow:**
+```bash
+# Make your changes
+git add .
+git commit -m "feat: add new mainframe exercise"
+git push origin main
+
+# The release workflow automatically:
+# - Bumps version from 1.1.0 → 1.1.1
+# - Builds and pushes Docker image
+# - Creates Git tag v1.1.1
+# - Creates GitHub release
+```
+
+### Manual Release
+For major or minor version bumps, use the manual workflow:
 
 1. Go to Actions → Release workflow
 2. Click "Run workflow"
 3. Select version bump type (patch/minor/major)
-4. The workflow will:
-   - Bump version automatically
-   - Update CHANGELOG.md
-   - Build and push Docker image
-   - Create Git tag
-   - Create GitHub release
+4. The workflow will handle the entire release process
+
+### Release Workflow Details
+
+The release workflow (`/.github/workflows/release.yml`) performs these steps:
+
+1. **Version Management**:
+   - Reads current version from `VERSION` file
+   - Calculates new version based on bump type
+   - Updates `VERSION` file and `CHANGELOG.md`
+
+2. **Docker Build**:
+   - Builds multi-platform image (AMD64 + ARM64)
+   - Pushes to GitHub Container Registry
+   - Tags: `latest`, `main`, and version-specific tag
+
+3. **Git Operations**:
+   - Commits version changes
+   - Creates and pushes Git tag
+   - Creates GitHub release with changelog notes
+
+4. **Post-Release**:
+   - Runs validation tests
+   - Provides release URLs and information
 
 ## CHANGELOG.md Format
 

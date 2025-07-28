@@ -1,9 +1,6 @@
 name: Build and Push Docker Image
 
 on:
-  push:
-    branches: [ main ]
-    tags: [ 'v*' ]
   pull_request:
     branches: [ main ]
   workflow_dispatch:
@@ -39,36 +36,30 @@ jobs:
       with:
         images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
         tags: |
-          type=ref,event=branch
           type=ref,event=pr
-          type=semver,pattern={{version}}
-          type=semver,pattern={{major}}.{{minor}}
-          type=sha,prefix=sha-
+          type=sha,prefix=pr-
 
     - name: Build and push Docker image
       uses: docker/build-push-action@v5
       with:
         context: .
-        platforms: linux/amd64
-        push: ${{ github.event_name != 'pull_request' }}
+        platforms: linux/amd64,linux/arm64
+        push: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
     - name: Run tests
-      if: github.event_name != 'pull_request'
       run: |
         echo "Running container tests..."
-        docker run --rm -d --name test-tk4 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+        docker run --rm -d --name test-tk4 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:pr-${{ github.event.number }}
         sleep 30
         docker ps | grep test-tk4 || exit 1
         docker stop test-tk4
 
     - name: Update documentation
-      if: github.event_name != 'pull_request'
       run: |
         echo "✅ Docker image built and pushed successfully!"
         echo "🔗 GHCR URL: https://ghcr.io/skunklabz/tk4-hercules"
-        echo "📋 Available tags:"
-        docker images ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}" 
+        echo "📋 PR Image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:pr-${{ github.event.number }}" 
