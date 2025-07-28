@@ -25,6 +25,8 @@ The Docker image automatically detects the target architecture and uses the appr
 - **x86_64/AMD64**: Uses `hercules/linux/64/bin/hercules` (native)
 - **ARM64/aarch64**: Uses `hercules/linux/64/bin/hercules` (emulated via Rosetta on macOS, or x86_64 emulation on Linux)
 
+**Note**: ARM64 support currently uses x86_64 binaries with emulation due to limitations in the TK4- distribution. Native ARM64 binaries are planned for future releases.
+
 ## Building Multi-Platform Images
 
 ### Local Development
@@ -95,6 +97,8 @@ make test-arm64
 
 The TK4- distribution only includes 32-bit ARM binaries (ARMv7), which cannot run natively on ARM64 systems without additional compatibility layers. The current solution uses x86_64 binaries with emulation to provide compatibility.
 
+**Note**: The TK4- distribution includes `hercules/linux/arm/bin/hercules` (ARMv7) but this cannot run natively on ARM64 systems. Therefore, we use x86_64 binaries with emulation for ARM64 support.
+
 ### Recommended Setup
 
 For ARM64 systems, we recommend using the native ARM64 image:
@@ -147,16 +151,19 @@ The Dockerfile includes logic to select the appropriate Hercules binary:
 RUN if [ "$(uname -m)" = "x86_64" ]; then \
         ln -sf /tk4-/hercules/linux/64/bin/hercules /tk4-/hercules; \
     elif [ "$(uname -m)" = "aarch64" ]; then \
-        ln -sf /tk4-/hercules/linux/arm/bin/hercules /tk4-/hercules; \
+        ln -sf /tk4-/hercules/linux/64/bin/hercules /tk4-/hercules; \
     fi
 ```
 
+**Note**: Both x86_64 and ARM64 architectures use the same x86_64 Hercules binary. ARM64 systems run this binary through emulation (Rosetta on macOS, QEMU on Linux).
+
 ### Multi-Platform Build Process
 
-1. **Download**: TK4- distribution includes ARM64 binaries
-2. **Filter**: Remove unnecessary architecture binaries
-3. **Link**: Create appropriate symlinks for target architecture
+1. **Download**: TK4- distribution includes x86_64 and ARMv7 binaries
+2. **Filter**: Remove unnecessary architecture binaries (keep only x86_64 for both platforms)
+3. **Link**: Create appropriate symlinks for target architecture (both use x86_64 binaries)
 4. **Build**: Use Docker buildx for multi-platform builds
+5. **Emulation**: ARM64 builds include QEMU for x86_64 emulation
 
 ### Registry Support
 

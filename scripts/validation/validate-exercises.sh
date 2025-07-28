@@ -338,7 +338,7 @@ main() {
     # Determine exit code
     if [ $TESTS_FAILED -eq 0 ]; then
         echo -e "${GREEN}🎉 All critical validations passed!${NC}"
-        echo -e "${BLUE}💡 Run ./test-exercises.sh for full functional testing${NC}"
+        echo -e "${BLUE}💡 Run ./scripts/test/test-exercises.sh for full functional testing${NC}"
         EXIT_CODE=0
     else
         echo -e "${RED}⚠️  Some validations failed. Please fix the issues above.${NC}"
@@ -349,7 +349,7 @@ main() {
     echo -e "${BLUE}💡 Tips:${NC}"
     echo "  - Fix any FAILED tests before running functional tests"
     echo "  - SKIPPED tests are optional and can be ignored"
-    echo "  - Run ./test-exercises.sh for full mainframe testing"
+    echo "  - Run ./scripts/test/test-exercises.sh for full mainframe testing"
     
     exit $EXIT_CODE
 }

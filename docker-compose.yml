@@ -46,8 +46,8 @@ services:
     labels:
       - "com.skunklabz.description=MVS 3.8j Tur(n)key 4- System on Hercules Mainframe Emulator"
       - "com.skunklabz.maintainer=SKUNKLABZ"
-      - "com.skunklabz.version=1.01"
-      - "com.skunklabz.base-image=ubuntu:22.04"
+      - "com.skunklabz.version=1.1.0"
+      - "com.skunklabz.base-image=alpine:3.19"
       - "com.skunklabz.architecture=mainframe-emulation"
       - "com.skunklabz.registry=ghcr.io"
     # Logging configuration

@@ -5,9 +5,11 @@
 
 set -e  # Exit on any error
 
+# Read version from VERSION file
+VERSION=$(cat ../../VERSION | tr -d ' ')
+
 # Configuration
 IMAGE_NAME="skunklabz/tk4-hercules"
-VERSION="1.01"
 LATEST_TAG="${IMAGE_NAME}:latest"
 VERSION_TAG="${IMAGE_NAME}:v${VERSION}"
 
@@ -15,7 +17,7 @@ echo "🐳 Building TK4-Hercules Docker Image (Platform-Aware)"
 echo "======================================================"
 echo "Image: ${IMAGE_NAME}"
 echo "Version: ${VERSION}"
-echo "Base: Ubuntu 22.04 LTS"
+echo "Base: Alpine Linux 3.19"
 echo ""
 
 # Detect platform

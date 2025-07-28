@@ -34,8 +34,8 @@ Ready for advanced topics:
 ### 1. Start Your Mainframe
 ```bash
 # Build and run the container
-./build.sh
-docker-compose up -d
+make build
+make start
 ```
 
 ### 2. Connect to Your Mainframe
@@ -79,4 +79,4 @@ Complete exercises to earn badges:
 
 ---
 
-*Happy mainframe exploring! 🖥️* 
+*Happy mainframe exploring! 🖥️*

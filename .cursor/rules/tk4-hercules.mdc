@@ -118,7 +118,7 @@ Always update CHANGELOG.md when making changes:
 ## Docker Best Practices
 - Use multi-stage builds to minimize image size
 - Pin base image versions for reproducibility
-- Consider security updates for base images (current: Ubuntu 22.04 LTS)
+- Consider security updates for base images (current: Alpine Linux 3.19)
 - Use COPY instead of ADD when not extracting archives
 - Set non-root USER when possible for security
 - Use .dockerignore to exclude unnecessary files

@@ -5,9 +5,11 @@
 
 set -e  # Exit on any error
 
+# Read version from VERSION file
+VERSION=$(cat ../../VERSION | tr -d ' ')
+
 # Configuration
 GHCR_IMAGE_NAME="ghcr.io/skunklabz/tk4-hercules"
-VERSION="1.01"
 GHCR_LATEST_TAG="${GHCR_IMAGE_NAME}:latest"
 GHCR_VERSION_TAG="${GHCR_IMAGE_NAME}:v${VERSION}"
 
@@ -15,7 +17,7 @@ echo "🐳 Building TK4-Hercules for GitHub Container Registry"
 echo "======================================================"
 echo "GHCR Image: ${GHCR_IMAGE_NAME}"
 echo "Version: ${VERSION}"
-echo "Base: Ubuntu 22.04 LTS"
+echo "Base: Alpine Linux 3.19"
 echo ""
 
 # Check if we're logged into GHCR

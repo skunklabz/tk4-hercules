@@ -59,7 +59,7 @@ TK4- is a pre-configured IBM MVS 3.8j (Multiple Virtual Storage) system that run
 
 - **OS**: IBM MVS 3.8j Service Level 8505
 - **Emulator**: Hercules 4.4.1
-- **Base Image**: Ubuntu 22.04 LTS
+- **Base Image**: Alpine Linux 3.19
 - **Architecture**: Multi-platform (x86_64, ARM64) (emulating System/370)
 - **Memory**: Configurable (default: 1-2GB)
 - **Storage**: Multiple DASD volumes
@@ -69,13 +69,13 @@ TK4- is a pre-configured IBM MVS 3.8j (Multiple Virtual Storage) system that run
 ### GitHub Container Registry (GHCR)
 
 - **Latest**: `ghcr.io/skunklabz/tk4-hercules:latest`
-- **Versioned**: `ghcr.io/skunklabz/tk4-hercules:v1.01`
+- **Versioned**: `ghcr.io/skunklabz/tk4-hercules:v1.1.0`
 - **Branch**: `ghcr.io/skunklabz/tk4-hercules:main`
 
 ### Docker Hub
 
 - **Latest**: `skunklabz/tk4-hercules:latest`
-- **Versioned**: `skunklabz/tk4-hercules:v1.01`
+- **Versioned**: `skunklabz/tk4-hercules:v1.1.0`
 
 ## Development
 

@@ -13,7 +13,7 @@ The project includes multiple testing approaches to validate different aspects:
 
 ## 📋 Available Test Scripts
 
-### Quick Validation (`./quick-validate.sh`)
+### Quick Validation (`./scripts/validation/quick-validate.sh`)
 **Purpose**: Fast validation of exercise files without running mainframe
 **Use Case**: Quick checks during development, CI/CD pipelines
 **Time**: ~30 seconds
@@ -29,10 +29,10 @@ The project includes multiple testing approaches to validate different aspects:
 
 **Usage**:
 ```bash
-./quick-validate.sh
+./scripts/validation/quick-validate.sh
 ```
 
-### Functional Testing (`./test-exercises.sh`)
+### Functional Testing (`./scripts/test/test-exercises.sh`)
 **Purpose**: Comprehensive testing with actual mainframe operations
 **Use Case**: Full validation, before releases, quality assurance
 **Time**: ~5-10 minutes
@@ -52,10 +52,10 @@ The project includes multiple testing approaches to validate different aspects:
 
 **Usage**:
 ```bash
-./test-exercises.sh
+./scripts/test/test-exercises.sh
 ```
 
-### Container Testing (`./test.sh`)
+### Container Testing (`./scripts/test/test.sh`)
 **Purpose**: Test Docker container functionality
 **Use Case**: Container health checks, deployment validation
 **Time**: ~2-3 minutes
@@ -69,29 +69,29 @@ The project includes multiple testing approaches to validate different aspects:
 
 **Usage**:
 ```bash
-./test.sh
+./scripts/test/test.sh
 ```
 
 ## 🎯 Testing Strategy
 
 ### Development Workflow
-1. **During Development**: Use `./quick-validate.sh` for fast feedback
-2. **Before Commits**: Run `./test-exercises.sh` to ensure functionality
+1. **During Development**: Use `./scripts/validation/quick-validate.sh` for fast feedback
+2. **Before Commits**: Run `./scripts/test/test-exercises.sh` to ensure functionality
 3. **Before Releases**: Run all test suites
 
 ### CI/CD Integration
 ```yaml
 # Example GitHub Actions workflow
 - name: Quick Validation
-  run: ./quick-validate.sh
+  run: ./scripts/validation/quick-validate.sh
 
 - name: Build and Test Container
   run: |
-    ./build.sh
-    ./test.sh
+    ./scripts/build/build.sh
+    ./scripts/test/test.sh
 
 - name: Functional Testing
-  run: ./test-exercises.sh
+  run: ./scripts/test/test-exercises.sh
 ```
 
 ## 📊 Test Results

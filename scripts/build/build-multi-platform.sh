@@ -5,9 +5,11 @@
 
 set -e  # Exit on any error
 
+# Read version from VERSION file
+VERSION=$(cat ../../VERSION | tr -d ' ')
+
 # Configuration
 IMAGE_NAME="tk4-hercules"
-VERSION="1.01"
 LATEST_TAG="${IMAGE_NAME}:latest"
 VERSION_TAG="${IMAGE_NAME}:v${VERSION}"
 

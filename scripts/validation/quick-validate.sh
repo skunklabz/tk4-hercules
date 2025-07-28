@@ -172,7 +172,7 @@ echo "Total Tests: $TOTAL"
 
 if [ $FAILED -eq 0 ]; then
     echo -e "${GREEN}🎉 All validations passed!${NC}"
-    echo -e "${BLUE}💡 Run ./test-exercises.sh for full functional testing${NC}"
+    echo -e "${BLUE}💡 Run ./scripts/test/test-exercises.sh for full functional testing${NC}"
     exit 0
 else
     echo -e "${RED}⚠️  Some validations failed. Please fix the issues above.${NC}"

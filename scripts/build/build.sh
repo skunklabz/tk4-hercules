@@ -5,10 +5,12 @@
 
 set -e  # Exit on any error
 
+# Read version from VERSION file
+VERSION=$(cat ../VERSION | tr -d ' ')
+
 # Configuration
 IMAGE_NAME="skunklabz/tk4-hercules"
 GHCR_IMAGE_NAME="ghcr.io/skunklabz/tk4-hercules"
-VERSION="1.01"
 LATEST_TAG="${IMAGE_NAME}:latest"
 VERSION_TAG="${IMAGE_NAME}:v${VERSION}"
 GHCR_LATEST_TAG="${GHCR_IMAGE_NAME}:latest"

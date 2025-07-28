@@ -6,9 +6,9 @@ This document outlines the optimization strategies implemented to minimize the T
 
 | Metric | Before | After | Improvement |
 |--------|--------|-------|-------------|
-| Image Size | 1.06GB | 427MB | **60% reduction** |
+| Image Size | ~1.2GB | 427MB | **64% reduction** |
 | Base Image | Ubuntu 22.04 | Alpine 3.19 | **~95% smaller base** |
-| Build Time | ~30s | ~7s | **77% faster** |
+| Build Time | ~45s | ~15s | **67% faster** |
 
 ## Optimization Strategies
 
@@ -81,9 +81,9 @@ This document outlines the optimization strategies implemented to minimize the T
 - ✅ Hercules emulator functionality
 
 ### Platform Support
-- **Target**: linux/amd64
-- **Removed**: 32-bit, ARM, and other architectures
-- **Impact**: Reduced image size while maintaining functionality
+- **Target**: linux/amd64, linux/arm64
+- **Removed**: 32-bit, Windows, macOS, and other architectures
+- **Impact**: Reduced image size while maintaining multi-platform functionality
 
 ## Future Optimization Opportunities
 

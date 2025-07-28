@@ -88,7 +88,7 @@ RUN ln -sf /lib/libc.so.6 /lib/libnsl.so.1 || true
 
 # Metadata
 LABEL maintainer="SKUNKLABZ"
-LABEL version="1.01"
+LABEL version="1.1.0"
 LABEL description="OS/VS2 MVS 3.8j Service Level 8505, Tur(n)key Level 4- Version 1.00 on Alpine Linux"
 LABEL org.opencontainers.image.source="https://github.com/skunklabz/tk4-hercules"
 LABEL org.opencontainers.image.licenses="MIT"

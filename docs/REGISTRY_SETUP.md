@@ -45,7 +45,7 @@ telnet localhost 3270
 ## Available Tags
 
 - `ghcr.io/skunklabz/tk4-hercules:latest` - Latest stable version
-- `ghcr.io/skunklabz/tk4-hercules:v1.01` - Specific version
+- `ghcr.io/skunklabz/tk4-hercules:v1.1.0` - Specific version
 - `ghcr.io/skunklabz/tk4-hercules:main` - Latest from main branch
 - `ghcr.io/skunklabz/tk4-hercules:pr-*` - Pull request builds
 
@@ -85,7 +85,7 @@ make login-ghcr
 The project includes GitHub Actions workflows that automatically build and push images:
 
 - **On push to main**: Builds and pushes `latest` and `main` tags
-- **On tag creation**: Builds and pushes versioned tags (e.g., `v1.01`)
+- **On tag creation**: Builds and pushes versioned tags (e.g., `v1.1.0`)
 - **On pull requests**: Builds but doesn't push (for testing)
 
 ### Workflow File
