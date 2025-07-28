@@ -1,0 +1,295 @@
+
+# tk4-hercules Project Rules
+
+**Version**: $(shell cat VERSION) (2025-07-27)
+
+This project containerizes the Hercules mainframe emulator running IBM MVS 3.8j (Turnkey 4-). 
+Focus on educational mainframe computing, historical preservation, and Docker best practices.
+
+## Semantic Versioning (SemVer) Awareness
+
+### Version Management
+- **Current version**: Always read from `VERSION` file at project root
+- **Version format**: MAJOR.MINOR.PATCH (e.g., 1.1.0)
+- **Automatic versioning**: Update VERSION file when making SemVer-relevant changes
+
+### SemVer Change Detection
+
+When making changes, automatically determine the appropriate version bump:
+
+#### MAJOR Version Bump (X.0.0)
+- **Breaking changes** to Docker configuration or container setup
+- **Incompatible API changes** in scripts or tools
+- **Major architectural changes** to the project structure
+- **Changes to mainframe setup** that break existing functionality
+- **Removal of features** or capabilities
+- **Changes to volume mount points** or persistent storage
+- **Breaking changes** to environment variables or configuration
+
+#### MINOR Version Bump (X.Y.0)
+- **New features** added to the mainframe environment
+- **New exercises** or educational content
+- **New mainframe capabilities** or tools
+- **Backward-compatible enhancements** to existing features
+- **New documentation sections** or guides
+- **New scripts** or utilities
+- **New Docker features** or optimizations
+- **New GitHub Actions workflows**
+
+#### PATCH Version Bump (X.Y.Z)
+- **Bug fixes** in existing functionality
+- **Documentation updates** and clarifications
+- **Minor improvements** to existing features
+- **Security patches** and vulnerability fixes
+- **Build system changes** and optimizations
+- **CI/CD improvements** and workflow updates
+- **Code quality improvements** and refactoring
+- **Typo fixes** and minor corrections
+
+### Automatic Version Updates
+
+When making changes, automatically:
+
+1. **Detect change type** based on the modifications
+2. **Update VERSION file** with appropriate bump
+3. **Update CHANGELOG.md** with new version entry
+4. **Use conventional commit format** for version-related commits
+
+### Version Update Commands
+
+After making changes, use these commands:
+
+```bash
+# For patch changes (bug fixes, minor improvements)
+make bump-patch
+
+# For minor changes (new features, enhancements)
+make bump-minor
+
+# For major changes (breaking changes)
+make bump-major
+```
+
+### CHANGELOG.md Updates
+
+Always update CHANGELOG.md when making changes:
+
+```markdown
+## [Unreleased]
+
+### Added
+- New features or capabilities
+
+### Changed
+- Changes to existing functionality
+
+### Fixed
+- Bug fixes and improvements
+
+### Security
+- Security-related changes
+```
+
+## Repository Structure & Organization
+
+### Directory Organization
+- **docs/**: All project documentation (LEARNING_GUIDE.md, TESTING.md, etc.)
+- **examples/**: Educational exercises and tutorials
+- **scripts/**: Organized by function (build/, test/, validation/)
+- **assets/**: Static assets and configuration templates
+- **config/**: Configuration files
+- **tools/**: Development tools and utilities
+- **.github/**: GitHub templates and workflows
+
+### File Naming Conventions
+- Use descriptive, lowercase names with hyphens for directories
+- Use descriptive, lowercase names with underscores for files
+- Follow consistent naming patterns within each directory
+- Scripts should be organized by function in scripts/ subdirectories
+
+### Documentation Standards
+- **README.md**: Project overview and quick start guide
+- **CONTRIBUTING.md**: Comprehensive contribution guidelines
+- **CHANGELOG.md**: Version history following Keep a Changelog format
+- **CODE_OF_CONDUCT.md**: Community guidelines
+- **SECURITY.md**: Security policy and vulnerability reporting
+- **docs/**: Technical documentation and guides
+
+## Docker Best Practices
+- Use multi-stage builds to minimize image size
+- Pin base image versions for reproducibility
+- Consider security updates for base images (current: Ubuntu 22.04 LTS)
+- Use COPY instead of ADD when not extracting archives
+- Set non-root USER when possible for security
+- Use .dockerignore to exclude unnecessary files
+- Optimize layer caching by ordering commands properly
+- Include health checks for better container monitoring
+- Use resource limits for CPU and memory
+- Implement proper logging with rotation
+
+## Mainframe & Heritage System Knowledge
+- MVS 3.8j is IBM's Multiple Virtual Storage operating system from 1981
+- JCL (Job Control Language) is the scripting language for MVS batch jobs
+- DASD (Direct Access Storage Device) refers to disk storage volumes
+- 3270 terminals are the standard mainframe terminal protocol
+- Hercules emulator requires specific configuration files (.cnf)
+- TK4- is a pre-configured turnkey MVS system for education
+
+## Container Architecture Guidelines
+- Maintain the 8 volume mount points for persistence:
+  - /tk4-/conf (master configuration)
+  - /tk4-/local_conf (initialization scripts)
+  - /tk4-/local_scripts (user modifications)
+  - /tk4-/prt (line printer output)
+  - /tk4-/pch (card punch output)
+  - /tk4-/dasd (disk volumes)
+  - /tk4-/jcl (job control files)
+  - /tk4-/log (system logs)
+- Expose ports 3270 (terminal) and 8038 (web console)
+- Use CMD rather than ENTRYPOINT for the /tk4-/mvs startup script
+
+## Security Considerations
+- Avoid running as root inside container when possible
+- Use specific versions rather than 'latest' tags
+- Consider security scanning for base image vulnerabilities
+- Document any security implications of exposed ports
+
+## Documentation Standards
+- Maintain clear README with usage examples
+- Document all environment variables and configuration options
+- Include troubleshooting section for common issues
+- Provide educational context about mainframe concepts
+- Keep YouTube links and external resources updated
+
+## Code Style
+- Use consistent indentation in Dockerfile (spaces preferred)
+- Group related RUN commands to reduce layers
+- Add meaningful labels (LABEL) for metadata
+- Use meaningful names for intermediate build stages
+- Comment complex operations, especially mainframe-specific setup
+
+## Comment Management
+- Follow the comprehensive comment management rules in `.cursor/rules/comment-management.mdc`
+- Remove unnecessary comments that don't add value
+- Keep comments that explain "why" not "what"
+- Remove commented-out code blocks
+- Remove TODO comments that are older than 30 days
+- Remove redundant comments that just repeat the code
+- Keep comments that explain complex business logic or mainframe concepts
+- Remove comments that are obvious from the code itself
+- Keep comments that document workarounds or platform-specific issues
+- Remove excessive inline comments that clutter the code
+- Keep comments that explain historical context or educational value
+
+## Educational Focus
+- Explain mainframe concepts when adding features
+- Consider backward compatibility with existing educational materials
+- Maintain simplicity for learning purposes
+- Document historical context of MVS 3.8j and System/370 architecture
+
+## Testing & Validation
+
+### Test Requirements
+- All new features must include tests
+- Tests should be deterministic and repeatable
+- Include both positive and negative test cases
+- Test mainframe connectivity and functionality
+- Validate exercise content and structure
+
+### Test Scripts
+- **test-exercises.sh**: Comprehensive testing of all exercises
+- **quick-validate.sh**: Quick validation of content
+- **validate-exercises.sh**: Detailed exercise validation
+- All tests should run via `make test` command
+
+### CI/CD Integration
+- GitHub Actions handle automated testing
+- Tests run on pull requests and pushes to main
+- Automated validation of documentation and structure
+- Docker image building and testing in CI
+
+## Performance Optimization
+- Minimize image layers and size
+- Cache dependencies appropriately in multi-stage builds
+- Consider init system if running multiple processes
+- Optimize for container startup time
+
+## Version Management & Standards
+
+### Versioning
+- Follow Semantic Versioning (SemVer) for releases
+- Update CHANGELOG.md with all changes following Keep a Changelog format
+- Include dates in version entries (YYYY-MM-DD format)
+- Current version: $(shell cat VERSION) (2025-07-27)
+
+### Open Source Standards
+- Follow established open source project patterns
+- Include all standard files (LICENSE, CONTRIBUTING.md, etc.)
+- Use conventional commit format for commit messages
+- Maintain comprehensive documentation
+
+### Code Quality
+- Follow shellcheck recommendations for shell scripts
+- Use consistent indentation and formatting
+- Add meaningful comments for complex operations
+- Test all changes before committing
+
+## Compatibility Notes
+- TK4- system expects specific directory structure under /tk4-/
+- Hercules requires proper CPU architecture emulation
+- MVS 3.8j has specific memory and storage requirements
+- 3270 terminal protocols must be preserved for authenticity
+
+## Development Workflow & Tools
+
+### Makefile Commands
+- **make build**: Build the Docker container
+- **make start**: Start the mainframe container
+- **make stop**: Stop the mainframe container
+- **make test**: Run comprehensive tests
+- **make test-quick**: Run quick validation
+- **make validate**: Validate exercise content
+- **make clean**: Clean up containers and images
+- **make help**: Show all available commands
+- **make version**: Show current version
+- **make bump-patch**: Bump patch version
+- **make bump-minor**: Bump minor version
+- **make bump-major**: Bump major version
+
+### Script Organization
+- **scripts/build/**: Build scripts (build.sh, build-platform.sh, download-tk4.sh)
+- **scripts/test/**: Test scripts (test.sh, test-exercises.sh)
+- **scripts/validation/**: Validation scripts (quick-validate.sh, validate-exercises.sh)
+
+### Trunk-Based Development
+- **Single main branch**: All development flows through `main`
+- **Short-lived feature branches**: Create branches for individual features/fixes
+- **Frequent merges**: Merge feature branches within 1-2 days
+- **Small batches**: Keep changes small and focused
+- **Continuous integration**: All changes are tested on pull requests
+- **No long-lived development branches**: Eliminate integration complexity
+- **Direct to main**: Feature branches merge directly to `main`
+- **Automated testing**: GitHub Actions run on all pull requests
+- **Code review required**: All changes must be reviewed before merging
+- **Quick feedback loop**: Small changes enable rapid iteration
+
+### GitHub Integration
+- Use provided issue templates for bug reports and feature requests
+- Follow the pull request template for all PRs
+- GitHub Actions handle CI/CD automation
+- Automated testing and validation on pull requests
+
+## AI Assistant Guidelines
+
+When making changes as an AI assistant:
+
+1. **Always check the current version** from the VERSION file
+2. **Determine the appropriate version bump** based on the type of change
+3. **Update the VERSION file** when making SemVer-relevant changes
+4. **Update CHANGELOG.md** with new version entry and changes
+5. **Use conventional commit format** for version-related commits
+6. **Consider backward compatibility** when making changes
+7. **Test changes thoroughly** before committing
+8. **Document breaking changes** clearly in CHANGELOG.md
+9. **Follow the established patterns** for version management
+10. **Ensure all version references** are updated consistently 
