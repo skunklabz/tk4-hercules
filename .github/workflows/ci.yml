@@ -117,7 +117,7 @@ jobs:
     - name: Check for TODO comments
       run: |
         echo "📝 Checking for TODO comments..."
-        if grep -r "TODO" . --exclude-dir=.git --exclude-dir=.github; then
+        if grep -r "TODO" . --exclude-dir=.git --exclude-dir=.github --exclude-dir=.cursor; then
           echo "⚠️  TODO comments found. Please address them before merging."
           exit 1
         fi

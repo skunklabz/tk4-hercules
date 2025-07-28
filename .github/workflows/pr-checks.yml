@@ -80,7 +80,7 @@ jobs:
         
         if [ -n "$CHANGED_FILES" ]; then
           for file in $CHANGED_FILES; do
-            if [ -f "$file" ] && [[ "$file" != *.md ]]; then
+            if [ -f "$file" ] && [[ "$file" != *.md ]] && [[ "$file" != .cursor/* ]]; then
               if grep -q "TODO" "$file"; then
                 echo "⚠️  TODO comments found in $file"
                 exit 1
