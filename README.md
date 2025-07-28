@@ -99,6 +99,31 @@ make build
 make start
 ```
 
+### Git Hooks (Quality Assurance)
+
+This repository includes Git hooks to ensure code quality before pushing:
+
+#### Pre-Push Hook (Default)
+Automatically runs before each `git push`:
+- Quick validation checks
+- Exercise content validation  
+- Docker build test
+
+**Enable**: Already enabled by default
+
+#### Comprehensive Pre-Push Hook (Optional)
+Runs full test suite including container startup and connectivity tests:
+
+```bash
+# Enable comprehensive pre-push checks
+ln -sf .git/hooks/pre-push-comprehensive .git/hooks/pre-push
+
+# Disable (back to default)
+ln -sf .git/hooks/pre-push .git/hooks/pre-push
+```
+
+**Note**: Comprehensive tests take 2-3 minutes but catch more issues before they reach CI.
+
 ### Development Commands
 
 ```bash
