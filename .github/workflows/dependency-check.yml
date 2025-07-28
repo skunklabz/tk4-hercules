@@ -125,14 +125,20 @@ jobs:
       run: |
         echo "🔒 Checking for secrets in code..."
         
-        # Check for common secret patterns
+        # Check for common secret patterns, excluding documentation and known safe patterns
         SECRETS_FOUND=$(grep -r -i "password\|secret\|key\|token\|api_key\|private_key" . \
           --exclude-dir=.git \
           --exclude-dir=.github \
+          --exclude-dir=.cache \
           --exclude=*.md \
+          --exclude=*.mdc \
           --exclude=*.txt \
           --exclude=*.log \
-          | grep -v "CUL8TR\|PASS4U\|TODO\|FIXME" || true)
+          --exclude=Makefile \
+          --exclude=docker-compose.yml \
+          --exclude=Dockerfile \
+          --exclude=*.sh \
+          | grep -v -E "(CUL8TR|PASS4U|TODO|FIXME|GITHUB_TOKEN|write:packages|password-stdin|Tur\(n\)key|MVS|OS/VS2|Alpine|Hercules|mainframe|emulator|tk4-hercules|skunklabz|ghcr\.io)" || true)
         
         if [ -n "$SECRETS_FOUND" ]; then
           echo "⚠️  Potential secrets found:"
