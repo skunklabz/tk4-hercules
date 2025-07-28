@@ -245,6 +245,7 @@ jobs:
           --exclude=docker-compose.yml \
           --exclude=Dockerfile \
           --exclude=*.sh \
+          --exclude=.gitignore \
           | grep -v -E "(CUL8TR|PASS4U|GITHUB_TOKEN|write:packages|password-stdin|Tur\(n\)key|MVS|OS/VS2|Alpine|Hercules|mainframe|emulator|tk4-hercules|skunklabz|ghcr\.io)"; then
           echo "⚠️  Potential secrets found. Please review the code."
           exit 1

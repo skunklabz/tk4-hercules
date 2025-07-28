@@ -138,6 +138,7 @@ jobs:
           --exclude=docker-compose.yml \
           --exclude=Dockerfile \
           --exclude=*.sh \
+          --exclude=.gitignore \
           | grep -v -E "(CUL8TR|PASS4U|TODO|FIXME|GITHUB_TOKEN|write:packages|password-stdin|Tur\(n\)key|MVS|OS/VS2|Alpine|Hercules|mainframe|emulator|tk4-hercules|skunklabz|ghcr\.io)" || true)
         
         if [ -n "$SECRETS_FOUND" ]; then
