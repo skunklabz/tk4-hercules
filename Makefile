@@ -22,13 +22,16 @@ help:
 	@echo "  build-platform - Build for specific platform"
 	@echo "  build-multi  - Build multi-platform images (AMD64 + ARM64)"
 	@echo "  build-ghcr   - Build for GitHub Container Registry"
+	@echo "  fix-arm64    - Fix ARM64 compatibility issues"
+	@echo "  start-arm64  - Start with ARM64 workaround"
 	@echo ""
 	@echo "Registry Commands:"
 	@echo "  push-ghcr    - Build and push to GitHub Container Registry"
 	@echo "  login-ghcr   - Login to GitHub Container Registry"
+	@echo "  Note: Local development uses local images only (no Docker Hub)"
 	@echo ""
 	@echo "Container Commands:"
-	@echo "  start        - Start the mainframe container"
+	@echo "  start        - Build and start the mainframe container (local image)"
 	@echo "  stop         - Stop the mainframe container"
 	@echo "  restart      - Restart the mainframe container"
 	@echo "  logs         - Show container logs"
@@ -40,11 +43,15 @@ help:
 	@echo "  test-arm64   - Test ARM64 support"
 	@echo "  validate     - Validate exercise content"
 	@echo "  test-local   - Run full local test suite"
+	@echo "  test-ports   - Test ports and services (3270, 8038)"
+	@echo "  test-full    - Test full MVS services (starts actual system)"
+	@echo "  pre-commit   - Run pre-commit checks (before pushing)"
 	@echo ""
 	@echo "Development Commands:"
 	@echo "  clean        - Clean up containers and images"
 	@echo "  docs         - Generate documentation"
 	@echo "  lint         - Run linting checks"
+	@echo "  setup-hooks  - Install git hooks for automatic testing"
 	@echo ""
 	@echo "CI/CD Commands:"
 	@echo "  ci-lint      - Run CI linting checks"
@@ -104,6 +111,14 @@ build-ghcr:
 	@echo "Building for GitHub Container Registry..."
 	@./scripts/build/build-ghcr.sh --no-prompt
 
+fix-arm64:
+	@echo "Fixing ARM64 compatibility issues..."
+	@./scripts/build/fix-arm64.sh
+
+start-arm64:
+	@echo "Starting TK4-Hercules with ARM64 workaround..."
+	@./scripts/start-arm64.sh
+
 # Registry commands
 push-ghcr:
 	@echo "Building and pushing to GitHub Container Registry..."
@@ -117,20 +132,39 @@ login-ghcr:
 # Container management
 start:
 	@echo "Starting TK4-Hercules mainframe..."
-	@docker compose up -d
+	@echo "Building local image if needed..."
+	@docker build --platform linux/amd64 -t tk4-hercules:latest .
+	@echo "Starting container with local image..."
+	@docker run -d --name tk4-hercules \
+		--platform linux/amd64 \
+		-p 3270:3270 \
+		-p 8038:8038 \
+		-v tk4-conf:/tk4-/conf \
+		-v tk4-local_conf:/tk4-/local_conf \
+		-v tk4-local_scripts:/tk4-/local_scripts \
+		-v tk4-prt:/tk4-/prt \
+		-v tk4-dasd:/tk4-/dasd \
+		-v tk4-pch:/tk4-/pch \
+		-v tk4-jcl:/tk4-/jcl \
+		-v tk4-log:/tk4-/log \
+		--restart unless-stopped \
+		--memory=2g \
+		--cpus=2.0 \
+		tk4-hercules:latest
 
 stop:
 	@echo "Stopping TK4-Hercules mainframe..."
-	@docker compose down
+	@docker stop tk4-hercules 2>/dev/null || true
+	@docker rm tk4-hercules 2>/dev/null || true
 
 restart: stop start
 	@echo "Restarted TK4-Hercules mainframe"
 
 logs:
-	@docker compose logs -f
+	@docker logs -f tk4-hercules
 
 shell:
-	@docker compose exec tk4-hercules /bin/bash
+	@docker exec -it tk4-hercules /bin/bash
 
 # Testing commands
 test:
@@ -148,10 +182,34 @@ test-quick:
 test-local:
 	@echo "Running full local test suite..."
 	@echo "This includes:"
-	@echo "  - Exercise file validation"
-	@echo "  - Container startup and connectivity"
-	@echo "  - Basic mainframe functionality"
-	@./scripts/test/test-exercises.sh
+	@echo "  - Docker build validation"
+	@echo "  - Container startup testing"
+	@echo "  - Multi-platform build test"
+	@echo "  - Workflow file validation"
+	@echo "  - Essential file checks"
+	@./scripts/test-local.sh
+
+test-ports:
+	@echo "Testing ports and services..."
+	@echo "This includes:"
+	@echo "  - 3270 terminal port validation"
+	@echo "  - Web console (port 8038) testing"
+	@echo "  - Service connectivity checks"
+	@./scripts/test-ports.sh
+
+test-full:
+	@echo "Testing full MVS services..."
+	@echo "This includes:"
+	@echo "  - Starting actual MVS system"
+	@echo "  - Testing 3270 terminal functionality"
+	@echo "  - Testing web console (port 8038)"
+	@echo "  - Full service validation"
+	@./scripts/test-full-services.sh
+
+pre-commit:
+	@echo "Running pre-commit checks..."
+	@echo "This ensures your code is ready for remote push"
+	@./scripts/pre-commit.sh
 
 test-arm64:
 	@echo "Testing ARM64 support..."
@@ -177,6 +235,10 @@ lint:
 	@echo "Running linting checks..."
 	@shellcheck scripts/**/*.sh || true
 	@echo "Linting complete"
+
+setup-hooks:
+	@echo "Setting up git hooks for automatic testing..."
+	@./scripts/setup-hooks.sh
 
 # Development workflow
 dev-setup: build start

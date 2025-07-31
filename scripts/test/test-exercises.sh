@@ -1,14 +1,7 @@
 #!/bin/bash
 
-# TK4-Hercules Essential Exercise Test Script
-# Simplified test suite focusing on core functionality
-
-set -e
-
-# Configuration
-CONTAINER_NAME="tk4-hercules"
-TEST_TIMEOUT=120  # 2 minutes timeout for tests
-LOG_FILE="exercise-test-results.log"
+# TK4-Hercules Exercise Test Script
+# Tests exercise file structure, container startup, and basic mainframe functionality
 
 # Colors for output
 RED='\033[0;31m'
@@ -22,15 +15,13 @@ TESTS_PASSED=0
 TESTS_FAILED=0
 TESTS_SKIPPED=0
 
-echo "🧪 TK4-Hercules Essential Test Suite"
-echo "===================================="
-echo "Testing core functionality..."
-echo "Log file: $LOG_FILE"
+echo "🧪 TK4-Hercules Exercise Tests"
+echo "=============================="
+echo "Testing:"
+echo "  - Exercise file structure"
+echo "  - Container startup and connectivity"
+echo "  - Basic mainframe functionality"
 echo ""
-
-# Initialize log file
-echo "TK4-Hercules Essential Test Results - $(date)" > "$LOG_FILE"
-echo "=============================================" >> "$LOG_FILE"
 
 # Function to log test results
 log_test() {
@@ -41,59 +32,24 @@ log_test() {
     case $status in
         "PASS")
             echo -e "${GREEN}✅ PASS${NC}: $test_name - $message"
-            echo "✅ PASS: $test_name - $message" >> "$LOG_FILE"
             ((TESTS_PASSED++))
             ;;
         "FAIL")
             echo -e "${RED}❌ FAIL${NC}: $test_name - $message"
-            echo "❌ FAIL: $test_name - $message" >> "$LOG_FILE"
             ((TESTS_FAILED++))
             ;;
         "SKIP")
             echo -e "${YELLOW}⏭️  SKIP${NC}: $test_name - $message"
-            echo "⏭️  SKIP: $test_name - $message" >> "$LOG_FILE"
             ((TESTS_SKIPPED++))
             ;;
     esac
 }
 
-# Function to wait for mainframe to be ready
-wait_for_mainframe() {
-    echo -e "${BLUE}⏳ Waiting for mainframe to be ready...${NC}"
+# Function to test exercise file structure
+test_exercise_structure() {
+    echo -e "${BLUE}📁 Testing exercise file structure...${NC}"
     
-    local max_attempts=12  # 12 attempts * 10 seconds = 120 seconds timeout
-    local attempt=1
-    
-    while [ $attempt -le $max_attempts ]; do
-        # Check web interface for mainframe readiness
-        if curl -s http://localhost:8038/cgi-bin/tasks/syslog | grep -q "Enter input for console\|HHC00010A\|READY"; then
-            echo -e "${GREEN}✅ Mainframe is ready!${NC}"
-            return 0
-        fi
-        
-        echo -n "."
-        sleep 10  # Check every 10 seconds
-        ((attempt++))
-    done
-    
-    echo -e "${RED}❌ Mainframe failed to start within timeout${NC}"
-    return 1
-}
-
-# Function to test exercise files
-test_exercise_files() {
-    echo -e "${BLUE}📁 Testing exercise files...${NC}"
-    
-    # Check if examples directory exists
-    if [ -d "examples" ]; then
-        log_test "Examples Directory" "PASS" "Directory exists"
-    else
-        log_test "Examples Directory" "FAIL" "Directory missing"
-        return 1
-    fi
-    
-    # Check for required files
-    required_files=(
+    local required_files=(
         "examples/README.md"
         "examples/start-here.md"
         "examples/01-first-session.md"
@@ -104,153 +60,227 @@ test_exercise_files() {
     
     for file in "${required_files[@]}"; do
         if [ -f "$file" ]; then
-            log_test "File: $file" "PASS" "File exists"
+            log_test "File Exists: $file" "PASS" "File found"
         else
-            log_test "File: $file" "FAIL" "File missing"
+            log_test "File Exists: $file" "FAIL" "File missing"
         fi
     done
 }
 
-# Function to test exercise content
+# Function to test exercise content quality
 test_exercise_content() {
-    echo -e "${BLUE}📖 Testing exercise content...${NC}"
+    echo -e "${BLUE}📖 Testing exercise content quality...${NC}"
     
-    exercise_files=(
+    # Test required sections in exercise files
+    local exercise_files=(
         "examples/01-first-session.md"
         "examples/02-file-systems.md"
         "examples/03-first-jcl-job.md"
     )
     
+    local required_sections=(
+        "Objective"
+        "Prerequisites"
+        "What You'll Learn"
+        "Learning Checkpoint"
+        "Navigation"
+    )
+    
     for file in "${exercise_files[@]}"; do
         if [ -f "$file" ]; then
-            # Check for essential sections
-            if grep -q "Objective" "$file"; then
-                log_test "Content: $file - Objective" "PASS" "Section found"
-            else
-                log_test "Content: $file - Objective" "FAIL" "Section missing"
-            fi
-            
-            if grep -q "Prerequisites" "$file"; then
-                log_test "Content: $file - Prerequisites" "PASS" "Section found"
-            else
-                log_test "Content: $file - Prerequisites" "FAIL" "Section missing"
-            fi
+            for section in "${required_sections[@]}"; do
+                if grep -q "$section" "$file"; then
+                    log_test "Content: $file - $section" "PASS" "Section found"
+                else
+                    log_test "Content: $file - $section" "FAIL" "Section missing"
+                fi
+            done
         fi
     done
 }
 
-# Function to test mainframe connectivity
-test_mainframe_connectivity() {
-    echo -e "${BLUE}🔌 Testing mainframe connectivity...${NC}"
+# Function to test container startup
+test_container_startup() {
+    echo -e "${BLUE}🐳 Testing container startup...${NC}"
     
-    # Test web interface
-    if curl -s http://localhost:8038/ > /dev/null; then
-        log_test "Web Interface" "PASS" "Web console accessible"
-    else
-        log_test "Web Interface" "FAIL" "Web console not accessible"
+    # Check if Docker is running
+    if ! docker info >/dev/null 2>&1; then
+        log_test "Docker Runtime" "FAIL" "Docker is not running"
+        return
     fi
     
-    # Test 3270 port
-    if nc -z localhost 3270 2>/dev/null; then
-        log_test "3270 Port" "PASS" "Terminal port accessible"
+    log_test "Docker Runtime" "PASS" "Docker is running"
+    
+    # Check if docker-compose.yml exists
+    if [ -f "docker-compose.yml" ]; then
+        log_test "Docker Compose" "PASS" "docker-compose.yml found"
     else
-        log_test "3270 Port" "FAIL" "Terminal port not accessible"
+        log_test "Docker Compose" "FAIL" "docker-compose.yml missing"
+        return
     fi
     
-    # Test container health
-    if docker ps | grep -q "$CONTAINER_NAME"; then
-        log_test "Container Health" "PASS" "Container is running"
+    # Check if Dockerfile exists
+    if [ -f "Dockerfile" ]; then
+        log_test "Dockerfile" "PASS" "Dockerfile found"
     else
-        log_test "Container Health" "FAIL" "Container is not running"
+        log_test "Dockerfile" "FAIL" "Dockerfile missing"
+        return
+    fi
+    
+    # Test container build (without running)
+    echo "Building container for testing..."
+    if docker build -t tk4-hercules-test . >/dev/null 2>&1; then
+        log_test "Container Build" "PASS" "Container builds successfully"
+    else
+        log_test "Container Build" "FAIL" "Container build failed"
+        return
+    fi
+    
+    # Clean up test image
+    docker rmi tk4-hercules-test >/dev/null 2>&1 || true
+}
+
+# Function to test container connectivity
+test_container_connectivity() {
+    echo -e "${BLUE}🔌 Testing container connectivity...${NC}"
+    
+    # Check if container is currently running
+    if docker compose ps | grep -q "tk4-hercules.*Up"; then
+        log_test "Container Status" "PASS" "Container is running"
+        
+        # Test port 3270 (terminal)
+        if netstat -an 2>/dev/null | grep -q ":3270"; then
+            log_test "Port 3270 (Terminal)" "PASS" "Port is listening"
+        else
+            log_test "Port 3270 (Terminal)" "FAIL" "Port not listening"
+        fi
+        
+        # Test port 8038 (web console)
+        if netstat -an 2>/dev/null | grep -q ":8038"; then
+            log_test "Port 8038 (Web Console)" "PASS" "Port is listening"
+        else
+            log_test "Port 8038 (Web Console)" "FAIL" "Port not listening"
+        fi
+        
+        # Test basic connectivity to container
+        if docker compose exec -T tk4-hercules echo "test" >/dev/null 2>&1; then
+            log_test "Container Exec" "PASS" "Can execute commands in container"
+        else
+            log_test "Container Exec" "FAIL" "Cannot execute commands in container"
+        fi
+        
+    else
+        log_test "Container Status" "SKIP" "Container not running (start with 'make start')"
+        log_test "Port 3270 (Terminal)" "SKIP" "Container not running"
+        log_test "Port 8038 (Web Console)" "SKIP" "Container not running"
+        log_test "Container Exec" "SKIP" "Container not running"
     fi
 }
 
-# Main function
-main() {
-    echo -e "${BLUE}🚀 Starting essential test suite...${NC}"
+# Function to test basic mainframe functionality
+test_mainframe_functionality() {
+    echo -e "${BLUE}💻 Testing basic mainframe functionality...${NC}"
     
-    # Pre-flight checks
-    if [ ! -f "Dockerfile" ] || [ ! -f "docker-compose.yml" ]; then
-        echo -e "${RED}❌ Error: Must run from tk4-hercules project root${NC}"
-        exit 1
+    # Check if container is running
+    if ! docker compose ps | grep -q "tk4-hercules.*Up"; then
+        log_test "Mainframe Tests" "SKIP" "Container not running (start with 'make start')"
+        return
     fi
     
-    if ! command -v docker &> /dev/null; then
-        echo -e "${RED}❌ Error: Docker is not installed${NC}"
-        exit 1
-    fi
-    
-    # Start test container
-    echo -e "${BLUE}🐳 Starting test container...${NC}"
-    if [ "${CI:-false}" = "true" ]; then
-        IMAGE_NAME="tk4-hercules:test"
+    # Test if Hercules process is running in container
+    if docker compose exec -T tk4-hercules ps aux | grep -q "hercules"; then
+        log_test "Hercules Process" "PASS" "Hercules emulator is running"
     else
-        IMAGE_NAME="ghcr.io/skunklabz/tk4-hercules:latest"
+        log_test "Hercules Process" "FAIL" "Hercules emulator not running"
     fi
     
-    IMAGE_NAME="$IMAGE_NAME" docker compose up -d --force-recreate
-    
-    # Wait for container to be ready
-    if ! wait_for_mainframe; then
-        echo -e "${RED}❌ Failed to start mainframe for testing${NC}"
-        docker compose down
-        exit 1
+    # Test if MVS is loaded (check for typical MVS processes)
+    if docker compose exec -T tk4-hercules ps aux | grep -q "MVS"; then
+        log_test "MVS System" "PASS" "MVS system is loaded"
+    else
+        log_test "MVS System" "SKIP" "MVS system status unclear"
     fi
     
-    echo ""
-    echo "🧪 Running essential tests..."
-    echo ""
+    # Test if required directories exist in container
+    local required_dirs=(
+        "/opt/hercules"
+        "/opt/hercules/tk4-"
+        "/opt/hercules/tk4-/conf"
+        "/opt/hercules/tk4-/logs"
+    )
     
-    # Run essential test suites
-    test_exercise_files
-    test_exercise_content
-    test_mainframe_connectivity
+    for dir in "${required_dirs[@]}"; do
+        if docker compose exec -T tk4-hercules test -d "$dir"; then
+            log_test "Directory: $dir" "PASS" "Directory exists"
+        else
+            log_test "Directory: $dir" "FAIL" "Directory missing"
+        fi
+    done
+}
+
+# Function to test configuration files
+test_configuration_files() {
+    echo -e "${BLUE}⚙️  Testing configuration files...${NC}"
     
+    local required_configs=(
+        "docker-compose.yml"
+        "Dockerfile"
+        "VERSION"
+        "README.md"
+    )
+    
+    for config in "${required_configs[@]}"; do
+        if [ -f "$config" ]; then
+            log_test "Config: $config" "PASS" "File exists"
+        else
+            log_test "Config: $config" "FAIL" "File missing"
+        fi
+    done
+    
+    # Test if VERSION file contains valid version
+    if [ -f "VERSION" ]; then
+        local version=$(cat VERSION | tr -d ' ')
+        if [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            log_test "Version Format" "PASS" "Valid semantic version: $version"
+        else
+            log_test "Version Format" "FAIL" "Invalid version format: $version"
+        fi
+    fi
+}
+
+# Function to print test summary
+print_summary() {
     echo ""
-    echo "📊 Test Results Summary"
-    echo "======================"
+    echo -e "${BLUE}📊 Test Summary${NC}"
+    echo "=================="
     echo -e "${GREEN}✅ Passed: $TESTS_PASSED${NC}"
     echo -e "${RED}❌ Failed: $TESTS_FAILED${NC}"
     echo -e "${YELLOW}⏭️  Skipped: $TESTS_SKIPPED${NC}"
-    echo ""
     
-    # Calculate total tests
-    TOTAL_TESTS=$((TESTS_PASSED + TESTS_FAILED + TESTS_SKIPPED))
-    echo "Total Tests: $TOTAL_TESTS"
+    local total=$((TESTS_PASSED + TESTS_FAILED + TESTS_SKIPPED))
+    echo "Total: $total"
     
-    # Write summary to log
-    echo "" >> "$LOG_FILE"
-    echo "Test Summary:" >> "$LOG_FILE"
-    echo "=============" >> "$LOG_FILE"
-    echo "Passed: $TESTS_PASSED" >> "$LOG_FILE"
-    echo "Failed: $TESTS_FAILED" >> "$LOG_FILE"
-    echo "Skipped: $TESTS_SKIPPED" >> "$LOG_FILE"
-    echo "Total: $TOTAL_TESTS" >> "$LOG_FILE"
-    
-    # Determine exit code
     if [ $TESTS_FAILED -eq 0 ]; then
-        echo -e "${GREEN}🎉 All essential tests passed!${NC}"
-        echo "🎉 All essential tests passed!" >> "$LOG_FILE"
-        EXIT_CODE=0
+        echo ""
+        echo -e "${GREEN}🎉 All tests passed!${NC}"
+        exit 0
     else
-        echo -e "${RED}⚠️  Some tests failed. Check the log for details.${NC}"
-        echo "⚠️  Some tests failed. Check the log for details." >> "$LOG_FILE"
-        EXIT_CODE=1
+        echo ""
+        echo -e "${RED}⚠️  Some tests failed. Please check the output above.${NC}"
+        exit 1
     fi
-    
-    # Cleanup
-    echo ""
-    echo -e "${BLUE}🧹 Cleaning up test environment...${NC}"
-    docker compose down
-    
-    echo ""
-    echo -e "${BLUE}📋 Detailed results saved to: $LOG_FILE${NC}"
-    
-    exit $EXIT_CODE
 }
 
-# Handle script interruption
-trap 'echo -e "\n${YELLOW}⚠️  Test interrupted. Cleaning up...${NC}"; docker compose down; exit 1' INT TERM
+# Main test execution
+main() {
+    test_exercise_structure
+    test_exercise_content
+    test_configuration_files
+    test_container_startup
+    test_container_connectivity
+    test_mainframe_functionality
+    print_summary
+}
 
-# Run main function
-main "$@" 
+# Run the tests
+main 

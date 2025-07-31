@@ -42,6 +42,21 @@ telnet localhost 3270
 open http://localhost:8038
 ```
 
+### ARM64 Compatibility
+
+If you're running on ARM64 (Apple Silicon Macs, ARM servers), you may encounter symbol relocation errors. Use the AMD64 platform for better compatibility:
+
+```bash
+# Force AMD64 platform for ARM64 systems
+PLATFORM=linux/amd64 docker-compose up -d
+
+# Or set environment variable
+export PLATFORM=linux/amd64
+make start
+```
+
+For detailed troubleshooting, see [ARM64 Troubleshooting Guide](docs/ARM64_TROUBLESHOOTING.md).
+
 ## What is TK4-?
 
 TK4- is a pre-configured IBM MVS 3.8j (Multiple Virtual Storage) system that runs on the Hercules mainframe emulator. It's designed for educational purposes and historical preservation of mainframe computing.

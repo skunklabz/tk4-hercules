@@ -1,0 +1,48 @@
+#!/bin/bash
+#**********************************************************************
+#***                                                                ***
+#*** Script:  mvs (AMD64-only version)                              ***
+#***                                                                ***
+#*** Purpose: IPL OS/VS2-MVS 3.8j (TK4- unattended operations)      ***
+#***                                                                ***
+#*** Updated: 2024/07/31 - Simplified for AMD64 only                ***
+#***                                                                ***
+#**********************************************************************
+#
+# set environment - AMD64 only
+#
+arch=64
+HERCULES_BIN="./hercules/linux/64/bin/hercules"
+
+system=`uname -s | awk '{print tolower($0)}'`
+case $system in
+linux)
+   force_arch=
+   export PATH=hercules/$system/$arch/bin:$PATH
+   export LD_LIBRARY_PATH=hercules/$system/$arch/lib:hercules/$system/$arch/lib/hercules:$LD_LIBRARY_PATH
+   ;;
+darwin)
+   force_arch=
+   export PATH=hercules/$system/bin:$PATH
+   export DYLD_LIBRARY_PATH=hercules/$system/lib:hercules/$system/lib/hercules:$DYLD_LIBRARY_PATH
+   ;;
+*)
+   echo "System $system not supported."
+   exit
+   ;;
+esac
+
+MODE=`head -1 unattended/mode 2>/dev/null`
+DAEMON="-d"
+if [[ $MODE == 'CONSOLE' ]]; then unset DAEMON; fi
+
+#
+# source configuration variables
+#
+if [ -f local_conf/tk4-.parm ]; then . local_conf/tk4-.parm; fi
+
+#
+# IPL OS/VS2-MVS 3.8j
+#
+export HERCULES_RC=scripts/ipl.rc
+$force_arch $HERCULES_BIN $DAEMON -f conf/tk4-.cnf >log/3033.log 
