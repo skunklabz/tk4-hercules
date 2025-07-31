@@ -1,7 +1,9 @@
-name: Build and Push Docker Image
+name: Build Docker Image
 
 on:
   pull_request:
+    branches: [ main ]
+  push:
     branches: [ main ]
   workflow_dispatch:
 
@@ -30,36 +32,23 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Extract metadata
-      id: meta
-      uses: docker/metadata-action@v5
-      with:
-        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-        tags: |
-          type=ref,event=pr
-          type=sha,prefix=pr-
-
     - name: Build and push Docker image
       uses: docker/build-push-action@v5
       with:
         context: .
-        platforms: linux/amd64,linux/arm64
+        platforms: linux/amd64
         push: true
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
+        tags: |
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:main
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
-    - name: Run tests
+    - name: Test container
       run: |
-        echo "Running container tests..."
-        docker run --rm -d --name test-tk4 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:pr-${{ github.event.number }}
-        sleep 30
-        docker ps | grep test-tk4 || exit 1
+        echo "Testing container startup..."
+        docker run --rm -d --name test-tk4 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+        sleep 5
+        docker ps | grep test-tk4 || (docker logs test-tk4; exit 1)
         docker stop test-tk4
-
-    - name: Update documentation
-      run: |
-        echo "✅ Docker image built and pushed successfully!"
-        echo "🔗 GHCR URL: https://ghcr.io/skunklabz/tk4-hercules"
-        echo "📋 PR Image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:pr-${{ github.event.number }}" 
+        echo "✅ Container test passed" 

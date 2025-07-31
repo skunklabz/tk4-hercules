@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.1] - 2025-01-XX
+
+### Fixed
+- Resolved GitHub release conflict for v1.1.0
+
 ### Added
 - Semantic Versioning (SemVer) implementation with centralized VERSION file
 - Automated version bumping commands in Makefile

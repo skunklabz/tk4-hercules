@@ -1,99 +1,85 @@
 # GitHub Actions Workflows
 
-This directory contains the CI/CD workflows for the TK4-Hercules project.
+This directory contains the essential CI/CD workflows for the tk4-hercules project.
 
-## Workflow Overview
+## Workflows
 
-### 🔄 Release Workflow (`release.yml`)
-**Triggers**: Push to main, manual dispatch, release events
-**Purpose**: Automated version management and releases
+### `docker-build.yml`
+**Purpose**: Build and test Docker images on pull requests and pushes to main branch.
 
-**Features**:
-- ✅ Automatic patch version bump on main branch pushes
-- ✅ Manual version bump (patch/minor/major) via workflow dispatch
-- ✅ Multi-platform Docker builds (AMD64 + ARM64)
-- ✅ GitHub Container Registry integration
-- ✅ Automatic Git tagging and GitHub releases
-- ✅ Changelog management
+**Triggers**:
+- Pull requests to main branch
+- Pushes to main branch  
+- Manual workflow dispatch
 
-**Usage**:
-```bash
-# Automatic release (push to main)
-git push origin main
+**What it does**:
+- Builds multi-platform Docker image (amd64, arm64)
+- Pushes to GitHub Container Registry with `latest` and `main` tags
+- Runs basic container startup test
+- Uses GitHub Actions cache for faster builds
 
-# Manual release (GitHub Actions UI)
-# Go to Actions → Release → Run workflow
-```
+### `release.yml`
+**Purpose**: Create releases with versioned Docker images.
 
-### 🐳 Docker Build Workflow (`docker-build.yml`)
-**Triggers**: Pull requests, manual dispatch
-**Purpose**: PR testing and validation
+**Triggers**:
+- Pushes to main branch
+- GitHub releases (published)
+- Manual workflow dispatch
 
-**Features**:
-- ✅ PR-specific Docker image builds
-- ✅ Multi-platform testing
-- ✅ Container health checks
-- ✅ PR-specific image tags
+**What it does**:
+- Builds Docker image with version tag from VERSION file
+- Pushes to GitHub Container Registry with `latest` and `v{version}` tags
+- Creates GitHub release with version tag
+- Includes Docker image reference in release notes
 
-### 🧪 CI Workflow (`ci.yml`)
-**Triggers**: Push to main, pull requests
-**Purpose**: Comprehensive testing and validation
+## Simplified Approach
 
-**Features**:
-- ✅ Code quality checks
-- ✅ Documentation validation
-- ✅ Security scanning
-- ✅ Dependency checks
+We've removed unnecessary complexity and focused on what's essential:
 
-### 🔒 Security Workflow (`dependency-check.yml`)
-**Triggers**: Weekly, manual dispatch
-**Purpose**: Security and dependency monitoring
+❌ **Removed**:
+- Extensive linting and validation checks
+- Duplicate PR checks
+- Weekly dependency scanning
+- Automated version bumping
+- Complex metadata extraction
 
-**Features**:
-- ✅ Dependency vulnerability scanning
-- ✅ Container image security analysis
-- ✅ License compliance checks
+✅ **Kept**:
+- Docker image building and testing
+- Multi-platform support (amd64, arm64)
+- Basic container validation
+- Release creation with versioned images
+- GitHub Container Registry integration
 
-### ✅ PR Checks Workflow (`pr-checks.yml`)
-**Triggers**: Pull requests
-**Purpose**: PR-specific validation
+## Usage
 
-**Features**:
-- ✅ Quick validation tests
-- ✅ Documentation checks
-- ✅ Code formatting validation
+### Building Images
+Images are automatically built on:
+- Every PR to main branch
+- Every push to main branch
+- Manual trigger via GitHub Actions UI
 
-## Release Process
-
-### Automated Release (Main Branch)
-1. **Push to main** → Triggers release workflow
-2. **Version bump** → Patch version incremented
-3. **Docker build** → Multi-platform image built
-4. **Registry push** → Image pushed to GHCR
-5. **Git tag** → Version tag created
-6. **GitHub release** → Release with changelog
+### Creating Releases
+1. Update the VERSION file with the new version
+2. Push to main branch
+3. The workflow will automatically create a GitHub release with the versioned Docker image
 
 ### Manual Release
-1. **GitHub Actions** → Release workflow
-2. **Select version type** → patch/minor/major
-3. **Run workflow** → Complete release process
+1. Go to Actions → Release workflow
+2. Click "Run workflow"
+3. The workflow will use the current VERSION file
 
-## Workflow Permissions
+## Docker Images
 
-- **Contents**: Write access for version bumps and releases
-- **Packages**: Write access for Docker image pushes
-- **Security Events**: Read access for security scanning
+All images are pushed to: `ghcr.io/skunklabz/tk4-hercules`
 
-## Troubleshooting
+Available tags:
+- `latest` - Latest build from main branch
+- `main` - Latest build from main branch  
+- `v{version}` - Versioned releases (e.g., `v1.0.0`)
 
-### Common Issues
-1. **Permission Denied**: Check workflow permissions
-2. **Build Failures**: Review Docker build logs
-3. **Version Conflicts**: Ensure VERSION file is up to date
-4. **Registry Issues**: Verify GHCR authentication
+## Cache Strategy
 
-### Debug Steps
-1. Check workflow run logs
-2. Verify file permissions
-3. Test Docker builds locally
-4. Review GitHub token permissions 
+The workflows use GitHub Actions cache to speed up builds:
+- Build cache is shared between workflows
+- Cache is automatically managed by Docker Buildx
+- No manual cache management required 

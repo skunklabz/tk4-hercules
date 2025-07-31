@@ -208,6 +208,28 @@ Always update CHANGELOG.md when making changes:
 - Automated validation of documentation and structure
 - Docker image building and testing in CI
 
+### Testing Best Practices
+- **Always test your changes** before committing or proposing them
+- **Test locally first** before pushing to CI
+- **Use realistic test data** that represents actual usage
+- **Test both success and failure scenarios**
+- **Validate that changes work across different environments**
+- **Test Docker builds** to ensure they complete successfully
+- **Test container startup** to ensure it stays running
+- **Test any new scripts** or tools you create
+
+### Cleanup After Testing
+- **Always clean up test artifacts** after testing
+- **Remove temporary Docker images** created during testing
+- **Delete test containers** that are no longer needed
+- **Clean up temporary files** created during debugging
+- **Remove test branches** after they're no longer needed
+- **Clean up any temporary directories** created for testing
+- **Remove debug scripts** that were created for troubleshooting
+- **Clean up any test data** that was created during testing
+- **Use `docker system prune`** to clean up unused Docker resources
+- **Remove any temporary configuration files** created for testing
+
 ## Performance Optimization
 - Minimize image layers and size
 - Cache dependencies appropriately in multi-stage builds

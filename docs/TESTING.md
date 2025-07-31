@@ -1,238 +1,212 @@
 # TK4-Hercules Testing Guide
 
-This document explains how to test the TK4-Hercules project and exercises to ensure everything works correctly.
+This document describes the testing strategy for the TK4-Hercules project, which has been simplified to focus on essential functionality while maintaining quality assurance.
 
-## 🧪 Testing Overview
+## Test Structure Overview
 
-The project includes multiple testing approaches to validate different aspects:
+The testing framework has been streamlined to include only the most important tests:
 
-1. **Quick Validation** - Fast checks of exercise files and content
-2. **Functional Testing** - Full testing with running mainframe
-3. **Container Testing** - Docker container functionality
-4. **Exercise Testing** - Individual exercise validation
+### Essential Tests (`scripts/test/test-exercises.sh`)
+- **Purpose**: Core functionality validation
+- **Scope**: Exercise files, container startup, basic connectivity
+- **Duration**: ~2 minutes
+- **Use Case**: Primary test suite for development and CI
 
-## 📋 Available Test Scripts
+### Quick Validation (`scripts/validation/quick-validate.sh`)
+- **Purpose**: Fast file structure validation
+- **Scope**: Exercise file existence and basic content structure
+- **Duration**: ~30 seconds
+- **Use Case**: CI/CD pipeline, pre-commit checks
 
-### Quick Validation (`./scripts/validation/quick-validate.sh`)
-**Purpose**: Fast validation of exercise files without running mainframe
-**Use Case**: Quick checks during development, CI/CD pipelines
-**Time**: ~30 seconds
-**Requirements**: None (just filesystem access)
+### ARM64 Support (`scripts/test/test-arm64.sh`)
+- **Purpose**: Multi-platform compatibility
+- **Scope**: ARM64 architecture support
+- **Duration**: ~3 minutes
+- **Use Case**: Platform-specific testing
 
-**Tests**:
-- ✅ Exercise file structure
-- ✅ Required content sections (Objective, Prerequisites, Navigation)
-- ✅ Code examples (JCL, TSO)
-- ✅ User account documentation
-- ✅ Essential command documentation
-- ✅ Navigation links
+### Basic Container Test (`scripts/test/test.sh`)
+- **Purpose**: Docker container functionality
+- **Scope**: Image building, container startup, port accessibility
+- **Duration**: ~1 minute
+- **Use Case**: Container validation
 
-**Usage**:
+### Exercise Validation (`scripts/validation/validate-exercises.sh`)
+- **Purpose**: Content quality assurance
+- **Scope**: Exercise content structure and completeness
+- **Duration**: ~1 minute
+- **Use Case**: Content review and quality checks
+
+## Running Tests
+
+### Local Development
 ```bash
-./scripts/validation/quick-validate.sh
+# Run essential tests (recommended for development)
+make test
+
+# Run quick validation
+make test-quick
+
+# Run full local test suite
+make test-local
+
+# Test ARM64 support
+make test-arm64
+
+# Validate exercise content
+make validate
 ```
 
-### Functional Testing (`./scripts/test/test-exercises.sh`)
-**Purpose**: Comprehensive testing with actual mainframe operations
-**Use Case**: Full validation, before releases, quality assurance
-**Time**: ~5-10 minutes
-**Requirements**: Docker, mainframe container running
-
-**Tests**:
-- ✅ Mainframe connectivity and startup
-- ✅ User account accessibility
-- ✅ TSO command execution
-- ✅ File operations (LISTD, BROWSE, ALLOCATE, DELETE)
-- ✅ JCL job submission and monitoring
-- ✅ Programming environment (COBOL, FORTRAN, Assembler)
-- ✅ System administration commands
-- ✅ File transfer capabilities
-- ✅ Networking and VTAM
-- ✅ Database operations (VSAM)
-
-**Usage**:
+### CI/CD Pipeline
 ```bash
-./scripts/test/test-exercises.sh
+# Quick validation for CI
+make test-quick
+
+# Essential tests for CI
+make test
+
+# Full CI pipeline
+make ci-full
 ```
 
-### Container Testing (`./scripts/test/test.sh`)
-**Purpose**: Test Docker container functionality
-**Use Case**: Container health checks, deployment validation
-**Time**: ~2-3 minutes
-**Requirements**: Docker
+## Test Categories
 
-**Tests**:
-- ✅ Container startup and shutdown
-- ✅ Port accessibility (3270, 8038)
-- ✅ Basic mainframe boot process
-- ✅ Health check endpoints
+### 1. Essential Tests (Primary)
+These tests validate the core functionality that must work for the project to be useful:
 
-**Usage**:
-```bash
-./scripts/test/test.sh
-```
+- **Exercise File Structure**: Ensures all required exercise files exist
+- **Container Startup**: Validates Docker container can start successfully
+- **Mainframe Connectivity**: Tests web interface and 3270 terminal access
+- **Basic Health Checks**: Verifies container is running and responsive
 
-## 🎯 Testing Strategy
+### 2. Quick Validation (Secondary)
+Fast checks for file structure and basic content:
 
-### Development Workflow
-1. **During Development**: Use `./scripts/validation/quick-validate.sh` for fast feedback
-2. **Before Commits**: Run `./scripts/test/test-exercises.sh` to ensure functionality
-3. **Before Releases**: Run all test suites
+- **File Existence**: Checks for required exercise files
+- **Content Structure**: Validates basic markdown structure
+- **No Container Required**: Can run without Docker
 
-### CI/CD Integration
-```yaml
-# Example GitHub Actions workflow
-- name: Quick Validation
-  run: ./scripts/validation/quick-validate.sh
+### 3. Platform Tests (Specialized)
+Architecture-specific validation:
 
-- name: Build and Test Container
-  run: |
-    ./scripts/build/build.sh
-    ./scripts/test/test.sh
+- **ARM64 Support**: Tests compatibility with ARM64 processors
+- **Multi-platform Build**: Validates cross-platform builds
 
-- name: Functional Testing
-  run: ./scripts/test/test-exercises.sh
-```
+### 4. Content Validation (Quality)
+Content quality and completeness checks:
 
-## 📊 Test Results
+- **Exercise Completeness**: Ensures exercises have required sections
+- **Content Structure**: Validates markdown formatting
+- **Navigation**: Checks for proper exercise flow
 
-### Quick Validation Results
-```
-🔍 Quick TK4-Hercules Exercise Validation
-=========================================
+## Removed Tests
 
-📁 Testing exercise files...
-✅ PASS: Exercises Directory - Directory exists
-✅ PASS: File: exercises/README.md - File exists
-...
+The following complex tests were removed to simplify the testing framework:
 
-📖 Testing exercise content...
-✅ PASS: Content: exercises/01-first-session.md - Objective - Section found
-...
+- **Interactive TSO Commands**: Required complex session management
+- **JCL Job Submission**: Needed extensive mainframe setup
+- **File Operations**: Required interactive TSO sessions
+- **Programming Environment**: Needed compiler setup and configuration
+- **System Administration**: Required admin privileges
+- **Database Operations**: Needed database setup
+- **Networking Tests**: Required network configuration
+- **File Transfer**: Needed complex file transfer setup
 
-🔗 Testing navigation links...
-✅ PASS: Next Links - Next links found
-✅ PASS: Previous Links - Previous links found
+## Test Configuration
 
-📊 Validation Results Summary
-============================
-✅ Passed: 26
-❌ Failed: 0
-Total Tests: 26
-🎉 All validations passed!
-```
+### Timeouts
+- **Essential Tests**: 120 seconds
+- **Quick Validation**: 30 seconds
+- **ARM64 Tests**: 180 seconds
 
-### Functional Testing Results
-```
-🧪 TK4-Hercules Exercise Test Suite
-===================================
+### Logging
+All tests generate detailed logs in:
+- `exercise-test-results.log` - Essential test results
+- Console output with color-coded results
 
-🔌 Testing mainframe connectivity...
-✅ PASS: Container Status - Container is running
-✅ PASS: Hercules Process - Hercules is running
-✅ PASS: 3270 Port - 3270 port is accessible
+### Exit Codes
+- **0**: All tests passed
+- **1**: Some tests failed
+- **2**: Test setup failed
 
-📁 Testing file operations...
-✅ PASS: List current directory - Command executed successfully
-✅ PASS: List system datasets - Command executed successfully
-...
+## Best Practices
 
-📊 Test Results Summary
-======================
-✅ Passed: 45
-❌ Failed: 0
-⏭️  Skipped: 3
-Total Tests: 48
-🎉 All critical tests passed!
-```
+### For Developers
+1. Run `make test-quick` before committing
+2. Run `make test` for comprehensive validation
+3. Run `make test-arm64` if working on ARM64 support
+4. Check logs for detailed failure information
 
-## 🔧 Troubleshooting
+### For CI/CD
+1. Use `make test-quick` for fast feedback
+2. Use `make test` for thorough validation
+3. Use `make ci-full` for complete pipeline
+4. Monitor test duration and optimize as needed
+
+### For Content Contributors
+1. Run `make validate` to check exercise content
+2. Ensure all required sections are present
+3. Test navigation flow between exercises
+4. Validate markdown formatting
+
+## Troubleshooting
 
 ### Common Issues
 
-#### Quick Validation Failures
-- **Missing Files**: Ensure all exercise files exist
-- **Missing Sections**: Check for required sections (Objective, Prerequisites, Navigation)
-- **Navigation Links**: Verify Next/Previous links are properly formatted
-
-#### Functional Testing Failures
-- **Container Issues**: Check Docker is running and ports are available
-- **Mainframe Startup**: Wait longer for mainframe to fully boot
-- **Command Timeouts**: Increase timeout values in test script
-
-#### Container Testing Failures
-- **Port Conflicts**: Ensure ports 3270 and 8038 are not in use
-- **Docker Issues**: Check Docker daemon is running
-- **Resource Limits**: Ensure sufficient memory/CPU for container
-
-### Debug Commands
+**Container won't start**
 ```bash
-# Check container status
-docker ps
+# Check Docker status
+docker ps -a
 
-# View container logs
-docker-compose logs
+# Check container logs
+docker compose logs
 
-# Test port connectivity
-telnet localhost 3270
-
-# Check exercise files
-ls -la exercises/
-
-# Validate specific exercise
-grep -r "Objective" exercises/01-first-session.md
+# Clean up and retry
+make clean
+make test
 ```
 
-## 📈 Test Coverage
+**Tests timeout**
+```bash
+# Increase timeout in test script
+# Check system resources
+# Verify Docker has sufficient memory/CPU
+```
 
-### Exercise Coverage
-- ✅ **Exercise 1**: First mainframe session
-- ✅ **Exercise 2**: File systems and datasets
-- ✅ **Exercise 3**: JCL job submission
-- ✅ **Exercise 4**: Programming (COBOL, etc.)
-- ✅ **Exercise 5**: File transfer
-- ✅ **Exercise 6**: System administration
-- ✅ **Exercise 7**: Mainframe games
-- ✅ **Exercise 8**: Advanced JCL
-- ✅ **Exercise 9**: Networking
-- ✅ **Exercise 10**: Database operations
-- ✅ **Challenges**: Advanced scenarios
+**ARM64 tests fail**
+```bash
+# Verify you're on ARM64 platform
+uname -m
 
-### Mainframe Operations Coverage
-- ✅ **TSO Commands**: LISTD, BROWSE, ALLOCATE, DELETE
-- ✅ **JCL Operations**: Job submission, monitoring, output
-- ✅ **File Operations**: Dataset creation, browsing, management
-- ✅ **System Commands**: Status, user info, address spaces
-- ✅ **Programming**: Compiler availability, code execution
-- ✅ **Networking**: VTAM, terminal types, connectivity
+# Check Docker platform support
+docker buildx ls
 
-## 🚀 Best Practices
+# Run debug version if available
+```
 
-### For Developers
-1. **Run quick validation frequently** during development
-2. **Test with real mainframe** before committing changes
-3. **Update tests** when adding new exercises
-4. **Document test requirements** for new features
+### Getting Help
 
-### For Users
-1. **Start with quick validation** to check setup
-2. **Run functional tests** to verify mainframe operations
-3. **Report test failures** with detailed logs
-4. **Check troubleshooting guide** for common issues
+1. Check the test logs for detailed error messages
+2. Verify Docker and system requirements
+3. Review the troubleshooting section in README.md
+4. Open an issue with test logs attached
 
-### For Maintainers
-1. **Run all test suites** before releases
-2. **Monitor test coverage** and add tests for new features
-3. **Update test scripts** when mainframe configuration changes
-4. **Maintain test documentation** and troubleshooting guides
+## Future Enhancements
 
-## 📚 Additional Resources
+The simplified test structure provides a foundation for future enhancements:
 
-- [Main README](README.md) - Project overview and setup
-- [Learning Guide](LEARNING_GUIDE.md) - Comprehensive learning materials
-- [Exercises Index](exercises/README.md) - Individual exercise guide
-- [Hercules Documentation](https://hercules-390.github.io/html/hercoper.html) - Official Hercules guide
+- **Performance Tests**: Measure container startup time
+- **Security Tests**: Validate container security
+- **Integration Tests**: Test with external tools
+- **Load Tests**: Validate under different loads
+- **Automated UI Tests**: Test web interface functionality
 
----
+## Conclusion
 
-**Happy testing! 🧪** 
+The simplified testing framework focuses on essential functionality while maintaining quality assurance. This approach provides:
+
+- **Faster feedback**: Reduced test execution time
+- **Better maintainability**: Fewer complex test scenarios
+- **Improved reliability**: More focused test coverage
+- **Easier debugging**: Clearer test results and logs
+
+By focusing on core functionality, the tests are more reliable and provide better value for development and CI/CD workflows. 
