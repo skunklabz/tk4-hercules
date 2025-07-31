@@ -1,9 +1,11 @@
 services:
   tk4-hercules:
-    # Use GHCR image as primary, fallback to local build
-    image: ${IMAGE_NAME:-ghcr.io/skunklabz/tk4-hercules:latest}
+    # Use local image (built with 'make build' or 'make start')
+    # This will use the locally built image, not pull from any registry
+    image: tk4-hercules:latest
     # Platform will be auto-detected for multi-platform images
-    # platform: linux/amd64  # Commented out to allow auto-detection
+    # For ARM64 systems, force AMD64 platform for better compatibility
+    platform: ${PLATFORM:-linux/amd64}
     container_name: tk4-hercules
     ports:
       - "3270:3270"   # 3270 terminal protocol
@@ -35,6 +37,9 @@ services:
       - TZ=UTC
       - HERCULES_VERSION=4.4.1
       - MVS_VERSION=3.8j
+      # ARM64 compatibility settings
+      - QEMU_CPU=max
+      - QEMU_OPTS=-cpu max
     # Health check with improved reliability
     healthcheck:
       test: ["CMD", "ps", "aux", "|", "grep", "-v", "grep", "|", "grep", "hercules", "||", "exit", "1"]

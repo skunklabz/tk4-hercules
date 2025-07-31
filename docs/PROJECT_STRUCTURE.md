@@ -189,7 +189,7 @@ When moving from the old structure to this new structure:
 
 ### Path Updates
 - `./build.sh` → `make build` or `./scripts/build/build.sh`
-- `./test.sh` → `make test` or `./scripts/test/test.sh`
+- `./test.sh` → `make test` or `./scripts/test/test-exercises.sh`
 - `LEARNING_GUIDE.md` → `docs/LEARNING_GUIDE.md`
 - `exercises/` → `examples/`
 
