@@ -279,6 +279,53 @@ ci-full: ci-lint ci-validate ci-test
 release-prep: test validate
 	@echo "Release preparation completed"
 
+# Multi-version support
+build-tk4:
+	@echo "Building TK4- version..."
+	@MVS_VERSION=tk4 docker-compose build
+
+build-tk5:
+	@echo "Building TK5- version..."
+	@MVS_VERSION=tk5 docker-compose build
+
+start-tk4:
+	@echo "Starting TK4- version..."
+	@MVS_VERSION=tk4 docker-compose up -d
+
+start-tk5:
+	@echo "Starting TK5- version..."
+	@MVS_VERSION=tk5 docker-compose up -d
+
+test-tk4:
+	@echo "Testing TK4- version..."
+	@MVS_VERSION=tk4 make test
+
+test-tk5:
+	@echo "Testing TK5- version..."
+	@MVS_VERSION=tk5 make test
+
+stop-tk4:
+	@echo "Stopping TK4- version..."
+	@MVS_VERSION=tk4 docker-compose down
+
+stop-tk5:
+	@echo "Stopping TK5- version..."
+	@MVS_VERSION=tk5 docker-compose down
+
+logs-tk4:
+	@echo "Showing TK4- logs..."
+	@MVS_VERSION=tk4 docker-compose logs -f
+
+logs-tk5:
+	@echo "Showing TK5- logs..."
+	@MVS_VERSION=tk5 docker-compose logs -f
+
+# Default version (TK4- for backward compatibility)
+build: build-tk4
+start: start-tk4
+stop: stop-tk4
+logs: logs-tk4
+
 # Utility commands
 status:
 	@echo "Container status:"
@@ -289,19 +336,29 @@ status:
 	@echo "8038 (Web): $(shell netstat -an 2>/dev/null | grep :8038 || echo 'Not listening')"
 
 info:
-	@echo "TK4-Hercules Project Information"
+	@echo "TKX-Hercules Project Information"
 	@echo "================================"
 	@echo "Version: $(VERSION)"
-	@echo "Mainframe: IBM MVS 3.8j (TK4-)"
+	@echo "Mainframe: IBM MVS 3.8j (TK4- and TK5-)"
 	@echo "Emulator: Hercules"
 	@echo "Container: Docker"
 	@echo "Registry: GitHub Container Registry (ghcr.io)"
 	@echo ""
+	@echo "Available Versions:"
+	@echo "- TK4-: Original Turnkey 4- system (8 volumes)"
+	@echo "- TK5-: Enhanced Turnkey 5- system (15 volumes)"
+	@echo ""
+	@echo "Usage:"
+	@echo "- make start-tk4: Start TK4- version (default)"
+	@echo "- make start-tk5: Start TK5- version"
+	@echo "- make build-tk4: Build TK4- image"
+	@echo "- make build-tk5: Build TK5- image"
+	@echo ""
 	@echo "Documentation:"
 	@echo "- README.md: Quick start guide"
-	@echo "- docs/LEARNING_GUIDE.md: Educational content"
-	@echo "- docs/TESTING.md: Testing procedures"
-	@echo "- CONTRIBUTING.md: How to contribute"
+	@echo "- docs/TKX_MIGRATION_PLAN.md: Migration strategy"
+	@echo "- docs/TK5_TECHNICAL_SPECS.md: TK5- specifications"
+	@echo "- docs/ATTRIBUTIONS.md: Credits and acknowledgments"
 	@echo ""
 	@echo "Scripts:"
 	@echo "- scripts/build/: Build scripts"

@@ -1,0 +1,52 @@
+services:
+  tkx-hercules:
+    image: tkx-hercules:tk4-latest
+    platform: ${PLATFORM:-linux/amd64}
+    container_name: tkx-hercules-tk4
+    ports:
+      - "3270:3270"
+      - "8038:8038"
+    volumes:
+      - tk4-conf:/tk4-/conf
+      - tk4-local_conf:/tk4-/local_conf
+      - tk4-local_scripts:/tk4-/local_scripts
+      - tk4-prt:/tk4-/prt
+      - tk4-dasd:/tk4-/dasd
+      - tk4-pch:/tk4-/pch
+      - tk4-jcl:/tk4-/jcl
+      - tk4-log:/tk4-/log
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '2.0'
+        reservations:
+          memory: 1G
+          cpus: '1.0'
+    environment:
+      - TZ=UTC
+      - HERCULES_VERSION=4.4.1
+      - MVS_VERSION=3.8j-tk4
+    labels:
+      - "com.skunklabz.description=MVS 3.8j Turnkey 4- System on Hercules Mainframe Emulator"
+      - "com.skunklabz.version=1.2.0"
+      - "com.skunklabz.mvs-version=tk4"
+
+volumes:
+  tk4-conf:
+    driver: local
+  tk4-local_conf:
+    driver: local
+  tk4-local_scripts:
+    driver: local
+  tk4-prt:
+    driver: local
+  tk4-dasd:
+    driver: local
+  tk4-pch:
+    driver: local
+  tk4-jcl:
+    driver: local
+  tk4-log:
+    driver: local 

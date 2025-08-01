@@ -1,81 +1,32 @@
 services:
-  tk4-hercules:
-    # Use local image (built with 'make build' or 'make start')
-    # This will use the locally built image, not pull from any registry
-    image: tk4-hercules:latest
-    # Platform will be auto-detected for multi-platform images
-    # For ARM64 systems, force AMD64 platform for better compatibility
-    platform: ${PLATFORM:-linux/amd64}
-    container_name: tk4-hercules
-    ports:
-      - "3270:3270"   # 3270 terminal protocol
-      - "8038:8038"   # Web console
-    volumes:
-      - tk4-conf:/tk4-/conf
-      - tk4-local_conf:/tk4-/local_conf
-      - tk4-local_scripts:/tk4-/local_scripts
-      - tk4-prt:/tk4-/prt
-      - tk4-dasd:/tk4-/dasd
-      - tk4-pch:/tk4-/pch
-      - tk4-jcl:/tk4-/jcl
-      - tk4-log:/tk4-/log
-    restart: unless-stopped
-    # Resource limits for better container management
-    deploy:
-      resources:
-        limits:
-          memory: 2G
-          cpus: '2.0'
-        reservations:
-          memory: 1G
-          cpus: '1.0'
-    # Security improvements
-    security_opt:
-      - no-new-privileges:true
-    # Environment variables
-    environment:
-      - TZ=UTC
-      - HERCULES_VERSION=4.4.1
-      - MVS_VERSION=3.8j
-      # ARM64 compatibility settings
-      - QEMU_CPU=max
-      - QEMU_OPTS=-cpu max
-    # Health check with improved reliability
-    healthcheck:
-      test: ["CMD", "ps", "aux", "|", "grep", "-v", "grep", "|", "grep", "hercules", "||", "exit", "1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 60s
-    # Labels for better container management
-    labels:
-      - "com.skunklabz.description=MVS 3.8j Tur(n)key 4- System on Hercules Mainframe Emulator"
-      - "com.skunklabz.maintainer=SKUNKLABZ"
-      - "com.skunklabz.version=1.1.0"
-      - "com.skunklabz.base-image=alpine:3.19"
-      - "com.skunklabz.architecture=mainframe-emulation"
-      - "com.skunklabz.registry=ghcr.io"
-    # Logging configuration
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
+  tkx-hercules:
+    extends:
+      file: ./versions/${MVS_VERSION:-tk4}/docker-compose.yml
+      service: tkx-hercules
 
 volumes:
+  # TK4- volumes
   tk4-conf:
-    driver: local
   tk4-local_conf:
-    driver: local
   tk4-local_scripts:
-    driver: local
   tk4-prt:
-    driver: local
   tk4-dasd:
-    driver: local
   tk4-pch:
-    driver: local
   tk4-jcl:
-    driver: local
   tk4-log:
-    driver: local 
+  # TK5- volumes
+  tk5-tk5res:
+  tk5-tk5cat:
+  tk5-tk5dlb:
+  tk5-tk5001:
+  tk5-tk5002:
+  tk5-tso001:
+  tk5-tso002:
+  tk5-tso003:
+  tk5-work01:
+  tk5-work02:
+  tk5-work03:
+  tk5-work04:
+  tk5-int001:
+  tk5-page00:
+  tk5-spool0: 
