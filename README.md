@@ -1,35 +1,44 @@
-# TK4-Hercules
+# TKX-Hercules
 
-A Docker containerized IBM MVS 3.8j (Turnkey 4-) mainframe emulator using Hercules for educational mainframe computing and historical preservation.
+A Docker containerized IBM MVS 3.8j mainframe emulator supporting both TK4- and TK5- systems using Hercules for educational mainframe computing and historical preservation.
 
-[![Docker Build](https://github.com/skunklabz/tk4-hercules/workflows/Build%20and%20Push%20Docker%20Image/badge.svg)](https://github.com/skunklabz/tk4-hercules/actions)
-[![GitHub Container Registry](https://img.shields.io/badge/GHCR-ghcr.io%2Fskunklabz%2Ftk4--hercules-blue)](https://ghcr.io/skunklabz/tk4-hercules)
+[![Docker Build](https://github.com/skunklabz/tkx-hercules/workflows/Build%20and%20Push%20Docker%20Image/badge.svg)](https://github.com/skunklabz/tkx-hercules/actions)
+[![GitHub Container Registry](https://img.shields.io/badge/GHCR-ghcr.io%2Fskunklabz%2Ftkx--hercules-blue)](https://ghcr.io/skunklabz/tkx-hercules)
 
 ## Quick Start
+
+### Multi-Version Support
+
+This project supports both TK4- and TK5- MVS systems:
+
+```bash
+# Run TK4- (default)
+make start-tk4
+
+# Run TK5-
+make start-tk5
+
+# Or use Docker Compose directly
+MVS_VERSION=tk4 docker-compose up -d  # TK4- system
+MVS_VERSION=tk5 docker-compose up -d  # TK5- system
+```
 
 ### Using GitHub Container Registry (Recommended)
 
 ```bash
-# Pull and run the latest image
+# Pull and run TK4- (default)
 docker run -d \
-  --name tk4-hercules \
+  --name tkx-hercules-tk4 \
   -p 3270:3270 \
   -p 8038:8038 \
-  ghcr.io/skunklabz/tk4-hercules:latest
+  ghcr.io/skunklabz/tkx-hercules:tk4-latest
 
-# Or use Docker Compose
-docker-compose up -d
-```
-
-### Using Docker Hub
-
-```bash
-# Pull and run from Docker Hub
+# Pull and run TK5-
 docker run -d \
-  --name tk4-hercules \
+  --name tkx-hercules-tk5 \
   -p 3270:3270 \
   -p 8038:8038 \
-  skunklabz/tk4-hercules:latest
+  ghcr.io/skunklabz/tkx-hercules:tk5-latest
 ```
 
 ### Connect to the Mainframe
@@ -52,14 +61,29 @@ PLATFORM=linux/amd64 docker-compose up -d
 
 # Or set environment variable
 export PLATFORM=linux/amd64
-make start
+make start-tk4  # or make start-tk5
 ```
 
 For detailed troubleshooting, see [ARM64 Troubleshooting Guide](docs/ARM64_TROUBLESHOOTING.md).
 
-## What is TK4-?
+## Version Comparison
 
-TK4- is a pre-configured IBM MVS 3.8j (Multiple Virtual Storage) system that runs on the Hercules mainframe emulator. It's designed for educational purposes and historical preservation of mainframe computing.
+| Feature | TK4- | TK5- |
+|---------|------|------|
+| **DASD Volumes** | 8 volumes | 15 volumes |
+| **Hercules Version** | 4.4.1 | 4.60 (Hyperion) |
+| **System Structure** | Traditional | Fully restructured |
+| **New Features** | Basic MVS | ISPF 2.2, INTERCOMM, LUA370, SLIM, STF |
+| **Update Strategy** | Full system updates | Selective volume updates |
+| **Volume Isolation** | Shared volumes | Separate namespaces |
+
+## What are TK4- and TK5-?
+
+### TK4- (Turnkey 4-)
+TK4- is a pre-configured IBM MVS 3.8j system created by Jürgen Winkelmann, based on Volker Bandke's original TK3. It's designed for educational purposes and historical preservation of mainframe computing.
+
+### TK5- (Turnkey 5-)
+TK5- is the latest evolution by Rob Prins, featuring a streamlined architecture with 15 DASD volumes (reduced from 28 in TK4+) and enhanced functionality including modern tools and applications.
 
 ### Features
 
@@ -68,29 +92,25 @@ TK4- is a pre-configured IBM MVS 3.8j (Multiple Virtual Storage) system that run
 - **3270 Terminal Support**: Authentic mainframe terminal experience
 - **Web Console**: Modern web interface for system monitoring
 - **Educational Tools**: Pre-loaded with learning materials and examples
-- **Persistent Storage**: 8 volume mount points for data persistence
+- **Persistent Storage**: Volume isolation between versions
+- **Multi-Version Support**: Run TK4- and TK5- simultaneously
 
 ### System Specifications
 
 - **OS**: IBM MVS 3.8j Service Level 8505
-- **Emulator**: Hercules 4.4.1
-- **Base Image**: Alpine Linux 3.19
+- **Emulator**: Hercules 4.4.1 (TK4-) / 4.60 (TK5-)
+- **Base Image**: Ubuntu 22.04
 - **Architecture**: Multi-platform (x86_64, ARM64) (emulating System/370)
 - **Memory**: Configurable (default: 1-2GB)
-- **Storage**: Multiple DASD volumes
+- **Storage**: 8 volumes (TK4-) / 15 volumes (TK5-)
 
 ## Available Images
 
 ### GitHub Container Registry (GHCR)
 
-- **Latest**: `ghcr.io/skunklabz/tk4-hercules:latest`
-- **Versioned**: `ghcr.io/skunklabz/tk4-hercules:v1.1.0`
-- **Branch**: `ghcr.io/skunklabz/tk4-hercules:main`
-
-### Docker Hub
-
-- **Latest**: `skunklabz/tk4-hercules:latest`
-- **Versioned**: `skunklabz/tk4-hercules:v1.1.0`
+- **TK4- Latest**: `ghcr.io/skunklabz/tkx-hercules:tk4-latest`
+- **TK5- Latest**: `ghcr.io/skunklabz/tkx-hercules:tk5-latest`
+- **Versioned**: `ghcr.io/skunklabz/tkx-hercules:v1.2.0-tk4`, `ghcr.io/skunklabz/tkx-hercules:v1.2.0-tk5`
 
 ## Development
 

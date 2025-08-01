@@ -10,11 +10,11 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /tk5-/
 
-# Download TK5- distribution (URL TBD from prince-webdesign.nl)
-# Note: This is a placeholder - actual download URL needs to be determined
-RUN wget --no-check-certificate -O tk5-update4.zip [TK5_DOWNLOAD_URL] && \
-    unzip tk5-update4.zip && \
-    rm tk5-update4.zip
+# Download TK5- distribution from prince-webdesign.nl
+# Complete system with Update 4 included
+RUN wget --no-check-certificate -O mvs-tk5.zip https://www.prince-webdesign.nl/images/downloads/mvs-tk5.zip && \
+    unzip mvs-tk5.zip && \
+    rm mvs-tk5.zip
 
 # Final stage
 FROM ubuntu:22.04

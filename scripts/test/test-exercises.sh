@@ -120,16 +120,16 @@ test_container_startup() {
     fi
     
     # Check if Dockerfile exists
-    if [ -f "Dockerfile" ]; then
-        log_test "Dockerfile" "PASS" "Dockerfile found"
+    if [ -f "versions/tk4/Dockerfile" ]; then
+        log_test "Dockerfile" "PASS" "Dockerfile found in versions/tk4/"
     else
-        log_test "Dockerfile" "FAIL" "Dockerfile missing"
+        log_test "Dockerfile" "FAIL" "Dockerfile missing in versions/tk4/"
         return
     fi
     
     # Test container build (without running)
     echo "Building container for testing..."
-    if docker build -t tk4-hercules-test . >/dev/null 2>&1; then
+    if docker build -t tkx-hercules-tk4-test versions/tk4/ >/dev/null 2>&1; then
         log_test "Container Build" "PASS" "Container builds successfully"
     else
         log_test "Container Build" "FAIL" "Container build failed"
@@ -137,7 +137,7 @@ test_container_startup() {
     fi
     
     # Clean up test image
-    docker rmi tk4-hercules-test >/dev/null 2>&1 || true
+    docker rmi tkx-hercules-tk4-test >/dev/null 2>&1 || true
 }
 
 # Function to test container connectivity
@@ -224,7 +224,7 @@ test_configuration_files() {
     
     local required_configs=(
         "docker-compose.yml"
-        "Dockerfile"
+        "versions/tk4/Dockerfile"
         "VERSION"
         "README.md"
     )

@@ -39,8 +39,8 @@ fi
 print_status "Docker is running"
 
 # Check if we're in the right directory
-if [ ! -f "Dockerfile" ]; then
-    print_error "Dockerfile not found. Please run this script from the project root."
+if [ ! -f "versions/tk4/Dockerfile" ]; then
+    print_error "Dockerfile not found in versions/tk4/. Please run this script from the project root."
     exit 1
 fi
 
@@ -48,7 +48,7 @@ print_status "Project structure looks good"
 
 # Build the Docker image
 echo "🐳 Building Docker image..."
-docker build --platform linux/amd64 -t tk4-hercules:test .
+docker build --platform linux/amd64 -t tkx-hercules:tk4-test versions/tk4/
 
 if [ $? -eq 0 ]; then
     print_status "Docker image built successfully"
@@ -70,7 +70,7 @@ docker run -d --name $CONTAINER_NAME \
     --platform linux/amd64 \
     -p 3270:3270 \
     -p 8038:8038 \
-    tk4-hercules:test
+    tkx-hercules:tk4-test
 
 # Wait for container to start and services to be ready
 echo "⏳ Waiting for services to start..."
