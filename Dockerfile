@@ -58,13 +58,7 @@ RUN mkdir -p /lib64 && \
     ln -sf /lib/x86_64-linux-gnu/libutil.so.1 /usr/lib64/libutil.so.1 || true && \
     ln -sf /lib/x86_64-linux-gnu/librt.so.1 /usr/lib64/librt.so.1 || true
 
-# Set up QEMU for ARM64 emulation of x86_64 binaries (simplified)
-RUN if [ "$(uname -m)" = "aarch64" ]; then \
-        echo "Running on ARM64 architecture" && \
-        echo "QEMU emulation will be handled at runtime if needed"; \
-    else \
-        echo "Running on $(uname -m) architecture"; \
-    fi
+# Note: ARM64 emulation will be handled at runtime if needed
 
 # Create non-root user for security
 RUN groupadd -g 1000 hercules && \
