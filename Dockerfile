@@ -18,9 +18,6 @@ RUN wget --no-check-certificate -O tk4-_v1.00_current.zip https://wotho.pebble-b
 # Final stage
 FROM ubuntu:22.04
 
-# Ensure shell is available
-SHELL ["/bin/bash", "-c"]
-
 # Install runtime dependencies with improved ARM64 support
 RUN apt-get update && apt-get install -y \
     bash \
@@ -50,28 +47,14 @@ COPY versions/tk4/mvs.fixed mvs
 # Verify Hercules binary exists and is executable
 RUN chmod +x hercules/linux/64/bin/hercules
 
-# Create comprehensive x86_64 compatibility libraries for QEMU
-RUN mkdir -p /lib64 && \
-    ln -sf /lib/x86_64-linux-gnu/ld-2.35.so /lib64/ld-linux-x86-64.so.2 || true && \
-    mkdir -p /usr/lib64 && \
-    ln -sf /lib/x86_64-linux-gnu/libc.so.6 /usr/lib64/libc.so.6 || true && \
-    ln -sf /lib/x86_64-linux-gnu/libm.so.6 /usr/lib64/libm.so.6 || true && \
-    ln -sf /lib/x86_64-linux-gnu/libdl.so.2 /usr/lib64/libdl.so.2 || true && \
-    ln -sf /lib/x86_64-linux-gnu/libpthread.so.0 /usr/lib64/libpthread.so.0 || true && \
-    ln -sf /lib/x86_64-linux-gnu/libcrypt.so.1 /usr/lib64/libcrypt.so.1 || true && \
-    ln -sf /lib/x86_64-linux-gnu/libutil.so.1 /usr/lib64/libutil.so.1 || true && \
-    ln -sf /lib/x86_64-linux-gnu/librt.so.1 /usr/lib64/librt.so.1 || true
+# Note: x86_64 compatibility libraries will be handled at runtime if needed
 
 # Note: ARM64 emulation will be handled at runtime if needed
 
-# Create non-root user for security
-RUN groupadd -g 1000 hercules && \
-    useradd -m -s /bin/bash -u 1000 -g hercules hercules && \
-    chown -R hercules:hercules .
+# Note: User creation will be handled at runtime if needed
 
-# Create persistence directories and set ownership
-RUN mkdir -p conf local_conf local_scripts prt dasd pch jcl log && \
-    chown -R hercules:hercules .
+# Create persistence directories
+RUN mkdir -p conf local_conf local_scripts prt dasd pch jcl log
 
 # Define volume mount points for persistence
 VOLUME [ "conf", "local_conf", "local_scripts", "prt", "dasd", "pch", "jcl", "log" ]
