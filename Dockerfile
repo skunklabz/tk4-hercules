@@ -47,7 +47,7 @@ COPY versions/tk4/mvs.fixed mvs
 RUN chmod +x hercules/linux/64/bin/hercules
 
 # Create comprehensive x86_64 compatibility libraries for QEMU
-RUN /bin/bash -c "mkdir -p /lib64 && \
+RUN mkdir -p /lib64 && \
     ln -sf /lib/x86_64-linux-gnu/ld-2.35.so /lib64/ld-linux-x86-64.so.2 || true && \
     mkdir -p /usr/lib64 && \
     ln -sf /lib/x86_64-linux-gnu/libc.so.6 /usr/lib64/libc.so.6 || true && \
@@ -56,24 +56,24 @@ RUN /bin/bash -c "mkdir -p /lib64 && \
     ln -sf /lib/x86_64-linux-gnu/libpthread.so.0 /usr/lib64/libpthread.so.0 || true && \
     ln -sf /lib/x86_64-linux-gnu/libcrypt.so.1 /usr/lib64/libcrypt.so.1 || true && \
     ln -sf /lib/x86_64-linux-gnu/libutil.so.1 /usr/lib64/libutil.so.1 || true && \
-    ln -sf /lib/x86_64-linux-gnu/librt.so.1 /usr/lib64/librt.so.1 || true"
+    ln -sf /lib/x86_64-linux-gnu/librt.so.1 /usr/lib64/librt.so.1 || true
 
 # Set up QEMU for ARM64 emulation of x86_64 binaries (simplified)
-RUN /bin/bash -c "if [ \"\$(uname -m)\" = \"aarch64\" ]; then \
-        echo \"Running on ARM64 architecture\" && \
-        echo \"QEMU emulation will be handled at runtime if needed\"; \
+RUN if [ "$(uname -m)" = "aarch64" ]; then \
+        echo "Running on ARM64 architecture" && \
+        echo "QEMU emulation will be handled at runtime if needed"; \
     else \
-        echo \"Running on \$(uname -m) architecture\"; \
-    fi"
+        echo "Running on $(uname -m) architecture"; \
+    fi
 
 # Create non-root user for security
-RUN /bin/bash -c "groupadd -g 1000 hercules && \
+RUN groupadd -g 1000 hercules && \
     useradd -m -s /bin/bash -u 1000 -g hercules hercules && \
-    chown -R hercules:hercules ."
+    chown -R hercules:hercules .
 
 # Create persistence directories and set ownership
-RUN /bin/bash -c "mkdir -p conf local_conf local_scripts prt dasd pch jcl log && \
-    chown -R hercules:hercules ."
+RUN mkdir -p conf local_conf local_scripts prt dasd pch jcl log && \
+    chown -R hercules:hercules .
 
 # Define volume mount points for persistence
 VOLUME [ "conf", "local_conf", "local_scripts", "prt", "dasd", "pch", "jcl", "log" ]
