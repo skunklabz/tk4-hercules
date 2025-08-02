@@ -18,6 +18,9 @@ RUN wget --no-check-certificate -O tk4-_v1.00_current.zip https://wotho.pebble-b
 # Final stage
 FROM ubuntu:22.04
 
+# Ensure shell is available
+SHELL ["/bin/bash", "-c"]
+
 # Install runtime dependencies with improved ARM64 support
 RUN apt-get update && apt-get install -y \
     bash \
@@ -26,6 +29,7 @@ RUN apt-get update && apt-get install -y \
     qemu-user-static \
     libc6 \
     coreutils \
+    passwd \
     && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
