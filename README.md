@@ -124,8 +124,8 @@ TK5- is the latest evolution by Rob Prins, featuring a streamlined architecture 
 
 ```bash
 # Clone the repository
-git clone https://github.com/skunklabz/tk4-hercules.git
-cd tk4-hercules
+git clone https://github.com/skunklabz/tkx-hercules.git
+cd tkx-hercules
 
 # Build the image
 make build
@@ -136,7 +136,7 @@ make start
 
 ### ARM64 Support
 
-TK4-Hercules now supports ARM64 architecture, including Apple Silicon Macs and ARM-based servers. The image automatically detects your platform and uses the appropriate Hercules binary.
+TKX-Hercules now supports ARM64 architecture, including Apple Silicon Macs and ARM-based servers. The image automatically detects your platform and uses the appropriate Hercules binary.
 
 **Note:** ARM64 support currently uses x86_64 emulation due to limitations in the TK4- distribution. Native ARM64 binaries are planned for future releases.
 
@@ -249,8 +249,8 @@ The container uses 8 persistent volume mounts:
 
 ## Support
 
-- **Issues**: [GitHub Issues](https://github.com/skunklabz/tk4-hercules/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/skunklabz/tk4-hercules/discussions)
+- **Issues**: [GitHub Issues](https://github.com/skunklabz/tkx-hercules/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/skunklabz/tkx-hercules/discussions)
 - **Documentation**: [docs/](docs/) directory
 
 ## License
@@ -259,7 +259,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
-- **TK4-**: The original Turnkey 4- system by Volker Bandke
+- **TK4-**: The original Turnkey 4- system by Jürgen Winkelmann
+- **TK5-**: The latest evolution by Rob Prins
+- **Patrick Raths**: Docker implementation for TK5- (https://github.com/patrickraths/MVS-TK5)
 - **Hercules**: The mainframe emulator by Jay Maynard and contributors
 - **IBM**: For the original MVS 3.8j operating system
 - **Mainframe Community**: For preserving and sharing mainframe knowledge

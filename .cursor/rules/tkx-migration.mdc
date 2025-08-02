@@ -85,7 +85,7 @@ tkx-hercules/
 ### Repository Rename
 ```bash
 # Rename repository
-gh repo rename tkx-hercules --repo skunklabz/tk4-hercules
+gh repo rename tkx-hercules --repo skunklabz/tkx-hercules
 
 # Update local remote
 git remote set-url origin https://github.com/skunklabz/tkx-hercules.git

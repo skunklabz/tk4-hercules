@@ -1,6 +1,6 @@
 # GitHub Actions Workflows
 
-This directory contains the essential CI/CD workflows for the tk4-hercules project.
+This directory contains the essential CI/CD workflows for the tkx-hercules project.
 
 ## Workflows
 
@@ -70,7 +70,7 @@ Images are automatically built on:
 
 ## Docker Images
 
-All images are pushed to: `ghcr.io/skunklabz/tk4-hercules`
+All images are pushed to: `ghcr.io/skunklabz/tkx-hercules`
 
 Available tags:
 - `latest` - Latest build from main branch

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Local testing script for tk4-hercules
+# Local testing script for tkx-hercules
 # Mirrors the CI/CD workflow for local validation
 
 set -e
@@ -153,7 +153,7 @@ fi
 # Test multi-platform build (if buildx is available)
 if docker buildx version > /dev/null 2>&1; then
     echo "🔧 Testing multi-platform build..."
-    docker buildx build --platform linux/amd64,linux/arm64 -t tk4-hercules:test-multi .
+    docker buildx build --platform linux/amd64,linux/arm64 -t tkx-hercules:test-multi .
     if [ $? -eq 0 ]; then
         print_status "Multi-platform build successful"
     else

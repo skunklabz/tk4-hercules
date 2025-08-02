@@ -1,11 +1,11 @@
 # GitHub Container Registry Setup
 
-This document explains how to set up and use the GitHub Container Registry (GHCR) for the TK4-Hercules project.
+This document explains how to set up and use the GitHub Container Registry (GHCR) for the TKX-Hercules project.
 
 ## Overview
 
-The TK4-Hercules Docker image is now available on GitHub Container Registry at:
-`ghcr.io/skunklabz/tk4-hercules`
+The TKX-Hercules Docker image is now available on GitHub Container Registry at:
+`ghcr.io/skunklabz/tkx-hercules`
 
 ## Benefits of GHCR
 
@@ -20,11 +20,11 @@ The TK4-Hercules Docker image is now available on GitHub Container Registry at:
 
 ```bash
 # Pull the latest image
-docker pull ghcr.io/skunklabz/tk4-hercules:latest
+docker pull ghcr.io/skunklabz/tkx-hercules:latest
 
 # Run the container
 docker run -d \
-  --name tk4-hercules \
+  --name tkx-hercules \
   -p 3270:3270 \
   -p 8038:8038 \
   ghcr.io/skunklabz/tk4-hercules:latest
@@ -44,10 +44,10 @@ telnet localhost 3270
 
 ## Available Tags
 
-- `ghcr.io/skunklabz/tk4-hercules:latest` - Latest stable version
-- `ghcr.io/skunklabz/tk4-hercules:v1.1.0` - Specific version
-- `ghcr.io/skunklabz/tk4-hercules:main` - Latest from main branch
-- `ghcr.io/skunklabz/tk4-hercules:pr-*` - Pull request builds
+- `ghcr.io/skunklabz/tkx-hercules:latest` - Latest stable version
+- `ghcr.io/skunklabz/tkx-hercules:v1.2.0` - Specific version
+- `ghcr.io/skunklabz/tkx-hercules:main` - Latest from main branch
+- `ghcr.io/skunklabz/tkx-hercules:pr-*` - Pull request builds
 
 ## Building and Pushing
 
@@ -117,15 +117,12 @@ To use a different image source, modify the `docker-compose.yml`:
 
 ```yaml
 services:
-  tk4-hercules:
-    # Use GHCR (default)
-    image: ghcr.io/skunklabz/tk4-hercules:latest
-    
-    # Or use Docker Hub
-    # image: skunklabz/tk4-hercules:latest
+  tkx-hercules:
+    # Use GitHub Container Registry (default)
+    image: ghcr.io/skunklabz/tkx-hercules:latest
     
     # Or use local image
-    # image: tk4-hercules:latest
+    # image: tkx-hercules:latest
 ```
 
 ## Security and Permissions
@@ -177,25 +174,25 @@ Your GitHub token needs these scopes:
 docker info | grep ghcr.io
 
 # List local images
-docker images ghcr.io/skunklabz/tk4-hercules
+docker images ghcr.io/skunklabz/tkx-hercules
 
 # Check workflow status
-# Visit: https://github.com/skunklabz/tk4-hercules/actions
+# Visit: https://github.com/skunklabz/tkx-hercules/actions
 ```
 
 ## Registry URL
 
-- **Web Interface**: https://ghcr.io/skunklabz/tk4-hercules
-- **Docker Pull**: `ghcr.io/skunklabz/tk4-hercules:latest`
-- **Package Settings**: https://github.com/skunklabz/tk4-hercules/packages
+- **Web Interface**: https://ghcr.io/skunklabz/tkx-hercules
+- **Docker Pull**: `ghcr.io/skunklabz/tkx-hercules:latest`
+- **Package Settings**: https://github.com/skunklabz/tkx-hercules/packages
 
-## Migration from Docker Hub
+## Registry Information
 
-If you were previously using Docker Hub images:
+The project uses GitHub Container Registry (GHCR) exclusively:
 
-1. Update your `docker-compose.yml` to use GHCR images
-2. Update any scripts or documentation referencing Docker Hub
-3. Consider keeping Docker Hub images for backward compatibility
+1. All images are published to GHCR
+2. No Docker Hub images are maintained
+3. All documentation references GHCR images
 
 ## Support
 

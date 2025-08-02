@@ -16,7 +16,7 @@ This project builds upon the work of many contributors in the mainframe emulatio
 
 ### Docker Implementation
 - **[patrickraths/MVS-TK5](https://github.com/patrickraths/MVS-TK5)** - Existing TK5- Docker implementation that influenced our approach
-  - **Patrick Raths** - Creator of the Docker implementation for TK5-
+  - **Patrick Raths** - Creator of the Docker implementation for TK5- and SDL-Hercules-390 base image
   - **SDL-Hercules-390** - Base image approach and configuration strategies
 
 ## Technical Components

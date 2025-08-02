@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# ARM64 Workaround Script for TK4-Hercules
+# ARM64 Workaround Script for TKX-Hercules
 # This script provides a workaround for symbol relocation errors on ARM64 systems
 
 set -e
 
-echo "🔧 ARM64 Workaround for TK4-Hercules"
+echo "🔧 ARM64 Workaround for TKX-Hercules"
 echo "====================================="
 echo ""
 
@@ -26,10 +26,10 @@ docker-compose down 2>/dev/null || true
 
 # Remove existing containers
 echo "🗑️  Cleaning up existing containers..."
-docker rm -f tk4-hercules 2>/dev/null || true
+docker rm -f tkx-hercules 2>/dev/null || true
 
 echo ""
-echo "🚀 Starting TK4-Hercules with ARM64 workaround..."
+echo "🚀 Starting TKX-Hercules with ARM64 workaround..."
 echo ""
 
 # Method 1: Try with AMD64 platform
@@ -64,7 +64,7 @@ fi
 echo ""
 echo "📋 Method 2: Using Ubuntu-based image..."
 echo "  Building Ubuntu-based image (this may take a few minutes)..."
-docker build -f Dockerfile.ubuntu -t tk4-hercules:ubuntu . >/dev/null 2>&1
+docker build -f Dockerfile.ubuntu -t tkx-hercules:ubuntu . >/dev/null 2>&1
 
 if [ $? -eq 0 ]; then
     echo "✅ Ubuntu image built successfully"
@@ -74,8 +74,8 @@ if [ $? -eq 0 ]; then
     # Create a simple docker-compose override
     cat > docker-compose.override.yml << EOF
 services:
-  tk4-hercules:
-    image: tk4-hercules:ubuntu
+  tkx-hercules:
+image: tkx-hercules:ubuntu
     platform: linux/amd64
 EOF
     
@@ -112,10 +112,10 @@ echo ""
 
 docker run -d \
   --platform linux/amd64 \
-  --name tk4-hercules \
+  --name tkx-hercules \
   -p 3270:3270 \
   -p 8038:8038 \
-  ghcr.io/skunklabz/tk4-hercules:latest
+  ghcr.io/skunklabz/tkx-hercules:latest
 
 if [ $? -eq 0 ]; then
     echo "✅ Container started with docker run"
@@ -125,10 +125,10 @@ if [ $? -eq 0 ]; then
     echo "  Web Console: http://localhost:8038"
     echo ""
     echo "📋 Container status:"
-    docker ps | grep tk4-hercules
+    docker ps | grep tkx-hercules
     echo ""
     echo "📋 Recent logs:"
-    docker logs tk4-hercules --tail=5
+    docker logs tkx-hercules --tail=5
 else
     echo "❌ All methods failed"
     echo ""

@@ -1,27 +1,38 @@
 services:
   tkx-hercules:
-    image: tkx-hercules:tk5-latest
-    platform: ${PLATFORM:-linux/amd64}
+    image: praths/mvs-tk5:latest
     container_name: tkx-hercules-tk5
+    stdin_open: true          # docker run -i
+    tty: true                 # docker run -t
+    cap_add:
+      - SYS_NICE
     ports:
       - "3270:3270"
       - "8038:8038"
     volumes:
-      - tk5-tk5res:/tk5-/tk5res
-      - tk5-tk5cat:/tk5-/tk5cat
-      - tk5-tk5dlb:/tk5-/tk5dlb
-      - tk5-tk5001:/tk5-/tk5001
-      - tk5-tk5002:/tk5-/tk5002
-      - tk5-tso001:/tk5-/tso001
-      - tk5-tso002:/tk5-/tso002
-      - tk5-tso003:/tk5-/tso003
-      - tk5-work01:/tk5-/work01
-      - tk5-work02:/tk5-/work02
-      - tk5-work03:/tk5-/work03
-      - tk5-work04:/tk5-/work04
-      - tk5-int001:/tk5-/int001
-      - tk5-page00:/tk5-/page00
-      - tk5-spool0:/tk5-/spool0
+      # Use patrickraths' working volume structure
+      - tk5-dasd-usr:/opt/tk5/dasd.usr
+      - tk5-log:/opt/tk5/log
+      - tk5-tape:/opt/tk5/tape
+      - tk5-prt:/opt/tk5/prt
+      - tk5-pch:/opt/tk5/pch
+      - tk5-jcl:/opt/tk5/jcl
+      # Additional volumes for our extended structure
+      - tk5-tk5res:/opt/tk5/tk5res
+      - tk5-tk5cat:/opt/tk5/tk5cat
+      - tk5-tk5dlb:/opt/tk5/tk5dlb
+      - tk5-tk5001:/opt/tk5/tk5001
+      - tk5-tk5002:/opt/tk5/tk5002
+      - tk5-tso001:/opt/tk5/tso001
+      - tk5-tso002:/opt/tk5/tso002
+      - tk5-tso003:/opt/tk5/tso003
+      - tk5-work01:/opt/tk5/work01
+      - tk5-work02:/opt/tk5/work02
+      - tk5-work03:/opt/tk5/work03
+      - tk5-work04:/opt/tk5/work04
+      - tk5-int001:/opt/tk5/int001
+      - tk5-page00:/opt/tk5/page00
+      - tk5-spool0:/opt/tk5/spool0
     restart: unless-stopped
     deploy:
       resources:
@@ -36,11 +47,25 @@ services:
       - HERCULES_VERSION=4.60
       - MVS_VERSION=3.8j-tk5
     labels:
-      - "com.skunklabz.description=MVS 3.8j Turnkey 5- System on Hercules Mainframe Emulator"
+      - "com.skunklabz.description=MVS 3.8j Turnkey 5- System on Hercules Mainframe Emulator (patrickraths implementation)"
       - "com.skunklabz.version=1.2.0"
       - "com.skunklabz.mvs-version=tk5"
 
 volumes:
+  # patrickraths volume structure
+  tk5-dasd-usr:
+    driver: local
+  tk5-log:
+    driver: local
+  tk5-tape:
+    driver: local
+  tk5-prt:
+    driver: local
+  tk5-pch:
+    driver: local
+  tk5-jcl:
+    driver: local
+  # Additional volumes for our extended structure
   tk5-tk5res:
     driver: local
   tk5-tk5cat:

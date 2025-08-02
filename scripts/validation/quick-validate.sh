@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Quick TK4-Hercules Exercise Validation
+# Quick TKX-Hercules Exercise Validation
 # Simple validation without complex operations
 
 # Colors for output
@@ -9,7 +9,7 @@ GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-echo "🔍 Quick TK4-Hercules Exercise Validation"
+echo "🔍 Quick TKX-Hercules Exercise Validation"
 echo "========================================="
 echo ""
 

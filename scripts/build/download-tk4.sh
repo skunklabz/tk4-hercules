@@ -50,7 +50,7 @@ echo "   3. Run: ./test.sh"
 echo ""
 
 echo "🚀 Alternative: Use pre-built image"
-echo "   docker pull skunklabz/tk4-hercules:latest"
+echo "   docker pull skunklabz/tkx-hercules:latest"
 echo "   docker-compose up -d"
 echo ""
 

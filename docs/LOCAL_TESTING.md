@@ -285,7 +285,7 @@ This ensures a smooth development workflow with confidence that your changes wil
 
 ## Local Development
 
-The project is configured to use **local images only** - no Docker Hub or external registries required:
+The project is configured to use **local images only** - no external registries required:
 
 ```bash
 # Start the mainframe (builds and uses local image)
@@ -304,4 +304,4 @@ make logs
 make shell
 ```
 
-All commands use the locally built `tk4-hercules:latest` image, ensuring you're always working with your latest changes. 
+All commands use the locally built `tkx-hercules:latest` image, ensuring you're always working with your latest changes. 

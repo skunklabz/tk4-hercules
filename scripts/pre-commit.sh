@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Pre-commit hook for tk4-hercules
+# Pre-commit hook for tkx-hercules
 # Runs local tests before allowing commits
 
 set -e

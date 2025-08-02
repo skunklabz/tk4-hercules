@@ -1,5 +1,8 @@
 services:
   tkx-hercules:
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: tkx-hercules:tk4-latest
     platform: ${PLATFORM:-linux/amd64}
     container_name: tkx-hercules-tk4

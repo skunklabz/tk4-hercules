@@ -1,4 +1,4 @@
-# TK4-Hercules Makefile
+# TKX-Hercules Makefile
 # Common development tasks for the project
 
 .PHONY: help build build-platform build-multi start stop test test-arm64 validate clean docs build-ghcr push-ghcr version bump-patch bump-minor bump-major
@@ -8,7 +8,7 @@ VERSION := $(shell cat VERSION)
 
 # Default target
 help:
-	@echo "TK4-Hercules Development Commands"
+	@echo "TKX-Hercules Development Commands"
 	@echo "================================="
 	@echo ""
 	@echo "Version Management:"
@@ -28,7 +28,7 @@ help:
 	@echo "Registry Commands:"
 	@echo "  push-ghcr    - Build and push to GitHub Container Registry"
 	@echo "  login-ghcr   - Login to GitHub Container Registry"
-	@echo "  Note: Local development uses local images only (no Docker Hub)"
+	@echo "  Note: Local development uses local images only (no external registries)"
 	@echo ""
 	@echo "Container Commands:"
 	@echo "  start        - Build and start the mainframe container (local image)"
@@ -96,7 +96,7 @@ bump-major:
 
 # Build commands
 build:
-	@echo "Building TK4-Hercules container..."
+	@echo "Building TKX-Hercules container..."
 	@./scripts/build/build.sh
 
 build-platform:
@@ -116,7 +116,7 @@ fix-arm64:
 	@./scripts/build/fix-arm64.sh
 
 start-arm64:
-	@echo "Starting TK4-Hercules with ARM64 workaround..."
+	@echo "Starting TKX-Hercules with ARM64 workaround..."
 	@./scripts/start-arm64.sh
 
 # Registry commands
@@ -131,11 +131,11 @@ login-ghcr:
 
 # Container management
 start:
-	@echo "Starting TK4-Hercules mainframe..."
+	@echo "Starting TKX-Hercules mainframe..."
 	@echo "Building local image if needed..."
-	@docker build --platform linux/amd64 -t tk4-hercules:latest .
+	@docker build --platform linux/amd64 -t tkx-hercules:latest .
 	@echo "Starting container with local image..."
-	@docker run -d --name tk4-hercules \
+	@docker run -d --name tkx-hercules \
 		--platform linux/amd64 \
 		-p 3270:3270 \
 		-p 8038:8038 \
@@ -150,21 +150,21 @@ start:
 		--restart unless-stopped \
 		--memory=2g \
 		--cpus=2.0 \
-		tk4-hercules:latest
+		tkx-hercules:latest
 
 stop:
-	@echo "Stopping TK4-Hercules mainframe..."
-	@docker stop tk4-hercules 2>/dev/null || true
-	@docker rm tk4-hercules 2>/dev/null || true
+	@echo "Stopping TKX-Hercules mainframe..."
+	@docker stop tkx-hercules 2>/dev/null || true
+	@docker rm tkx-hercules 2>/dev/null || true
 
 restart: stop start
-	@echo "Restarted TK4-Hercules mainframe"
+	@echo "Restarted TKX-Hercules mainframe"
 
 logs:
-	@docker logs -f tk4-hercules
+	@docker logs -f tkx-hercules
 
 shell:
-	@docker exec -it tk4-hercules /bin/bash
+	@docker exec -it tkx-hercules /bin/bash
 
 # Testing commands
 test:
@@ -223,8 +223,8 @@ validate:
 clean:
 	@echo "Cleaning up containers and images..."
 	@docker compose down -v
-	@docker rmi tk4-hercules:latest 2>/dev/null || true
-	@docker rmi ghcr.io/skunklabz/tk4-hercules:latest 2>/dev/null || true
+	@docker rmi tkx-hercules:latest 2>/dev/null || true
+	@docker rmi ghcr.io/skunklabz/tkx-hercules:latest 2>/dev/null || true
 	@docker system prune -f
 
 docs:

@@ -37,9 +37,6 @@ RUN chmod +x hercules/linux/64/bin/hercules
 # Ensure mvs script exists and is executable
 RUN chmod +x mvs
 
-# Fix mvs script for ARM64 compatibility
-COPY mvs.fixed mvs
-
 # Ensure mvs script is executable
 RUN chmod +x mvs
 

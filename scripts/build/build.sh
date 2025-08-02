@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# TK4-Hercules Docker Build Script
+# TKX-Hercules Docker Build Script
 # This script builds the Docker image with proper tagging and testing
 
 set -e  # Exit on any error
@@ -9,8 +9,8 @@ set -e  # Exit on any error
 VERSION=$(cat ../VERSION | tr -d ' ')
 
 # Configuration
-IMAGE_NAME="skunklabz/tk4-hercules"
-GHCR_IMAGE_NAME="ghcr.io/skunklabz/tk4-hercules"
+IMAGE_NAME="skunklabz/tkx-hercules"
+GHCR_IMAGE_NAME="ghcr.io/skunklabz/tkx-hercules"
 LATEST_TAG="${IMAGE_NAME}:latest"
 VERSION_TAG="${IMAGE_NAME}:v${VERSION}"
 GHCR_LATEST_TAG="${GHCR_IMAGE_NAME}:latest"
@@ -25,7 +25,7 @@ else
     USE_GHCR=false
 fi
 
-echo "🐳 Building TK4-Hercules Docker Image"
+echo "🐳 Building TKX-Hercules Docker Image"
 echo "======================================"
 echo "Image: ${IMAGE_NAME}"
 echo "GHCR Image: ${GHCR_IMAGE_NAME}"
@@ -66,12 +66,8 @@ if [ $? -eq 0 ]; then
         echo "   docker push ${GHCR_LATEST_TAG}"
         echo "   docker push ${GHCR_VERSION_TAG}"
         echo ""
-        echo "🔗 GHCR URL: https://ghcr.io/skunklabz/tk4-hercules"
+        echo "🔗 GHCR URL: https://ghcr.io/skunklabz/tkx-hercules"
     else
-        echo "📤 To push to Docker Hub (if you have access):"
-        echo "   docker push ${LATEST_TAG}"
-        echo "   docker push ${VERSION_TAG}"
-        echo ""
         echo "📤 To push to GitHub Container Registry:"
         echo "   ./scripts/build/build.sh --ghcr"
         echo "   docker push ${GHCR_LATEST_TAG}"

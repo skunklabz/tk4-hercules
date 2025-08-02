@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# TK4-Hercules ARM64 Fix Script
+# TKX-Hercules ARM64 Fix Script
 # This script helps fix ARM64 compatibility issues
 
 set -e  # Exit on any error
 
-echo "🔧 Fixing TK4-Hercules ARM64 Compatibility Issues"
+echo "🔧 Fixing TKX-Hercules ARM64 Compatibility Issues"
 echo "=================================================="
 echo ""
 
@@ -26,8 +26,8 @@ docker compose down 2>/dev/null || true
 
 # Remove existing images to force rebuild
 echo "🗑️  Removing existing images..."
-docker rmi ghcr.io/skunklabz/tk4-hercules:latest 2>/dev/null || true
-docker rmi tk4-hercules:latest 2>/dev/null || true
+docker rmi ghcr.io/skunklabz/tkx-hercules:latest 2>/dev/null || true
+docker rmi tkx-hercules:latest 2>/dev/null || true
 
 # Clean up any dangling images
 echo "🧹 Cleaning up Docker system..."
@@ -41,7 +41,7 @@ else
     echo "❌ Multi-platform build failed"
     echo ""
     echo "💡 Alternative: Try building for ARM64 only"
-    echo "   docker build --platform linux/arm64 -t tk4-hercules:arm64 ."
+    echo "   docker build --platform linux/arm64 -t tkx-hercules:arm64 ."
     exit 1
 fi
 
