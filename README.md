@@ -2,7 +2,7 @@
 
 A Docker containerized IBM MVS 3.8j mainframe emulator supporting both TK4- and TK5- systems using Hercules for educational mainframe computing and historical preservation.
 
-[![Docker Build](https://github.com/skunklabz/tkx-hercules/workflows/Build%20and%20Push%20Docker%20Image/badge.svg)](https://github.com/skunklabz/tkx-hercules/actions)
+[![Docker Build](https://github.com/skunklabz/tkx-hercules/workflows/Build%20Docker%20Image/badge.svg)](https://github.com/skunklabz/tkx-hercules/actions)
 [![GitHub Container Registry](https://img.shields.io/badge/GHCR-ghcr.io%2Fskunklabz%2Ftkx--hercules-blue)](https://ghcr.io/skunklabz/tkx-hercules)
 
 ## Quick Start
