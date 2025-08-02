@@ -5,7 +5,7 @@
 **Estimated Time**: 15-20 minutes
 
 **Prerequisites**: 
-- TK4-Hercules running (see [main README](../README.md))
+- TKX-Hercules running (see [main README](../README.md))
 - 3270 terminal emulator installed (`c3270`)
 
 ---

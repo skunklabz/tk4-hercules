@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Full service testing script for tk4-hercules
+# Full service testing script for tkx-hercules
 # Starts the actual MVS system and tests all services
 
 set -e
@@ -105,30 +105,30 @@ main() {
     print_info "Starting full MVS service tests..."
     
     # Clean up any existing test containers
-    docker stop test-tk4-full 2>/dev/null || true
-    docker rm test-tk4-full 2>/dev/null || true
+    docker stop test-tkx-full 2>/dev/null || true
+    docker rm test-tkx-full 2>/dev/null || true
     
     # Build the image if needed
-    if ! docker images | grep -q "tk4-hercules.*latest"; then
+    if ! docker images | grep -q "tkx-hercules.*latest"; then
         print_info "Building Docker image..."
-        docker build --platform linux/amd64 -t tk4-hercules:latest .
+        docker build --platform linux/amd64 -t tkx-hercules:latest .
     fi
     
-    # Start container with actual MVS startup
+    # Start container with actual MVS system
     print_info "Starting container with MVS system..."
-    docker run -d --name test-tk4-full \
+    docker run -d --name test-tkx-full \
         --platform linux/amd64 \
         -p 3270:3270 \
         -p 8038:8038 \
-        tk4-hercules:latest
+        tkx-hercules:latest
     
     # Wait for container to start
     sleep 5
     
     # Check if container is running
-    if ! docker ps | grep -q test-tk4-full; then
+    if ! docker ps | grep -q test-tkx-full; then
         print_error "Container failed to start"
-        docker logs test-tk4-full || true
+        docker logs test-tkx-full || true
         exit 1
     fi
     
@@ -137,16 +137,16 @@ main() {
     # Show initial logs
     echo ""
     print_info "Initial container logs:"
-    docker logs test-tk4-full | head -20
+    docker logs test-tkx-full | head -20
     
     # Wait for 3270 service
     if wait_for_service 3270 "3270 Terminal"; then
         print_status "3270 terminal service is ready"
     else
         print_error "3270 terminal service failed to start"
-        docker logs test-tk4-full
-        docker stop test-tk4-full
-        docker rm test-tk4-full
+        docker logs test-tkx-full
+        docker stop test-tkx-full
+        docker rm test-tkx-full
         exit 1
     fi
     
@@ -156,11 +156,11 @@ main() {
     # Show final status
     echo ""
     print_info "Final container status:"
-    docker ps | grep test-tk4-full || true
+    docker ps | grep test-tkx-full || true
     
     echo ""
     print_info "Recent container logs:"
-    docker logs --tail 20 test-tk4-full
+    docker logs --tail 20 test-tkx-full
     
     # Provide connection information
     echo ""
@@ -171,8 +171,8 @@ main() {
     echo "  💻 3270 Terminal: telnet localhost 3270"
     echo ""
     print_info "To stop the test container:"
-    echo "  docker stop test-tk4-full"
-    echo "  docker rm test-tk4-full"
+    echo "  docker stop test-tkx-full"
+    echo "  docker rm test-tkx-full"
     echo ""
     print_info "To keep the container running for manual testing:"
     echo "  # Container will continue running until stopped"

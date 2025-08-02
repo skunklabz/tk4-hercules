@@ -1,1 +1,1 @@
-# Static assets for TK4-Hercules
+# Static assets for TKX-Hercules

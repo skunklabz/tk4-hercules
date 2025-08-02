@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# TK4-Hercules Multi-Platform Build Script
+# TKX-Hercules Multi-Platform Build Script
 # This script builds Docker images for both AMD64 and ARM64 platforms
 
 set -e  # Exit on any error
@@ -9,11 +9,11 @@ set -e  # Exit on any error
 VERSION=$(cat ../../VERSION | tr -d ' ')
 
 # Configuration
-IMAGE_NAME="tk4-hercules"
+IMAGE_NAME="tkx-hercules"
 LATEST_TAG="${IMAGE_NAME}:latest"
 VERSION_TAG="${IMAGE_NAME}:v${VERSION}"
 
-echo "🐳 Building TK4-Hercules Multi-Platform Docker Images"
+echo "🐳 Building TKX-Hercules Multi-Platform Docker Images"
 echo "====================================================="
 echo "Image: ${IMAGE_NAME}"
 echo "Version: ${VERSION}"
@@ -29,7 +29,7 @@ fi
 
 # Create and use a new builder instance
 echo "🔧 Setting up buildx builder..."
-docker buildx create --name tk4-hercules-multi --use --driver docker-container || true
+docker buildx create --name tkx-hercules-multi --use --driver docker-container || true
 
 # Build for multiple platforms
 echo "📦 Building multi-platform Docker images..."

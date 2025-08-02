@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# TK4-Hercules ARM64 Test Script
+# TKX-Hercules ARM64 Test Script
 # This script tests ARM64 compatibility and provides troubleshooting information
 
 set -e  # Exit on any error
 
-echo "🧪 Testing TK4-Hercules ARM64 Support"
+echo "🧪 Testing TKX-Hercules ARM64 Support"
 echo "====================================="
 echo ""
 
@@ -51,13 +51,13 @@ if [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then
     
     # Test multi-platform image pull
     echo "📦 Testing multi-platform image pull..."
-    if docker pull --platform linux/arm64 ghcr.io/skunklabz/tk4-hercules:latest 2>/dev/null; then
+    if docker pull --platform linux/arm64 ghcr.io/skunklabz/tkx-hercules:latest 2>/dev/null; then
         echo "✅ ARM64 image available"
     else
         echo "⚠️  ARM64 image not available, will use AMD64 with emulation"
     fi
     
-    if docker pull --platform linux/amd64 ghcr.io/skunklabz/tk4-hercules:latest 2>/dev/null; then
+    if docker pull --platform linux/amd64 ghcr.io/skunklabz/tkx-hercules:latest 2>/dev/null; then
         echo "✅ AMD64 image available for emulation"
     else
         echo "❌ No compatible images found"
@@ -73,7 +73,7 @@ fi
 
 # Test container startup
 echo "🚀 Testing container startup..."
-echo "  This will attempt to start the TK4-Hercules container"
+echo "  This will attempt to start the TKX-Hercules container"
 echo "  and check for common ARM64 compatibility issues"
 echo ""
 

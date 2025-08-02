@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# TK4-Hercules Platform-Aware Build Script
+# TKX-Hercules Platform-Aware Build Script
 # This script detects the platform and builds the Docker image accordingly
 
 set -e  # Exit on any error
@@ -9,11 +9,11 @@ set -e  # Exit on any error
 VERSION=$(cat ../../VERSION | tr -d ' ')
 
 # Configuration
-IMAGE_NAME="skunklabz/tk4-hercules"
+IMAGE_NAME="skunklabz/tkx-hercules"
 LATEST_TAG="${IMAGE_NAME}:latest"
 VERSION_TAG="${IMAGE_NAME}:v${VERSION}"
 
-echo "🐳 Building TK4-Hercules Docker Image (Platform-Aware)"
+echo "🐳 Building TKX-Hercules Docker Image (Platform-Aware)"
 echo "======================================================"
 echo "Image: ${IMAGE_NAME}"
 echo "Version: ${VERSION}"

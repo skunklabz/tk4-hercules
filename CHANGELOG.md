@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2025-01-XX
+
+### Added
+- **Multi-Version Support**: Complete TK4- and TK5- system support
+- **Volume Isolation**: Separate volume namespaces for each version
+- **Patrick Raths Attribution**: Proper credit for MVS-TK5 Docker implementation
+- **Enhanced Documentation**: Updated attributions and acknowledgments
+- **Version Management**: Centralized version control with VERSION file
+
+### Changed
+- **Repository Structure**: Organized versions into tk4/ and tk5/ directories
+- **Docker Configuration**: Multi-version docker-compose.yml with environment variable support
+- **Documentation**: Updated README and attributions to reflect current state
+- **Version Bump**: Incremented to 1.2.0 for major multi-version release
+
+### Fixed
+- **Attributions**: Proper credit to Patrick Raths for TK5- Docker implementation
+- **Repository References**: Updated all tk4-hercules references to tkx-hercules
+- **Documentation Cleanup**: Removed outdated references and improved clarity
+
 ## [1.1.1] - 2025-01-XX
 
 ### Fixed

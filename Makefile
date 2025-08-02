@@ -1,4 +1,4 @@
-# TK4-Hercules Makefile
+# TKX-Hercules Makefile
 # Common development tasks for the project
 
 .PHONY: help build build-platform build-multi start stop test test-arm64 validate clean docs build-ghcr push-ghcr version bump-patch bump-minor bump-major
@@ -8,7 +8,7 @@ VERSION := $(shell cat VERSION)
 
 # Default target
 help:
-	@echo "TK4-Hercules Development Commands"
+	@echo "TKX-Hercules Development Commands"
 	@echo "================================="
 	@echo ""
 	@echo "Version Management:"
@@ -28,7 +28,7 @@ help:
 	@echo "Registry Commands:"
 	@echo "  push-ghcr    - Build and push to GitHub Container Registry"
 	@echo "  login-ghcr   - Login to GitHub Container Registry"
-	@echo "  Note: Local development uses local images only (no Docker Hub)"
+	@echo "  Note: Local development uses local images only (no external registries)"
 	@echo ""
 	@echo "Container Commands:"
 	@echo "  start        - Build and start the mainframe container (local image)"
@@ -96,7 +96,7 @@ bump-major:
 
 # Build commands
 build:
-	@echo "Building TK4-Hercules container..."
+	@echo "Building TKX-Hercules container..."
 	@./scripts/build/build.sh
 
 build-platform:
@@ -116,7 +116,7 @@ fix-arm64:
 	@./scripts/build/fix-arm64.sh
 
 start-arm64:
-	@echo "Starting TK4-Hercules with ARM64 workaround..."
+	@echo "Starting TKX-Hercules with ARM64 workaround..."
 	@./scripts/start-arm64.sh
 
 # Registry commands
@@ -131,11 +131,11 @@ login-ghcr:
 
 # Container management
 start:
-	@echo "Starting TK4-Hercules mainframe..."
+	@echo "Starting TKX-Hercules mainframe..."
 	@echo "Building local image if needed..."
-	@docker build --platform linux/amd64 -t tk4-hercules:latest .
+	@docker build --platform linux/amd64 -t tkx-hercules:latest .
 	@echo "Starting container with local image..."
-	@docker run -d --name tk4-hercules \
+	@docker run -d --name tkx-hercules \
 		--platform linux/amd64 \
 		-p 3270:3270 \
 		-p 8038:8038 \
@@ -150,21 +150,21 @@ start:
 		--restart unless-stopped \
 		--memory=2g \
 		--cpus=2.0 \
-		tk4-hercules:latest
+		tkx-hercules:latest
 
 stop:
-	@echo "Stopping TK4-Hercules mainframe..."
-	@docker stop tk4-hercules 2>/dev/null || true
-	@docker rm tk4-hercules 2>/dev/null || true
+	@echo "Stopping TKX-Hercules mainframe..."
+	@docker stop tkx-hercules 2>/dev/null || true
+	@docker rm tkx-hercules 2>/dev/null || true
 
 restart: stop start
-	@echo "Restarted TK4-Hercules mainframe"
+	@echo "Restarted TKX-Hercules mainframe"
 
 logs:
-	@docker logs -f tk4-hercules
+	@docker logs -f tkx-hercules
 
 shell:
-	@docker exec -it tk4-hercules /bin/bash
+	@docker exec -it tkx-hercules /bin/bash
 
 # Testing commands
 test:
@@ -223,8 +223,8 @@ validate:
 clean:
 	@echo "Cleaning up containers and images..."
 	@docker compose down -v
-	@docker rmi tk4-hercules:latest 2>/dev/null || true
-	@docker rmi ghcr.io/skunklabz/tk4-hercules:latest 2>/dev/null || true
+	@docker rmi tkx-hercules:latest 2>/dev/null || true
+	@docker rmi ghcr.io/skunklabz/tkx-hercules:latest 2>/dev/null || true
 	@docker system prune -f
 
 docs:
@@ -279,6 +279,53 @@ ci-full: ci-lint ci-validate ci-test
 release-prep: test validate
 	@echo "Release preparation completed"
 
+# Multi-version support
+build-tk4:
+	@echo "Building TK4- version..."
+	@MVS_VERSION=tk4 docker-compose build
+
+build-tk5:
+	@echo "Building TK5- version..."
+	@MVS_VERSION=tk5 docker-compose build
+
+start-tk4:
+	@echo "Starting TK4- version..."
+	@MVS_VERSION=tk4 docker-compose up -d
+
+start-tk5:
+	@echo "Starting TK5- version..."
+	@MVS_VERSION=tk5 docker-compose up -d
+
+test-tk4:
+	@echo "Testing TK4- version..."
+	@MVS_VERSION=tk4 make test
+
+test-tk5:
+	@echo "Testing TK5- version..."
+	@MVS_VERSION=tk5 make test
+
+stop-tk4:
+	@echo "Stopping TK4- version..."
+	@MVS_VERSION=tk4 docker-compose down
+
+stop-tk5:
+	@echo "Stopping TK5- version..."
+	@MVS_VERSION=tk5 docker-compose down
+
+logs-tk4:
+	@echo "Showing TK4- logs..."
+	@MVS_VERSION=tk4 docker-compose logs -f
+
+logs-tk5:
+	@echo "Showing TK5- logs..."
+	@MVS_VERSION=tk5 docker-compose logs -f
+
+# Default version (TK4- for backward compatibility)
+build: build-tk4
+start: start-tk4
+stop: stop-tk4
+logs: logs-tk4
+
 # Utility commands
 status:
 	@echo "Container status:"
@@ -289,19 +336,29 @@ status:
 	@echo "8038 (Web): $(shell netstat -an 2>/dev/null | grep :8038 || echo 'Not listening')"
 
 info:
-	@echo "TK4-Hercules Project Information"
+	@echo "TKX-Hercules Project Information"
 	@echo "================================"
 	@echo "Version: $(VERSION)"
-	@echo "Mainframe: IBM MVS 3.8j (TK4-)"
+	@echo "Mainframe: IBM MVS 3.8j (TK4- and TK5-)"
 	@echo "Emulator: Hercules"
 	@echo "Container: Docker"
 	@echo "Registry: GitHub Container Registry (ghcr.io)"
 	@echo ""
+	@echo "Available Versions:"
+	@echo "- TK4-: Original Turnkey 4- system (8 volumes)"
+	@echo "- TK5-: Enhanced Turnkey 5- system (15 volumes)"
+	@echo ""
+	@echo "Usage:"
+	@echo "- make start-tk4: Start TK4- version (default)"
+	@echo "- make start-tk5: Start TK5- version"
+	@echo "- make build-tk4: Build TK4- image"
+	@echo "- make build-tk5: Build TK5- image"
+	@echo ""
 	@echo "Documentation:"
 	@echo "- README.md: Quick start guide"
-	@echo "- docs/LEARNING_GUIDE.md: Educational content"
-	@echo "- docs/TESTING.md: Testing procedures"
-	@echo "- CONTRIBUTING.md: How to contribute"
+	@echo "- docs/TKX_MIGRATION_PLAN.md: Migration strategy"
+	@echo "- docs/TK5_TECHNICAL_SPECS.md: TK5- specifications"
+	@echo "- docs/ATTRIBUTIONS.md: Credits and acknowledgments"
 	@echo ""
 	@echo "Scripts:"
 	@echo "- scripts/build/: Build scripts"

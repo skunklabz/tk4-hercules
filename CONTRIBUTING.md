@@ -1,6 +1,6 @@
-# Contributing to TK4-Hercules
+# Contributing to TKX-Hercules
 
-Thank you for your interest in contributing to the TK4-Hercules project! This document provides guidelines for contributing to this educational mainframe emulator project.
+Thank you for your interest in contributing to the TKX-Hercules project! This document provides guidelines for contributing to this educational mainframe emulator project.
 
 ## Development Workflow
 
@@ -185,4 +185,4 @@ This project emphasizes:
 - Join discussions in existing issues
 - Contact maintainers for complex questions
 
-Thank you for contributing to TK4-Hercules! 
+Thank you for contributing to TKX-Hercules! 
