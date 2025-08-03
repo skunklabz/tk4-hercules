@@ -76,7 +76,8 @@ jobs:
     - name: Build and push TK5 Docker image
       uses: docker/build-push-action@v5
       with:
-        context: ./versions/tk5
+        context: .
+        file: ./versions/tk5/Dockerfile
         platforms: linux/amd64
         push: true
         tags: |
