@@ -82,7 +82,7 @@ jobs:
       with:
         context: .
         file: ./versions/tk5/Dockerfile
-        platforms: linux/amd64
+        platforms: linux/arm64
         push: true
         tags: |
           ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:tk5-latest
