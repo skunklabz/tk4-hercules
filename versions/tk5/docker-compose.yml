@@ -1,6 +1,8 @@
 services:
   tkx-hercules:
-    image: praths/mvs-tk5:latest
+    build:
+      context: ../..
+      dockerfile: versions/tk5/Dockerfile
     container_name: tkx-hercules-tk5
     stdin_open: true          # docker run -i
     tty: true                 # docker run -t
