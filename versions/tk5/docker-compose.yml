@@ -3,6 +3,7 @@ services:
     build:
       context: ../..
       dockerfile: versions/tk5/Dockerfile
+    platform: ${PLATFORM:-linux/amd64}
     container_name: tkx-hercules-tk5
     stdin_open: true          # docker run -i
     tty: true                 # docker run -t
