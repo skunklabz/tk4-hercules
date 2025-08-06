@@ -22,6 +22,9 @@ ENV TK5                 /opt/tk5
 #
 COPY ./external/mvs-tk5/mvs-tk5 $TK5
 
+# Copy Hercules config file for TK5
+COPY ./external/mvs-tk5/mvs-tk5/conf/tk5.cnf /opt/hercules/hercules.cnf
+
 #
 # Make Hercules web Interface available inside TK5 as reference by
 # hercules.cnf
@@ -39,6 +42,6 @@ EXPOSE 3270 8038
 WORKDIR $TK5
 
 #
-# Start Hercules (removed invalid -r option)
+# Start Hercules (improved signal handling)
 #
-CMD /usr/bin/hercules -f $HERCULES_CNF 2>&1 | tee $HERCULES_LOG
+CMD ["/usr/bin/hercules", "-f", "/opt/hercules/hercules.cnf"]
