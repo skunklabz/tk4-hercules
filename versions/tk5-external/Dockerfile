@@ -1,47 +1,28 @@
-# *********************************************************************
-# Run TK5 (MVS 3.8j) in Docker container - AMD64 compatible version
-# *********************************************************************
-#
-# Use Ubuntu 22.04 as a base and install Hercules
-#
-FROM ubuntu:22.04
+FROM praths/sdl-hercules-390:latest
+
+# Set environment
+ARG HERCULES=/opt/hercules
+ARG TK5=/opt/tk5
+
+# Copy TK5 and Hercules
+COPY ./external/mvs-tk5/mvs-tk5 $TK5
+RUN mkdir -p $TK5/hercules
+
+# Make Hercules web Interface available inside TK5 as referenced by config
+RUN ln -s $HERCULES/share/hercules $TK5/hercules/httproot
+
+# Expose required ports
+EXPOSE 3270/tcp
+EXPOSE 8038/tcp
+
+# Set working directory and define the default entrypoint
+VOLUME $TK5/dasd.usr
+WORKDIR $TK5
+ENTRYPOINT ["./mvs"]
 
 # Install Hercules and its dependencies
 RUN apt-get update && apt-get install -y hercules && rm -rf /var/lib/apt/lists/*
-
-#
-# Set some environment variables
-#
-ENV HERCULES_RC         /opt/hercules/hercules.rc
-ENV HERCULES_CNF        /opt/hercules/hercules.cnf
-ENV HERCULES_LOG        /opt/hercules/hercules.log
-ENV TK5                 /opt/tk5
-
-#
-# Get the TK5 system
-#
-COPY ./external/mvs-tk5/mvs-tk5 $TK5
-
 # Copy Hercules config file for TK5
 COPY ./external/mvs-tk5/mvs-tk5/conf/tk5.cnf /opt/hercules/hercules.cnf
-
-#
-# Make Hercules web Interface available inside TK5 as reference by
-# hercules.cnf
-#
-RUN ln -s /usr/share/hercules /opt/hercules
-
-#
-# Expose ports for 3270 and the web interface
-#
-EXPOSE 3270 8038
-
-#
-# Set working directory
-#
-WORKDIR $TK5
-
-#
-# Start Hercules (improved signal handling)
 #
 CMD ["/usr/bin/hercules", "-f", "/opt/hercules/hercules.cnf"]
