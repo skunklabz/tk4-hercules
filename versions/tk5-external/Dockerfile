@@ -6,7 +6,6 @@ ARG TK5=/opt/tk5
 
 # Copy TK5 and Hercules
 COPY ./external/mvs-tk5/mvs-tk5 $TK5
-RUN ["mkdir", "-p", "/opt/tk5/hercules"]
 
 # Make Hercules web Interface available inside TK5 as referenced by config
 RUN ln -s $HERCULES/share/hercules $TK5/hercules/httproot
