@@ -26,7 +26,7 @@ COPY ./external/mvs-tk5/mvs-tk5 $TK5
 # Make Hercules web Interface available inside TK5 as reference by
 # hercules.cnf
 #
-RUN ln -s /usr/share/hercules/ /opt/hercules/
+RUN ln -s /usr/share/hercules /opt/hercules
 
 #
 # Expose ports for 3270 and the web interface
