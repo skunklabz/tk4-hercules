@@ -52,7 +52,7 @@ jobs:
         docker run --rm -d --name test-tk4 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:tk4-latest
         sleep 5
         docker ps | grep test-tk4 || (docker logs test-tk4; exit 1)
-        docker stop test-tk4
+        docker stop test-tk4 || echo "Container already stopped"
         echo "✅ TK4 container test passed"
 
   build-tk5:
@@ -96,7 +96,7 @@ jobs:
         docker run --rm -d --name test-tk5 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:tk5-latest
         sleep 5
         docker ps | grep test-tk5 || (docker logs test-tk5; exit 1)
-        docker stop test-tk5
+        docker stop test-tk5 || echo "Container already stopped"
         echo "✅ TK5 container test passed"
 
   build-main:
@@ -139,5 +139,5 @@ jobs:
         docker run --rm -d --name test-main ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
         sleep 5
         docker ps | grep test-main || (docker logs test-main; exit 1)
-        docker stop test-main
+        docker stop test-main || echo "Container already stopped"
         echo "✅ Main container test passed" 
