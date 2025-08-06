@@ -24,13 +24,18 @@ RUN apt-get update && apt-get install -y \
     libsdl2-mixer-2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
+# Create the expected Hercules directory structure for the mvs script
+RUN mkdir -p /opt/hercules/linux/64/bin /opt/hercules/linux/64/lib/hercules && \
+    ln -s /usr/bin/hercules /opt/hercules/linux/64/bin/hercules && \
+    ln -s /usr/lib /opt/hercules/linux/64/lib
+
 # Set environment
 ARG HERCULES=/usr/local
 ARG TK5=/opt/tk5
 
 # Copy TK5 and Hercules from submodule
 COPY ./external/mvs-tk5/mvs-tk5 $TK5
-RUN mkdir -p $TK5/hercules
+RUN mkdir -p $TK5/hercules && chmod +x $TK5/mvs
 
 # Make Hercules web Interface available inside TK5 as reference by
 # the default configuration scripts
