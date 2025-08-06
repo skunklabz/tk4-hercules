@@ -288,6 +288,10 @@ build-tk5:
 	@echo "Building TK5- version..."
 	@MVS_VERSION=tk5 docker-compose build
 
+build-tk5-external:
+	@echo "Building TK5- External version..."
+	@MVS_VERSION=tk5-external docker-compose build
+
 start-tk4:
 	@echo "Starting TK4- version..."
 	@MVS_VERSION=tk4 docker-compose up -d
@@ -295,6 +299,10 @@ start-tk4:
 start-tk5:
 	@echo "Starting TK5- version..."
 	@MVS_VERSION=tk5 docker-compose up -d
+
+start-tk5-external:
+	@echo "Starting TK5- External version..."
+	@MVS_VERSION=tk5-external docker-compose up -d
 
 test-tk4:
 	@echo "Testing TK4- version..."
@@ -304,6 +312,10 @@ test-tk5:
 	@echo "Testing TK5- version..."
 	@MVS_VERSION=tk5 make test
 
+test-tk5-external:
+	@echo "Testing TK5- External version..."
+	@MVS_VERSION=tk5-external make test
+
 stop-tk4:
 	@echo "Stopping TK4- version..."
 	@MVS_VERSION=tk4 docker-compose down
@@ -312,6 +324,10 @@ stop-tk5:
 	@echo "Stopping TK5- version..."
 	@MVS_VERSION=tk5 docker-compose down
 
+stop-tk5-external:
+	@echo "Stopping TK5- External version..."
+	@MVS_VERSION=tk5-external docker-compose down
+
 logs-tk4:
 	@echo "Showing TK4- logs..."
 	@MVS_VERSION=tk4 docker-compose logs -f
@@ -319,6 +335,10 @@ logs-tk4:
 logs-tk5:
 	@echo "Showing TK5- logs..."
 	@MVS_VERSION=tk5 docker-compose logs -f
+
+logs-tk5-external:
+	@echo "Showing TK5- External logs..."
+	@MVS_VERSION=tk5-external docker-compose logs -f
 
 # Default version (TK4- for backward compatibility)
 build: build-tk4
@@ -347,12 +367,15 @@ info:
 	@echo "Available Versions:"
 	@echo "- TK4-: Original Turnkey 4- system (8 volumes)"
 	@echo "- TK5-: Enhanced Turnkey 5- system (15 volumes)"
+	@echo "- TK5- External: AMD64-compatible TK5- system (15 volumes)"
 	@echo ""
 	@echo "Usage:"
 	@echo "- make start-tk4: Start TK4- version (default)"
 	@echo "- make start-tk5: Start TK5- version"
+	@echo "- make start-tk5-external: Start TK5- External version (AMD64 compatible)"
 	@echo "- make build-tk4: Build TK4- image"
 	@echo "- make build-tk5: Build TK5- image"
+	@echo "- make build-tk5-external: Build TK5- External image"
 	@echo ""
 	@echo "Documentation:"
 	@echo "- README.md: Quick start guide"

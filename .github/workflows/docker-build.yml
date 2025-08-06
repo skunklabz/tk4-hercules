@@ -80,8 +80,8 @@ jobs:
     - name: Build and push TK5 Docker image
       uses: docker/build-push-action@v5
       with:
-        context: ./external/mvs-tk5
-        file: ./external/mvs-tk5/Dockerfile
+        context: .
+        file: ./versions/tk5-external/Dockerfile
         platforms: linux/amd64
         push: true
         tags: |

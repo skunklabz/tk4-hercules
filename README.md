@@ -18,9 +18,13 @@ make start-tk4
 # Run TK5-
 make start-tk5
 
+# Run TK5- External (AMD64 compatible)
+make start-tk5-external
+
 # Or use Docker Compose directly
 MVS_VERSION=tk4 docker-compose up -d  # TK4- system
 MVS_VERSION=tk5 docker-compose up -d  # TK5- system
+MVS_VERSION=tk5-external docker-compose up -d  # TK5- external system
 ```
 
 ### Using GitHub Container Registry (Recommended)
