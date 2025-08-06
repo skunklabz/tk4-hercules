@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TKX-Hercules Learning Management System</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-server"></i>
+                    <h1>TKX-Hercules LMS</h1>
+                </div>
+                <div class="header-controls">
+                    <div class="version-selector">
+                        <label for="version-select">Version:</label>
+                        <select id="version-select">
+                            <option value="tk4">TK4-</option>
+                            <option value="tk5">TK5-</option>
+                        </select>
+                    </div>
+                    <div class="user-info">
+                        <span id="user-id">Guest</span>
+                        <button id="login-btn" class="btn btn-primary">Login</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Sidebar -->
+            <aside class="sidebar" id="sidebar">
+                <div class="sidebar-header">
+                    <h2>Learning Path</h2>
+                    <button id="sidebar-toggle" class="sidebar-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+                
+                <div class="progress-summary">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <span id="progress-text">0% Complete</span>
+                </div>
+
+                <nav class="exercise-nav">
+                    <div class="nav-section">
+                        <h3><i class="fas fa-rocket"></i> Beginner</h3>
+                        <ul id="beginner-exercises" class="exercise-list"></ul>
+                    </div>
+                    
+                    <div class="nav-section">
+                        <h3><i class="fas fa-laptop-code"></i> Intermediate</h3>
+                        <ul id="intermediate-exercises" class="exercise-list"></ul>
+                    </div>
+                    
+                    <div class="nav-section">
+                        <h3><i class="fas fa-tools"></i> Advanced</h3>
+                        <ul id="advanced-exercises" class="exercise-list"></ul>
+                    </div>
+                    
+                    <div class="nav-section">
+                        <h3><i class="fas fa-graduation-cap"></i> Expert</h3>
+                        <ul id="expert-exercises" class="exercise-list"></ul>
+                    </div>
+                </nav>
+            </aside>
+
+            <!-- Main Panel -->
+            <div class="main-panel">
+                <!-- Exercise Content -->
+                <div class="exercise-content" id="exercise-content">
+                    <div class="welcome-screen" id="welcome-screen">
+                        <div class="welcome-content">
+                            <i class="fas fa-graduation-cap welcome-icon"></i>
+                            <h1>Welcome to TKX-Hercules Learning</h1>
+                            <p>Learn mainframe computing with interactive exercises and real-time emulator access.</p>
+                            
+                            <div class="welcome-features">
+                                <div class="feature">
+                                    <i class="fas fa-play-circle"></i>
+                                    <h3>Interactive Learning</h3>
+                                    <p>Follow step-by-step exercises with embedded emulator access</p>
+                                </div>
+                                <div class="feature">
+                                    <i class="fas fa-server"></i>
+                                    <h3>Real Mainframe</h3>
+                                    <p>Practice on actual MVS 3.8j systems (TK4- or TK5-)</p>
+                                </div>
+                                <div class="feature">
+                                    <i class="fas fa-chart-line"></i>
+                                    <h3>Track Progress</h3>
+                                    <p>Monitor your learning journey with detailed progress tracking</p>
+                                </div>
+                            </div>
+                            
+                            <div class="welcome-actions">
+                                <button class="btn btn-primary btn-large" id="start-learning">
+                                    <i class="fas fa-rocket"></i>
+                                    Start Learning
+                                </button>
+                                <button class="btn btn-secondary btn-large" id="view-emulator">
+                                    <i class="fas fa-external-link-alt"></i>
+                                    Open Emulator
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="exercise-view" id="exercise-view" style="display: none;">
+                        <div class="exercise-header">
+                            <button class="btn btn-back" id="back-to-welcome">
+                                <i class="fas fa-arrow-left"></i>
+                                Back to Overview
+                            </button>
+                            <h2 id="exercise-title">Exercise Title</h2>
+                            <div class="exercise-meta">
+                                <span class="exercise-level" id="exercise-level">Beginner</span>
+                                <span class="exercise-time" id="exercise-time">15-20 min</span>
+                            </div>
+                        </div>
+                        
+                        <div class="exercise-body">
+                            <div class="exercise-text" id="exercise-text">
+                                <!-- Exercise content will be loaded here -->
+                            </div>
+                            
+                            <div class="exercise-actions">
+                                <button class="btn btn-secondary" id="mark-complete">
+                                    <i class="fas fa-check"></i>
+                                    Mark Complete
+                                </button>
+                                <button class="btn btn-primary" id="open-emulator">
+                                    <i class="fas fa-external-link-alt"></i>
+                                    Open Emulator
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Emulator Panel -->
+                <div class="emulator-panel" id="emulator-panel">
+                    <div class="emulator-header">
+                        <h3><i class="fas fa-terminal"></i> Mainframe Emulator</h3>
+                        <div class="emulator-controls">
+                            <button class="btn btn-sm btn-secondary" id="emulator-refresh">
+                                <i class="fas fa-sync-alt"></i>
+                                Refresh
+                            </button>
+                            <button class="btn btn-sm btn-secondary" id="emulator-fullscreen">
+                                <i class="fas fa-expand"></i>
+                                Fullscreen
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="emulator-frame-container">
+                        <iframe 
+                            id="emulator-frame" 
+                            src="http://localhost:3270" 
+                            title="TKX-Hercules Mainframe Emulator"
+                            frameborder="0">
+                        </iframe>
+                    </div>
+                    
+                    <div class="emulator-info">
+                        <div class="info-item">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Connected to MVS 3.8j</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-user"></i>
+                            <span>Default: HERC01/CUL8TR</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Login Modal -->
+        <div class="modal" id="login-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Login to Track Progress</h3>
+                    <button class="modal-close" id="modal-close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="user-id-input">User ID:</label>
+                        <input type="text" id="user-id-input" placeholder="Enter your user ID">
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn btn-primary" id="login-submit">Login</button>
+                        <button class="btn btn-secondary" id="login-cancel">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div class="loading-overlay" id="loading-overlay">
+            <div class="loading-content">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Loading...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="app.js"></script>
+</body>
+</html> 
