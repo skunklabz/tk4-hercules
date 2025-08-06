@@ -1,52 +1,44 @@
 # *********************************************************************
-# Run TK5 (MVS 3.8j) in Docker container - LOCAL VERSION
+# Run TK5 (MVS 3.8j) in Docker container - AMD64 compatible version
 # *********************************************************************
 #
-# Use Ubuntu base with Hercules for AMD64 compatibility
+# Use Ubuntu 22.04 as a base and install Hercules
 #
 FROM ubuntu:22.04
 
-# Install Hercules and dependencies
-RUN apt-get update && apt-get install -y \
-    hercules \
-    libncurses5 \
-    libssl3 \
-    zlib1g \
-    libbz2-1.0 \
-    liblzma5 \
-    libreadline8 \
-    libsqlite3-0 \
-    libcurl4 \
-    libpcap0.8 \
-    libsdl2-2.0-0 \
-    libsdl2-image-2.0-0 \
-    libsdl2-ttf-2.0-0 \
-    libsdl2-mixer-2.0-0 \
-    && rm -rf /var/lib/apt/lists/*
+# Install Hercules and its dependencies
+RUN apt-get update && apt-get install -y hercules && rm -rf /var/lib/apt/lists/*
 
-# Create the expected Hercules directory structure for the mvs script
-RUN mkdir -p /opt/hercules/linux/64/bin /opt/hercules/linux/64/lib/hercules && \
-    ln -s /usr/bin/hercules /opt/hercules/linux/64/bin/hercules && \
-    ln -s /usr/lib /opt/hercules/linux/64/lib
+#
+# Set some environment variables
+#
+ENV HERCULES_RC         /opt/hercules/hercules.rc
+ENV HERCULES_CNF        /opt/hercules/hercules.cnf
+ENV HERCULES_LOG        /opt/hercules/hercules.log
+ENV TK5                 /opt/tk5
 
-# Set environment
-ARG HERCULES=/usr/local
-ARG TK5=/opt/tk5
-
-# Copy TK5 and Hercules from submodule
+#
+# Get the TK5 system
+#
 COPY ./external/mvs-tk5/mvs-tk5 $TK5
-RUN mkdir -p $TK5/hercules && chmod +x $TK5/mvs
 
+#
 # Make Hercules web Interface available inside TK5 as reference by
-# the default configuration scripts
-RUN ln -s $HERCULES/share/hercules $TK5/hercules/httproot
+# hercules.cnf
+#
+RUN ln -s /usr/share/hercules/ /opt/hercules/
 
-# Make required Ports available
-EXPOSE 3270/tcp
-EXPOSE 8038/tcp
+#
+# Expose ports for 3270 and the web interface
+#
+EXPOSE 3270 8038
 
-# Set working directory and define the default entrypoint into the
-# container to launch TK5 when starting the container
-VOLUME $TK5/dasd.usr
+#
+# Set working directory
+#
 WORKDIR $TK5
-ENTRYPOINT [ "./mvs" ] 
+
+#
+# Start Hercules
+#
+CMD /usr/bin/hercules -f $HERCULES_CNF -r $HERCULES_RC 2>&1 | tee $HERCULES_LOG 
