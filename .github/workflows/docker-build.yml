@@ -93,10 +93,11 @@ jobs:
     - name: Test TK5 container
       run: |
         echo "Testing TK5 container startup..."
-        docker run --rm -d --name test-tk5 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:tk5-latest
+        docker run -d --name test-tk5 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:tk5-latest
         sleep 5
         docker ps | grep test-tk5 || (docker logs test-tk5; exit 1)
         docker stop test-tk5 || echo "Container already stopped"
+        docker rm -f test-tk5 || echo "Container already removed"
         echo "✅ TK5 container test passed"
 
   build-main:
