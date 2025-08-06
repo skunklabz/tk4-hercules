@@ -6,7 +6,7 @@ RUN apt-get update && \
     apt-get install -y git build-essential autoconf automake libtool gawk libcap2-bin libbz2-dev zlib1g-dev libssl-dev
 
 # Clone and build SDL Hercules (separate layer)
-RUN git clone https://github.com/SDL-Hercules-390/hyperion.git /tmp/hercules && \
+RUN git clone https://github.com/patrickraths/SDL-Hercules-390.git /tmp/hercules && \
     cd /tmp/hercules && \
     ./autogen.sh && \
     ./configure --prefix=/opt/hercules && \
