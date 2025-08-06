@@ -81,7 +81,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: .
-        file: ./versions/tk5-external/Dockerfile.ci
+        file: ./versions/tk5-external/Dockerfile
         platforms: linux/amd64
         push: true
         tags: |
