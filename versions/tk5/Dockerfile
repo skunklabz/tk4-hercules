@@ -22,6 +22,7 @@ RUN apt-get update && apt-get install -y \
     libsdl2-image-2.0-0 \
     libsdl2-ttf-2.0-0 \
     libsdl2-mixer-2.0-0 \
+    gettext-base \
     && rm -rf /var/lib/apt/lists/*
 
 # Set environment
@@ -31,6 +32,10 @@ ARG TK5=/opt/tk5
 # Copy TK5 and Hercules from submodule
 COPY ./external/mvs-tk5/mvs-tk5 $TK5
 RUN mkdir -p $TK5/hercules
+
+# Copy the pre-processing script
+COPY versions/tk5/preprocess-config.sh $TK5/
+RUN chmod +x $TK5/preprocess-config.sh
 
 # Make Hercules web Interface available inside TK5 as reference by
 # the default configuration scripts
@@ -44,4 +49,4 @@ EXPOSE 8038/tcp
 # container to launch TK5 when starting the container
 VOLUME $TK5/dasd.usr
 WORKDIR $TK5
-ENTRYPOINT [ "./mvs" ] 
+ENTRYPOINT [ "./preprocess-config.sh" ] 

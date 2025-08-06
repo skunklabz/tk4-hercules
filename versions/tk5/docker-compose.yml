@@ -49,6 +49,18 @@ services:
       - TZ=UTC
       - HERCULES_VERSION=4.60
       - MVS_VERSION=3.8j-tk5
+      - EXPLICIT_LOG=#
+      - MAINSIZE=16
+      - CNSLPORT=3270
+      - HTTPPORT=8038
+      - NUMCPU=2
+      - MAXCPU=2
+      - TK5CRLF=CRLF
+      - RDRPORT=3505
+      - TK5CONS=intcons
+      - CNF101A=conf
+      - REP101A=default
+      - CMD101A=
     labels:
       - "com.skunklabz.description=MVS 3.8j Turnkey 5- System on Hercules Mainframe Emulator (patrickraths implementation)"
       - "com.skunklabz.version=1.2.0"
