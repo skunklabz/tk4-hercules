@@ -39,6 +39,6 @@ EXPOSE 3270 8038
 WORKDIR $TK5
 
 #
-# Start Hercules
+# Start Hercules (removed invalid -r option)
 #
-CMD /usr/bin/hercules -f $HERCULES_CNF -r $HERCULES_RC 2>&1 | tee $HERCULES_LOG 
+CMD /usr/bin/hercules -f $HERCULES_CNF 2>&1 | tee $HERCULES_LOG
