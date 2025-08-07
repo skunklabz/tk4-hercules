@@ -1,5 +1,5 @@
 
-FROM ubuntu:22.04
+FROM --platform=linux/amd64 ubuntu:22.04
 
 # Install build dependencies (layered for cache efficiency)
 RUN apt-get update && \
@@ -24,7 +24,7 @@ ARG TK5=/opt/tk5
 
 
 # Copy TK5 system (app code changes most often)
-COPY ./external/mvs-tk5/mvs-tk5 $TK5
+COPY ../../external/mvs-tk5/mvs-tk5 $TK5
 
 
 # Make Hercules web Interface available inside TK5 as referenced by config
@@ -32,7 +32,7 @@ RUN mkdir -p $TK5/hercules && ln -s $HERCULES/share/hercules $TK5/hercules/httpr
 
 
 # Copy Hercules config file for TK5
-COPY ./external/mvs-tk5/mvs-tk5/conf/tk5.cnf /opt/hercules/hercules.cnf
+COPY ../../external/mvs-tk5/mvs-tk5/conf/tk5.cnf /opt/hercules/hercules.cnf
 
 # Expose required ports
 EXPOSE 3270/tcp
@@ -43,6 +43,3 @@ EXPOSE 8038/tcp
 VOLUME $TK5/dasd.usr
 WORKDIR $TK5
 ENTRYPOINT ["./mvs"]
-
-# Copy Hercules config file for TK5
-COPY ./external/mvs-tk5/mvs-tk5/conf/tk5.cnf /opt/hercules/hercules.cnf

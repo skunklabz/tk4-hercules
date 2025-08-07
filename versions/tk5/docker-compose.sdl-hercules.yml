@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  tk5-sdl-hercules:
+    build:
+      context: ../..
+      dockerfile: versions/tk5/Dockerfile.sdl-hercules
+    container_name: tk5-sdl-hercules
+    ports:
+      - "3270:3270"
+      - "8038:8038"
+    volumes:
+      - tk5-dasd-usr:/opt/tk5/dasd.usr
+    environment:
+      - HERCULES_RC=/opt/tk5/hercules.rc
+      - HERCULES_CNF=/opt/tk5/hercules.cnf
+      - HERCULES_LOG=/opt/tk5/hercules.log
+    cap_add:
+      - SYS_NICE
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "pgrep", "hercules"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+volumes:
+  tk5-dasd-usr:
+    driver: local 
