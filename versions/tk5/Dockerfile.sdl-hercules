@@ -6,7 +6,7 @@
 #
 
 # Stage 1: Build SDL-Hercules-390
-FROM ubuntu:latest AS sdl-hercules-build
+FROM --platform=linux/amd64 ubuntu:latest AS sdl-hercules-build
 
 # Set source and target directories
 ARG SRC=/usr/src
@@ -25,6 +25,8 @@ RUN apt-get -y update && apt-get -y install \
 RUN git clone https://github.com/SDL-Hercules-390/gists.git $SRC/extpkgs
 COPY ./external/sdl-hercules-390/extpkgs/extpkgs.sh.ini $SRC/extpkgs/
 WORKDIR $SRC/extpkgs
+# Update extpkgs configuration for x86_64
+RUN sed -i 's/cpu.*=.*aarch64/cpu = x86_64/' extpkgs.sh.ini
 RUN ./extpkgs.sh clone c d s t
 
 # Download and compile Hyperion from Github
@@ -37,7 +39,7 @@ RUN make
 RUN sudo make install
 
 # Stage 2: Final TK5 container with SDL-Hercules-390
-FROM ubuntu:22.04 AS tk5-sdl-hercules
+FROM --platform=linux/amd64 ubuntu:22.04 AS tk5-sdl-hercules
 
 # Set environment variables
 ARG TGT=/opt/hercules

@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   tk5-sdl-hercules:
+    platform: linux/amd64
     build:
       context: ../..
       dockerfile: versions/tk5/Dockerfile.sdl-hercules

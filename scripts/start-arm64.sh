@@ -22,7 +22,7 @@ echo ""
 
 # Stop any running containers
 echo "🛑 Stopping any running containers..."
-docker-compose down 2>/dev/null || true
+docker compose down 2>/dev/null || true
 
 # Remove existing containers
 echo "🗑️  Cleaning up existing containers..."
@@ -34,13 +34,13 @@ echo ""
 
 # Method 1: Try with AMD64 platform
 echo "📋 Method 1: Using AMD64 platform with emulation..."
-PLATFORM=linux/amd64 docker-compose up -d
+PLATFORM=linux/amd64 docker compose up -d
 
 # Wait a moment for startup
 sleep 5
 
 # Check if it's working
-if docker-compose ps | grep -q "Up"; then
+if docker compose ps | grep -q "Up"; then
     echo "✅ Container started successfully with AMD64 platform"
     echo ""
     echo "🎯 Connection details:"
@@ -48,16 +48,16 @@ if docker-compose ps | grep -q "Up"; then
     echo "  Web Console: http://localhost:8038"
     echo ""
     echo "📋 Container status:"
-    docker-compose ps
+    docker compose ps
     echo ""
     echo "📋 Recent logs:"
-    docker-compose logs --tail=5
+    docker compose logs --tail=5
     echo ""
     echo "💡 If you still see symbol relocation errors, try Method 2"
     exit 0
 else
     echo "❌ Method 1 failed, trying Method 2..."
-    docker-compose down 2>/dev/null || true
+    docker compose down 2>/dev/null || true
 fi
 
 # Method 2: Try with different base image
@@ -71,7 +71,7 @@ if [ $? -eq 0 ]; then
     echo ""
     echo "🚀 Starting with Ubuntu-based image..."
     
-    # Create a simple docker-compose override
+    # Create a simple docker compose override
     cat > docker-compose.override.yml << EOF
 services:
   tkx-hercules:
@@ -79,13 +79,13 @@ image: tkx-hercules:ubuntu
     platform: linux/amd64
 EOF
     
-    docker-compose up -d
+    docker compose up -d
     
     # Wait a moment for startup
     sleep 5
     
     # Check if it's working
-    if docker-compose ps | grep -q "Up"; then
+    if docker compose ps | grep -q "Up"; then
         echo "✅ Container started successfully with Ubuntu image"
         echo ""
         echo "🎯 Connection details:"
@@ -93,10 +93,10 @@ EOF
         echo "  Web Console: http://localhost:8038"
         echo ""
         echo "📋 Container status:"
-        docker-compose ps
+        docker compose ps
         echo ""
         echo "📋 Recent logs:"
-        docker-compose logs --tail=5
+        docker compose logs --tail=5
         exit 0
     else
         echo "❌ Method 2 also failed"

@@ -36,7 +36,7 @@ The `docker-compose.yml` file is already configured to use the GHCR image:
 
 ```bash
 # Start the mainframe
-docker-compose up -d
+docker compose up -d
 
 # Connect to the mainframe
 telnet localhost 3270
@@ -108,7 +108,7 @@ For local development, you can still build and use local images:
 make build
 
 # Start with local image
-docker-compose up -d
+docker compose up -d
 ```
 
 ### Switching Between Registries

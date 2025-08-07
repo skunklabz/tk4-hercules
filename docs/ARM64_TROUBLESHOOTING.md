@@ -29,17 +29,17 @@ export PLATFORM=linux/amd64
 make start
 ```
 
-Or run directly with docker-compose:
+Or run directly with docker compose:
 
 ```bash
-PLATFORM=linux/amd64 docker-compose up -d
+PLATFORM=linux/amd64 docker compose up -d
 ```
 
 ### Solution 2: Use Docker Run with Platform Specification
 
 ```bash
 # Stop any running containers
-docker-compose down
+docker compose down
 
 # Run with explicit AMD64 platform
 docker run -d \
@@ -62,7 +62,7 @@ make build-multi
 make test-arm64
 
 # Start with local image
-docker-compose up -d
+docker compose up -d
 ```
 
 ### Solution 4: Use ARM64 Fix Script

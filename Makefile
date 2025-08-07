@@ -282,27 +282,27 @@ release-prep: test validate
 # Multi-version support
 build-tk4:
 	@echo "Building TK4- version..."
-	@MVS_VERSION=tk4 docker-compose build
+	@MVS_VERSION=tk4 docker compose build
 
 build-tk5:
 	@echo "Building TK5- version..."
-	@MVS_VERSION=tk5 docker-compose build
+	@MVS_VERSION=tk5 docker compose build
 
 build-tk5-external:
 	@echo "Building TK5- External version..."
-	@MVS_VERSION=tk5-external docker-compose build
+	@MVS_VERSION=tk5-external docker compose build
 
 start-tk4:
 	@echo "Starting TK4- version..."
-	@MVS_VERSION=tk4 docker-compose up -d
+	@MVS_VERSION=tk4 docker compose up -d
 
 start-tk5:
 	@echo "Starting TK5- version..."
-	@MVS_VERSION=tk5 docker-compose up -d
+	@MVS_VERSION=tk5 docker compose up -d
 
 start-tk5-external:
 	@echo "Starting TK5- External version..."
-	@MVS_VERSION=tk5-external docker-compose up -d
+	@MVS_VERSION=tk5-external docker compose up -d
 
 test-tk4:
 	@echo "Testing TK4- version..."
@@ -318,27 +318,27 @@ test-tk5-external:
 
 stop-tk4:
 	@echo "Stopping TK4- version..."
-	@MVS_VERSION=tk4 docker-compose down
+	@MVS_VERSION=tk4 docker compose down
 
 stop-tk5:
 	@echo "Stopping TK5- version..."
-	@MVS_VERSION=tk5 docker-compose down
+	@MVS_VERSION=tk5 docker compose down
 
 stop-tk5-external:
 	@echo "Stopping TK5- External version..."
-	@MVS_VERSION=tk5-external docker-compose down
+	@MVS_VERSION=tk5-external docker compose down
 
 logs-tk4:
 	@echo "Showing TK4- logs..."
-	@MVS_VERSION=tk4 docker-compose logs -f
+	@MVS_VERSION=tk4 docker compose logs -f
 
 logs-tk5:
 	@echo "Showing TK5- logs..."
-	@MVS_VERSION=tk5 docker-compose logs -f
+	@MVS_VERSION=tk5 docker compose logs -f
 
 logs-tk5-external:
 	@echo "Showing TK5- External logs..."
-	@MVS_VERSION=tk5-external docker-compose logs -f
+	@MVS_VERSION=tk5-external docker compose logs -f
 
 # Default version (TK4- for backward compatibility)
 build: build-tk4

@@ -56,7 +56,7 @@ if [ $? -eq 0 ]; then
     fi
     echo ""
     echo "🚀 To run the container:"
-    echo "   docker-compose up -d"
+    echo "   docker compose up -d"
     echo ""
     echo "🔍 To test the build:"
     echo "   docker run --rm -it ${LATEST_TAG} /bin/bash"

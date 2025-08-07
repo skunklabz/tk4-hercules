@@ -51,7 +51,7 @@ echo ""
 
 echo "🚀 Alternative: Use pre-built image"
 echo "   docker pull skunklabz/tkx-hercules:latest"
-echo "   docker-compose up -d"
+echo "   docker compose up -d"
 echo ""
 
 # Try to open archive.org in browser (macOS/Linux)

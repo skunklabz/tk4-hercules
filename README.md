@@ -21,13 +21,13 @@ make start-tk5
 # Run TK5- External (AMD64 compatible)
 make start-tk5-external
 
-# Run TK5- with SDL-Hercules-390 (Enhanced performance)
-docker-compose -f versions/tk5/docker-compose.sdl-hercules.yml up -d
+# Run TK5- with SDL-Hercules-390 (x86_64, Enhanced performance)
+docker compose -f versions/tk5/docker-compose.sdl-hercules.yml up -d
 
 # Or use Docker Compose directly
-MVS_VERSION=tk4 docker-compose up -d  # TK4- system
-MVS_VERSION=tk5 docker-compose up -d  # TK5- system
-MVS_VERSION=tk5-external docker-compose up -d  # TK5- external system
+MVS_VERSION=tk4 docker compose up -d  # TK4- system
+MVS_VERSION=tk5 docker compose up -d  # TK5- system
+MVS_VERSION=tk5-external docker compose up -d  # TK5- external system
 ```
 
 ### Using GitHub Container Registry (Recommended)
@@ -64,7 +64,7 @@ If you're running on ARM64 (Apple Silicon Macs, ARM servers), you may encounter 
 
 ```bash
 # Force AMD64 platform for ARM64 systems
-PLATFORM=linux/amd64 docker-compose up -d
+PLATFORM=linux/amd64 docker compose up -d
 
 # Or set environment variable
 export PLATFORM=linux/amd64
@@ -83,7 +83,7 @@ For detailed troubleshooting, see [ARM64 Troubleshooting Guide](docs/ARM64_TROUB
 | **New Features** | Basic MVS | ISPF 2.2, INTERCOMM, LUA370, SLIM, STF | ISPF 2.2, INTERCOMM, LUA370, SLIM, STF |
 | **Update Strategy** | Full system updates | Selective volume updates | Selective volume updates |
 | **Volume Isolation** | Shared volumes | Separate namespaces | Separate namespaces |
-| **Performance** | Standard | Standard | Enhanced (especially ARM64) |
+| **Performance** | Standard | Standard | Enhanced (x86_64 optimized) |
 | **Build Time** | Fast | Fast | Slower (compiles from source) |
 
 ## What are TK4- and TK5-?
@@ -95,7 +95,7 @@ TK4- is a pre-configured IBM MVS 3.8j system created by Jürgen Winkelmann, base
 TK5- is the latest evolution by Rob Prins, featuring a streamlined architecture with 15 DASD volumes (reduced from 28 in TK4+) and enhanced functionality including modern tools and applications.
 
 ### SDL-Hercules-390
-SDL-Hercules-390 is a modern, actively maintained fork of the Hercules emulator that provides enhanced performance and better ARM64 support. The TK5- SDL-Hercules-390 version compiles the emulator from source for optimal performance and compatibility.
+SDL-Hercules-390 is a modern, actively maintained fork of the Hercules emulator that provides enhanced performance and better compatibility. The TK5- SDL-Hercules-390 version compiles the emulator from source for optimal performance on x86_64 architecture.
 
 ### Features
 

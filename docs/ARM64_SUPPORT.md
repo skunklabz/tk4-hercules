@@ -58,7 +58,7 @@ docker buildx build --platform linux/amd64,linux/arm64 -t ghcr.io/skunklabz/tkx-
 
 ```bash
 # The image will automatically use the correct architecture
-docker-compose up -d
+docker compose up -d
 ```
 
 ### Using Docker Run

@@ -1,6 +1,6 @@
-# TK5 with SDL-Hercules-390
+# TK5 with SDL-Hercules-390 (x86_64)
 
-This directory contains the Docker setup for running MVS TK5 using SDL-Hercules-390 (Hyperion) instead of the standard Hercules emulator.
+This directory contains the Docker setup for running MVS TK5 using SDL-Hercules-390 (Hyperion) instead of the standard Hercules emulator. This version is specifically built for x86_64/AMD64 architecture.
 
 ## What is SDL-Hercules-390?
 
@@ -53,9 +53,10 @@ docker run -it --name tk5-sdl-hercules \
 ## Differences from Standard TK5
 
 1. **Build Process**: Uses a multi-stage build to compile SDL-Hercules-390 from source
-2. **Performance**: Potentially better performance, especially on ARM64 systems
-3. **Capabilities**: Includes additional system capabilities for better emulation
-4. **Dependencies**: Includes additional runtime dependencies for SDL-Hercules-390
+2. **Architecture**: Specifically built for x86_64/AMD64 architecture
+3. **Performance**: Potentially better performance and compatibility on x86_64 systems
+4. **Capabilities**: Includes additional system capabilities for better emulation
+5. **Dependencies**: Includes additional runtime dependencies for SDL-Hercules-390
 
 ## Ports
 
@@ -95,7 +96,7 @@ If you encounter build issues:
 | Build Time | Fast | Slower (compiles from source) |
 | Image Size | Smaller | Larger (includes build tools) |
 | Performance | Good | Potentially better |
-| ARM64 Support | Limited | Enhanced |
+| Architecture | Multi-arch | x86_64/AMD64 specific |
 | Maintenance | Package-based | Source-based |
 
 ## Contributing
