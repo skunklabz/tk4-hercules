@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Test runner script for TKX-Hercules LMS
+# Test runner script for TK4-Hercules LMS
 # This script runs tests in Docker containers with proper cleanup
 
 set -e

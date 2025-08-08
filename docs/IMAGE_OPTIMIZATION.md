@@ -1,6 +1,6 @@
 # Docker Image Optimization
 
-This document outlines the optimization strategies implemented to minimize the TKX-Hercules Docker image size.
+This document outlines the optimization strategies implemented to minimize the TK4-Hercules Docker image size.
 
 ## Optimization Results
 
@@ -120,17 +120,17 @@ make build-ghcr
 
 ### Image Size Monitoring
 ```bash
-docker images | grep tkx-hercules
+docker images | grep tk4-hercules
 ```
 
 ### Component Size Analysis
 ```bash
-docker run --rm -it ghcr.io/skunklabz/tkx-hercules:latest sh -c "du -sh /tk4-/* | sort -hr"
+docker run --rm -it ghcr.io/skunklabz/tk4-hercules:latest sh -c "du -sh /tk4-/* | sort -hr"
 ```
 
 ### Health Check
 ```bash
-docker run --rm -d --name test-tk4 ghcr.io/skunklabz/tkx-hercules:latest
+docker run --rm -d --name test-tk4 ghcr.io/skunklabz/tk4-hercules:latest
 docker logs test-tk4
 docker stop test-tk4
 ```

@@ -98,7 +98,7 @@ make start
 
 ### ARM64 Support
 
-TKX-Hercules now supports ARM64 architecture, including Apple Silicon Macs and ARM-based servers. The image automatically detects your platform and uses the appropriate Hercules binary.
+TK4-Hercules now supports ARM64 architecture, including Apple Silicon Macs and ARM-based servers. The image automatically detects your platform and uses the appropriate Hercules binary.
 
 **Note:** ARM64 support currently uses x86_64 emulation due to limitations in the TK4- distribution. Native ARM64 binaries are planned for future releases.
 

@@ -1,1 +1,1 @@
-# Configuration files for TKX-Hercules
+# Configuration files for TK4-Hercules

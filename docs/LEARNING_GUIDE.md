@@ -1,4 +1,4 @@
-# TKX-Hercules Learning Guide: Mainframe Computing Adventures
+# TK4-Hercules Learning Guide: Mainframe Computing Adventures
 
 Welcome to the exciting world of mainframe computing! This guide will take you through fun, hands-on exercises to learn about IBM MVS 3.8j and mainframe computing concepts. Whether you're a complete beginner or an experienced programmer, these exercises will help you understand the fascinating world of vintage computing.
 
@@ -15,7 +15,7 @@ By completing these exercises, you'll learn:
 ## 📚 Prerequisites
 
 Before starting these exercises, make sure you have:
-1. **TKX-Hercules running**: Follow the main [README.md](README.md) to get your mainframe emulator running
+1. **TK4-Hercules running**: Follow the main [README.md](README.md) to get your mainframe emulator running
 2. **3270 Terminal Emulator**: Install `c3270` or similar 3270 emulator
 3. **Patience**: Mainframes are deliberate systems - things take time, and that's part of the learning experience!
 
@@ -415,4 +415,4 @@ Remember: Mainframes are about **reliability**, **security**, and **scalability*
 
 ---
 
-*This learning guide is based on educational content from various mainframe computing resources and adapted for the TKX-Hercules Docker container. Special thanks to the Hercules community and all the contributors who have made mainframe education accessible to everyone.* 
+*This learning guide is based on educational content from various mainframe computing resources and adapted for the TK4-Hercules Docker container. Special thanks to the Hercules community and all the contributors who have made mainframe education accessible to everyone.*

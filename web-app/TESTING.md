@@ -1,6 +1,6 @@
-# Testing Guide for TKX-Hercules LMS
+# Testing Guide for TK4-Hercules LMS
 
-This document explains how to run tests for the TKX-Hercules LMS web application using Docker containers.
+This document explains how to run tests for the TK4-Hercules LMS web application using Docker containers.
 
 ## Overview
 

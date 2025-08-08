@@ -1,6 +1,6 @@
 # ARM64 Troubleshooting Guide
 
-This guide helps resolve ARM64 compatibility issues with TKX-Hercules, particularly the symbol relocation errors you may encounter.
+This guide helps resolve ARM64 compatibility issues with TK4-Hercules, particularly the symbol relocation errors you may encounter.
 
 ## Common Issues
 
@@ -44,10 +44,10 @@ docker compose down
 # Run with explicit AMD64 platform
 docker run -d \
   --platform linux/amd64 \
-  --name tkx-hercules \
+  --name tk4-hercules \
   -p 3270:3270 \
   -p 8038:8038 \
-  ghcr.io/skunklabz/tkx-hercules:latest
+  ghcr.io/skunklabz/tk4-hercules:latest
 ```
 
 ### Solution 3: Build Local Image with ARM64 Fixes
@@ -165,7 +165,7 @@ Ensure you have multi-platform build support.
 ### Step 3: Check Image Platform
 
 ```bash
-docker image inspect ghcr.io/skunklabz/tkx-hercules:latest | grep Architecture
+docker image inspect ghcr.io/skunklabz/tk4-hercules:latest | grep Architecture
 ```
 
 ### Step 4: Test QEMU Emulation

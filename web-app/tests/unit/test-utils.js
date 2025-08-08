@@ -1,5 +1,5 @@
 /**
- * Test utilities for TKX-Hercules LMS unit tests
+* Test utilities for TK4-Hercules LMS unit tests
  */
 
 // Mock DOM elements

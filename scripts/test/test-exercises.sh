@@ -111,12 +111,7 @@ test_exercise_content() {
 test_submodules() {
     echo -e "${BLUE}🔗 Testing submodule availability...${NC}"
     
-    # Check SDL-Hercules-390 submodule
-    if [ -d "external/sdl-hercules-390" ]; then
-        log_test "SDL-Hercules-390 Submodule" "PASS" "Submodule found"
-    else
-        log_test "SDL-Hercules-390 Submodule" "FAIL" "Submodule missing"
-    fi
+:
 }
 
 # Function to test Docker build

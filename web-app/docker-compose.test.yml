@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.test
-    container_name: tkx-hercules-lms-app
+    container_name: tk4-hercules-lms-app
     ports:
       - "3000:3000"
     environment:
@@ -31,7 +31,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.test
-    container_name: tkx-hercules-test-unit
+    container_name: tk4-hercules-test-unit
     volumes:
       - ./test-results:/app/test-results
       - ./coverage:/app/coverage
@@ -48,7 +48,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.test
-    container_name: tkx-hercules-test-integration
+    container_name: tk4-hercules-test-integration
     volumes:
       - ./test-results:/app/test-results
       - ./playwright-report:/app/playwright-report
@@ -74,7 +74,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.test
-    container_name: tkx-hercules-test-all
+    container_name: tk4-hercules-test-all
     volumes:
       - ./test-results:/app/test-results
       - ./coverage:/app/coverage
@@ -100,7 +100,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.test
-    container_name: tkx-hercules-test-debug
+    container_name: tk4-hercules-test-debug
     volumes:
       - ./test-results:/app/test-results
       - ./coverage:/app/coverage

@@ -2,7 +2,7 @@
 
 # TK4-Hercules Docker Build Script
 # This script builds the Docker image with proper tagging and testing
-# Now uses SDL-Hercules-390 submodule instead of building Hercules from source
+# Build script for Docker image
 
 set -e  # Exit on any error
 
