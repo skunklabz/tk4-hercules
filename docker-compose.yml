@@ -1,10 +1,10 @@
-name: tkx-hercules-tk4
+name: tk4-hercules
 
 services:
-  tkx-hercules:
+  tk4-hercules:
     extends:
       file: ./versions/${MVS_VERSION:-tk4}/docker-compose.yml
-      service: tkx-hercules
+      service: tk4-hercules
 
 volumes:
   # TK4- volumes

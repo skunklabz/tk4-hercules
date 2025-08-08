@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# TKX-Hercules Exercise Test Script
+# TK4-Hercules Exercise Test Script
 # Tests exercise file structure, container startup, and basic mainframe functionality
 # TK4-only
 
@@ -13,7 +13,7 @@ NC='\033[0m' # No Color
 
 # Get version from environment or default to tk4
 MVS_VERSION=${MVS_VERSION:-tk4}
-CONTAINER_NAME="tkx-hercules-${MVS_VERSION}"
+CONTAINER_NAME="tk4-hercules-${MVS_VERSION}"
 DOCKERFILE_PATH="Dockerfile"
 
 # Test counter
@@ -21,7 +21,7 @@ TESTS_PASSED=0
 TESTS_FAILED=0
 TESTS_SKIPPED=0
 
-echo "🧪 TKX-Hercules Exercise Tests ($(echo ${MVS_VERSION} | tr '[:lower:]' '[:upper:]'))"
+echo "🧪 TK4-Hercules Exercise Tests ($(echo ${MVS_VERSION} | tr '[:lower:]' '[:upper:]'))"
 echo "================================================"
 echo "Testing:"
 echo "  - Exercise file structure"
@@ -129,11 +129,11 @@ test_docker_build() {
         
         # Try to build the image
         echo "Building Docker image (this may take several minutes)..."
-        if docker build --platform linux/amd64 -t test-tkx-hercules -f "$DOCKERFILE_PATH" . >/dev/null 2>&1; then
+    if docker build --platform linux/amd64 -t test-tk4-hercules -f "$DOCKERFILE_PATH" . >/dev/null 2>&1; then
             log_test "Docker Build" "PASS" "Image built successfully"
             
             # Clean up test image
-            docker rmi test-tkx-hercules >/dev/null 2>&1 || true
+            docker rmi test-tk4-hercules >/dev/null 2>&1 || true
         else
             log_test "Docker Build" "FAIL" "Build failed"
         fi
@@ -202,7 +202,7 @@ test_mainframe_functionality() {
 
 # Main test execution
 main() {
-    echo "Starting TKX-Hercules exercise tests..."
+echo "Starting TK4-Hercules exercise tests..."
     echo ""
     
     # Run all tests
@@ -235,7 +235,7 @@ main() {
     if [ $TESTS_FAILED -eq 0 ]; then
         echo -e "${GREEN}✅ All tests passed!${NC}"
         echo ""
-        echo "🎉 TKX-Hercules is ready to use!"
+        echo "🎉 TK4-Hercules is ready to use!"
         echo "Connect to mainframe: telnet localhost 3270"
         echo "Web console: http://localhost:8038"
         exit 0

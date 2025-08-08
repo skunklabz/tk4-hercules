@@ -1,6 +1,6 @@
-# TKX-Hercules Learning Exercises
+# TK4-Hercules Learning Exercises
 
-Welcome to the TKX-Hercules learning journey! This directory contains individual exercises designed to help you learn mainframe computing step by step.
+Welcome to the TK4-Hercules learning journey! This directory contains individual exercises designed to help you learn mainframe computing step by step.
 
 ## 🎯 Learning Path
 

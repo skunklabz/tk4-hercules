@@ -1,4 +1,4 @@
-# TKX-Hercules Makefile
+# TK4-Hercules Makefile
 # Common development tasks for the project
 
 .PHONY: help build build-platform build-multi start stop test test-arm64 validate clean docs build-ghcr push-ghcr version bump-patch bump-minor bump-major
@@ -8,7 +8,7 @@ VERSION := $(shell cat VERSION)
 
 # Default target
 help:
-	@echo "TKX-Hercules Development Commands"
+    @echo "TK4-Hercules Development Commands"
 	@echo "================================="
 	@echo ""
 	@echo "Version Management:"
@@ -93,7 +93,7 @@ bump-major:
 
 # Build commands
 build:
-	@echo "Building TKX-Hercules container..."
+    @echo "Building TK4-Hercules container..."
 	@./scripts/build/build.sh
 
 build-platform:
@@ -120,11 +120,11 @@ login-ghcr:
 
 # Container management
 start:
-	@echo "Starting TKX-Hercules mainframe..."
+    @echo "Starting TK4-Hercules mainframe..."
 	@echo "Building local image if needed..."
-	@docker build --platform linux/amd64 -t tkx-hercules:latest .
+    @docker build --platform linux/amd64 -t tk4-hercules:latest .
 	@echo "Starting container with local image..."
-	@docker run -d --name tkx-hercules \
+    @docker run -d --name tk4-hercules \
 		--platform linux/amd64 \
 		-p 3270:3270 \
 		-p 8038:8038 \
@@ -139,21 +139,21 @@ start:
 		--restart unless-stopped \
 		--memory=2g \
 		--cpus=2.0 \
-		tkx-hercules:latest
+        tk4-hercules:latest
 
 stop:
-	@echo "Stopping TKX-Hercules mainframe..."
-	@docker stop tkx-hercules 2>/dev/null || true
-	@docker rm tkx-hercules 2>/dev/null || true
+    @echo "Stopping TK4-Hercules mainframe..."
+    @docker stop tk4-hercules 2>/dev/null || true
+    @docker rm tk4-hercules 2>/dev/null || true
 
 restart: stop start
-	@echo "Restarted TKX-Hercules mainframe"
+    @echo "Restarted TK4-Hercules mainframe"
 
 logs:
-	@docker logs -f tkx-hercules
+    @docker logs -f tk4-hercules
 
 shell:
-	@docker exec -it tkx-hercules /bin/bash
+    @docker exec -it tk4-hercules /bin/bash
 
 # Testing commands
 test:
@@ -210,8 +210,8 @@ validate:
 clean:
 	@echo "Cleaning up containers and images..."
 	@docker compose down -v
-	@docker rmi tkx-hercules:latest 2>/dev/null || true
-	@docker rmi ghcr.io/skunklabz/tkx-hercules:latest 2>/dev/null || true
+    @docker rmi tk4-hercules:latest 2>/dev/null || true
+    @docker rmi ghcr.io/skunklabz/tk4-hercules:latest 2>/dev/null || true
 	@docker system prune -f
 
 docs:
@@ -303,11 +303,11 @@ status:
 	@echo "8038 (Web): $(shell netstat -an 2>/dev/null | grep :8038 || echo 'Not listening')"
 
 info:
-	@echo "TKX-Hercules Project Information"
+    @echo "TK4-Hercules Project Information"
 	@echo "================================"
 	@echo "Version: $(VERSION)"
     @echo "Mainframe: IBM MVS 3.8j (TK4-)"
-	@echo "Emulator: SDL-Hercules-390 (Hyperion)"
+    @echo "Emulator: Hercules"
 	@echo "Container: Docker"
 	@echo "Registry: GitHub Container Registry (ghcr.io)"
 	@echo ""
@@ -320,7 +320,7 @@ info:
 	@echo "Documentation:"
 	@echo "- README.md: Quick start guide"
 	@echo "- docs/TKX_MIGRATION_PLAN.md: Migration strategy"
-    @echo "- docs/SDL_HERCULES_MIGRATION.md: Migration notes"
+    @echo "- docs/ARM64_SUPPORT.md: Platform notes"
 	@echo "- docs/ATTRIBUTIONS.md: Credits and acknowledgments"
 	@echo ""
 	@echo "Scripts:"

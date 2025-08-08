@@ -13,7 +13,7 @@ currently being supported with security updates.
 
 ## Reporting a Vulnerability
 
-We take security vulnerabilities seriously. If you discover a security vulnerability in TKX-Hercules, please follow these steps:
+We take security vulnerabilities seriously. If you discover a security vulnerability in TK4-Hercules, please follow these steps:
 
 ### 1. **DO NOT** create a public GitHub issue
 Security vulnerabilities should be reported privately to avoid potential exploitation.
@@ -21,7 +21,7 @@ Security vulnerabilities should be reported privately to avoid potential exploit
 ### 2. Report the vulnerability
 Please email your findings to security@skunklabz.com with the following information:
 
-- **Subject**: `[SECURITY] TKX-Hercules Vulnerability Report`
+- **Subject**: `[SECURITY] TK4-Hercules Vulnerability Report`
 - **Description**: Detailed description of the vulnerability
 - **Steps to reproduce**: Clear steps to reproduce the issue
 - **Impact**: Potential impact of the vulnerability

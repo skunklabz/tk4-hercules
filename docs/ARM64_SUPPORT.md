@@ -1,6 +1,6 @@
-# ARM64 Support for TKX-Hercules
+# ARM64 Support for TK4-Hercules
 
-This document describes the ARM64 support added to the TKX-Hercules project.
+This document describes the ARM64 support added to the TK4-Hercules project.
 
 ## Overview
 
@@ -46,10 +46,10 @@ make build-ghcr
 
 ```bash
 # Build for multiple platforms
-docker buildx build --platform linux/amd64,linux/arm64 -t tkx-hercules:latest .
+docker buildx build --platform linux/amd64,linux/arm64 -t tk4-hercules:latest .
 
 # Build and push to registry
-docker buildx build --platform linux/amd64,linux/arm64 -t ghcr.io/skunklabz/tkx-hercules:latest --push .
+docker buildx build --platform linux/amd64,linux/arm64 -t ghcr.io/skunklabz/tk4-hercules:latest --push .
 ```
 
 ## Running on ARM64
@@ -65,14 +65,14 @@ docker compose up -d
 
 ```bash
 # Pull the latest multi-platform image
-docker pull ghcr.io/skunklabz/tkx-hercules:latest
+docker pull ghcr.io/skunklabz/tk4-hercules:latest
 
 # Run the container
 docker run -d \
-  --name tkx-hercules \
+  --name tk4-hercules \
   -p 3270:3270 \
   -p 8038:8038 \
-  ghcr.io/skunklabz/tkx-hercules:latest
+  ghcr.io/skunklabz/tk4-hercules:latest
 ```
 
 ## Testing ARM64 Support
@@ -105,7 +105,7 @@ For ARM64 systems, we recommend using the native ARM64 image:
 
 ```bash
 # This will automatically pull the ARM64 version
-docker pull ghcr.io/skunklabz/tkx-hercules:latest
+docker pull ghcr.io/skunklabz/tk4-hercules:latest
 ```
 
 ## Troubleshooting
@@ -116,10 +116,10 @@ If you see warnings about platform mismatch, ensure you're using the multi-platf
 
 ```bash
 # Check image platform
-docker image inspect ghcr.io/skunklabz/tkx-hercules:latest | grep Architecture
+docker image inspect ghcr.io/skunklabz/tk4-hercules:latest | grep Architecture
 
 # Pull fresh multi-platform image
-docker pull ghcr.io/skunklabz/tkx-hercules:latest
+docker pull ghcr.io/skunklabz/tk4-hercules:latest
 ```
 
 ### Build Issues
@@ -133,12 +133,12 @@ If you encounter build issues on ARM64:
 
 2. Create a new builder instance:
    ```bash
-   docker buildx create --name tkx-hercules-builder --use
+docker buildx create --name tk4-hercules-builder --use
    ```
 
 3. Build with explicit platform:
    ```bash
-   docker build --platform linux/arm64 -t tkx-hercules:arm64 .
+docker build --platform linux/arm64 -t tk4-hercules:arm64 .
    ```
 
 ## Technical Details

@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Version Bump**: Incremented to 1.2.0 for significant repository change
 
 ### Fixed
-- **Repository References**: Updated all tk4-hercules references to tkx-hercules
+- **Repository References**: Updated all references to tk4-hercules
 - **Documentation Cleanup**: Removed outdated references and improved clarity
 
 ## [1.1.1] - 2025-01-XX

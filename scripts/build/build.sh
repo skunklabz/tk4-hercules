@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# TKX-Hercules Docker Build Script
+# TK4-Hercules Docker Build Script
 # This script builds the Docker image with proper tagging and testing
 # Now uses SDL-Hercules-390 submodule instead of building Hercules from source
 
@@ -10,8 +10,8 @@ set -e  # Exit on any error
 VERSION=$(cat ../VERSION | tr -d ' ')
 
 # Configuration
-IMAGE_NAME="skunklabz/tkx-hercules"
-GHCR_IMAGE_NAME="ghcr.io/skunklabz/tkx-hercules"
+IMAGE_NAME="skunklabz/tk4-hercules"
+GHCR_IMAGE_NAME="ghcr.io/skunklabz/tk4-hercules"
 LATEST_TAG="${IMAGE_NAME}:latest"
 VERSION_TAG="${IMAGE_NAME}:v${VERSION}"
 GHCR_LATEST_TAG="${GHCR_IMAGE_NAME}:latest"
@@ -26,7 +26,7 @@ else
     USE_GHCR=false
 fi
 
-echo "🐳 Building TKX-Hercules Docker Image"
+echo "🐳 Building TK4-Hercules Docker Image"
 echo "======================================"
 echo "Image: ${IMAGE_NAME}"
 echo "GHCR Image: ${GHCR_IMAGE_NAME}"
@@ -36,10 +36,6 @@ echo ""
 
 # Check if submodules are initialized
 echo "🔍 Checking submodules..."
-if [ ! -d "external/sdl-hercules-390" ]; then
-    echo "❌ SDL-Hercules-390 submodule not found. Initializing submodules..."
-    git submodule update --init --recursive
-fi
 
 # Build the image with platform support
 echo "📦 Building Docker image..."
@@ -74,7 +70,7 @@ if [ $? -eq 0 ]; then
         echo "   docker push ${GHCR_LATEST_TAG}"
         echo "   docker push ${GHCR_VERSION_TAG}"
         echo ""
-        echo "🔗 GHCR URL: https://ghcr.io/skunklabz/tkx-hercules"
+echo "🔗 GHCR URL: https://ghcr.io/skunklabz/tk4-hercules"
     else
         echo "📤 To push to GitHub Container Registry:"
         echo "   ./scripts/build/build.sh --ghcr"

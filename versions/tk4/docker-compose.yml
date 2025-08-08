@@ -1,10 +1,10 @@
 services:
-  tkx-hercules:
+  tk4-hercules:
     build:
       context: ../..
       dockerfile: Dockerfile
     platform: ${PLATFORM:-linux/amd64}
-    container_name: tkx-hercules-tk4
+    container_name: tk4-hercules
     stdin_open: true          # docker run -i
     tty: true                 # docker run -t
     cap_add:

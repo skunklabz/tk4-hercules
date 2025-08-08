@@ -1,9 +1,9 @@
-# TKX-Hercules (TK4- only)
+# TK4-Hercules
 
 A Docker containerized IBM MVS 3.8j mainframe emulator featuring the TK4- system for educational mainframe computing and historical preservation.
 
-[![Docker Build](https://github.com/skunklabz/tkx-hercules/workflows/Build%20Docker%20Image/badge.svg)](https://github.com/skunklabz/tkx-hercules/actions)
-[![GitHub Container Registry](https://img.shields.io/badge/GHCR-ghcr.io%2Fskunklabz%2Ftkx--hercules-blue)](https://ghcr.io/skunklabz/tkx-hercules)
+[![Docker Build](https://github.com/skunklabz/tk4-hercules/workflows/Build%20Docker%20Image/badge.svg)](https://github.com/skunklabz/tk4-hercules/actions)
+[![GitHub Container Registry](https://img.shields.io/badge/GHCR-ghcr.io%2Fskunklabz%2Ftk4--hercules-blue)](https://ghcr.io/skunklabz/tk4-hercules)
 
 ## Quick Start
 
@@ -19,10 +19,10 @@ make start
 ```bash
 # Pull and run TK4-
 docker run -d \
-  --name tkx-hercules-tk4 \
+  --name tk4-hercules \
   -p 3270:3270 \
   -p 8038:8038 \
-  ghcr.io/skunklabz/tkx-hercules:tk4-latest
+  ghcr.io/skunklabz/tk4-hercules:latest
 ```
 
 ### Connect to the Mainframe
@@ -72,7 +72,7 @@ make start
 
 ### GitHub Container Registry (GHCR)
 
-- **TK4- Latest**: `ghcr.io/skunklabz/tkx-hercules:tk4-latest`
+- **TK4- Latest**: `ghcr.io/skunklabz/tk4-hercules:latest`
 
 ## Development
 
@@ -86,8 +86,8 @@ make start
 
 ```bash
 # Clone the repository
-git clone https://github.com/skunklabz/tkx-hercules.git
-cd tkx-hercules
+git clone https://github.com/skunklabz/tk4-hercules.git
+cd tk4-hercules
 
 # Build the image
 make build
@@ -211,8 +211,8 @@ The container uses 8 persistent volume mounts:
 
 ## Support
 
-- **Issues**: [GitHub Issues](https://github.com/skunklabz/tkx-hercules/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/skunklabz/tkx-hercules/discussions)
+- **Issues**: [GitHub Issues](https://github.com/skunklabz/tk4-hercules/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/skunklabz/tk4-hercules/discussions)
 - **Documentation**: [docs/](docs/) directory
 
 ## License
