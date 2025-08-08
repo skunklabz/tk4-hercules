@@ -28,22 +28,7 @@ describe('API Functions', () => {
       expect(data.exercises).toEqual(mockExercises);
     });
 
-    test('should fetch exercises for tk5 version', async () => {
-      const mockExercises = [
-        { id: 'tk5-1', title: 'TK5 Exercise 1', section: 'beginner' }
-      ];
-
-      global.fetch = jest.fn().mockResolvedValue({
-        ok: true,
-        json: () => Promise.resolve({ exercises: mockExercises })
-      });
-
-      const response = await fetch('/api/exercises/tk5');
-      const data = await response.json();
-
-      expect(fetch).toHaveBeenCalledWith('/api/exercises/tk5');
-      expect(data.exercises).toEqual(mockExercises);
-    });
+    // TK4-only: removed TK5 fetch test
 
     test('should handle exercise fetch errors', async () => {
       global.fetch = jest.fn().mockRejectedValue(new Error('Network error'));
@@ -192,7 +177,7 @@ describe('API Functions', () => {
       };
 
       expect(isValidExerciseId('exercise-1')).toBe(true);
-      expect(isValidExerciseId('tk5-exercise-1')).toBe(true);
+      // TK4-only: removed TK5-specific ID assertion
       expect(isValidExerciseId('')).toBe(false);
       expect(isValidExerciseId('exercise<1>')).toBe(false);
       expect(isValidExerciseId(null)).toBe(false);
@@ -200,11 +185,11 @@ describe('API Functions', () => {
 
     test('should validate version parameter', () => {
       const isValidVersion = (version) => {
-        return ['tk4', 'tk5'].includes(version);
+        return ['tk4'].includes(version);
       };
 
       expect(isValidVersion('tk4')).toBe(true);
-      expect(isValidVersion('tk5')).toBe(true);
+      // TK4-only: removed TK5 version assertion
       expect(isValidVersion('tk3')).toBe(false);
       expect(isValidVersion('')).toBe(false);
       expect(isValidVersion(null)).toBe(false);
