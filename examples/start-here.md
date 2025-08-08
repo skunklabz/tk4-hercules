@@ -1,6 +1,6 @@
 # 🚀 Quick Start: Begin Your Mainframe Journey
 
-Welcome to the TKX-Hercules learning exercises! This guide will help you get started quickly.
+Welcome to the TK4-Hercules learning exercises! This guide will help you get started quickly.
 
 ## 🎯 Choose Your Path
 
