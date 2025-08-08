@@ -8,7 +8,7 @@ VERSION := $(shell cat VERSION)
 
 # Default target
 help:
-    @echo "TK4-Hercules Development Commands"
+	@echo "TK4-Hercules Development Commands"
 	@echo "================================="
 	@echo ""
 	@echo "Version Management:"
@@ -93,7 +93,7 @@ bump-major:
 
 # Build commands
 build:
-    @echo "Building TK4-Hercules container..."
+	@echo "Building TK4-Hercules container..."
 	@./scripts/build/build.sh
 
 build-platform:
@@ -120,11 +120,11 @@ login-ghcr:
 
 # Container management
 start:
-    @echo "Starting TK4-Hercules mainframe..."
+	@echo "Starting TK4-Hercules mainframe..."
 	@echo "Building local image if needed..."
-    @docker build --platform linux/amd64 -t tk4-hercules:latest .
+	@docker build --platform linux/amd64 -t tk4-hercules:latest .
 	@echo "Starting container with local image..."
-    @docker run -d --name tk4-hercules \
+	@docker run -d --name tk4-hercules \
 		--platform linux/amd64 \
 		-p 3270:3270 \
 		-p 8038:8038 \
@@ -142,18 +142,18 @@ start:
         tk4-hercules:latest
 
 stop:
-    @echo "Stopping TK4-Hercules mainframe..."
-    @docker stop tk4-hercules 2>/dev/null || true
-    @docker rm tk4-hercules 2>/dev/null || true
+	@echo "Stopping TK4-Hercules mainframe..."
+	@docker stop tk4-hercules 2>/dev/null || true
+	@docker rm tk4-hercules 2>/dev/null || true
 
 restart: stop start
-    @echo "Restarted TK4-Hercules mainframe"
+	@echo "Restarted TK4-Hercules mainframe"
 
 logs:
-    @docker logs -f tk4-hercules
+	@docker logs -f tk4-hercules
 
 shell:
-    @docker exec -it tk4-hercules /bin/bash
+	@docker exec -it tk4-hercules /bin/bash
 
 # Testing commands
 test:
@@ -161,7 +161,7 @@ test:
 	@echo "This tests:"
 	@echo "  - Exercise file structure"
 	@echo "  - Container startup and connectivity"
-  @echo "  - Basic mainframe functionality (TK4-)"
+	@echo "  - Basic mainframe functionality (TK4-)"
 	@./scripts/test/test-exercises.sh
 
 test-quick:
@@ -210,8 +210,8 @@ validate:
 clean:
 	@echo "Cleaning up containers and images..."
 	@docker compose down -v
-    @docker rmi tk4-hercules:latest 2>/dev/null || true
-    @docker rmi ghcr.io/skunklabz/tk4-hercules:latest 2>/dev/null || true
+	@docker rmi tk4-hercules:latest 2>/dev/null || true
+	@docker rmi ghcr.io/skunklabz/tk4-hercules:latest 2>/dev/null || true
 	@docker system prune -f
 
 docs:
@@ -268,24 +268,24 @@ release-prep: test validate
 
 ## TK4-only targets
 build-tk4:
-    @echo "Building TK4- version..."
-    @MVS_VERSION=tk4 docker compose build
+	@echo "Building TK4- version..."
+	@MVS_VERSION=tk4 docker compose build
 
 start-tk4:
-    @echo "Starting TK4- version..."
-    @MVS_VERSION=tk4 docker compose up -d
+	@echo "Starting TK4- version..."
+	@MVS_VERSION=tk4 docker compose up -d
 
 test-tk4:
-    @echo "Testing TK4- version..."
-    @MVS_VERSION=tk4 make test
+	@echo "Testing TK4- version..."
+	@MVS_VERSION=tk4 make test
 
 stop-tk4:
-    @echo "Stopping TK4- version..."
-    @MVS_VERSION=tk4 docker compose down
+	@echo "Stopping TK4- version..."
+	@MVS_VERSION=tk4 docker compose down
 
 logs-tk4:
-    @echo "Showing TK4- logs..."
-    @MVS_VERSION=tk4 docker compose logs -f
+	@echo "Showing TK4- logs..."
+	@MVS_VERSION=tk4 docker compose logs -f
 
 # Default version (TK4-)
 build: build-tk4
@@ -303,24 +303,24 @@ status:
 	@echo "8038 (Web): $(shell netstat -an 2>/dev/null | grep :8038 || echo 'Not listening')"
 
 info:
-    @echo "TK4-Hercules Project Information"
+	@echo "TK4-Hercules Project Information"
 	@echo "================================"
 	@echo "Version: $(VERSION)"
-    @echo "Mainframe: IBM MVS 3.8j (TK4-)"
-    @echo "Emulator: Hercules"
+	@echo "Mainframe: IBM MVS 3.8j (TK4-)"
+	@echo "Emulator: Hercules"
 	@echo "Container: Docker"
 	@echo "Registry: GitHub Container Registry (ghcr.io)"
 	@echo ""
-    @echo "Available Versions: TK4- only"
-    @echo ""
-    @echo "Usage:"
-    @echo "- make start-tk4: Start TK4- version (default)"
-    @echo "- make build-tk4: Build TK4- image"
+	@echo "Available Versions: TK4- only"
+	@echo ""
+	@echo "Usage:"
+	@echo "- make start-tk4: Start TK4- version (default)"
+	@echo "- make build-tk4: Build TK4- image"
 	@echo ""
 	@echo "Documentation:"
 	@echo "- README.md: Quick start guide"
 	@echo "- docs/TKX_MIGRATION_PLAN.md: Migration strategy"
-    @echo "- docs/ARM64_SUPPORT.md: Platform notes"
+	@echo "- docs/ARM64_SUPPORT.md: Platform notes"
 	@echo "- docs/ATTRIBUTIONS.md: Credits and acknowledgments"
 	@echo ""
 	@echo "Scripts:"
