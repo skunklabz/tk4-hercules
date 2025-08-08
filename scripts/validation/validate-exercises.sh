@@ -55,7 +55,7 @@ test_exercise_structure() {
         "examples/02-file-systems.md"
         "examples/03-first-jcl-job.md"
         "examples/challenges/01-multi-step-jobs.md"
-        "versions/tk4/Dockerfile"
+        "Dockerfile"
     )
     
     for file in "${required_files[@]}"; do
