@@ -32,7 +32,7 @@ print_error() {
 # Function to cleanup containers and volumes
 cleanup() {
     print_status "Cleaning up Docker containers and volumes..."
-    docker-compose -f docker-compose.test.yml down --volumes --remove-orphans 2>/dev/null || true
+    docker compose -f docker-compose.test.yml down --volumes --remove-orphans 2>/dev/null || true
     print_success "Cleanup completed"
 }
 
@@ -88,9 +88,9 @@ if ! docker info >/dev/null 2>&1; then
     exit 1
 fi
 
-# Check if docker-compose is available
-if ! command -v docker-compose >/dev/null 2>&1; then
-    print_error "docker-compose is not installed. Please install docker-compose and try again."
+# Check if docker compose is available
+if ! command -v docker >/dev/null 2>&1; then
+    print_error "docker is not installed. Please install docker and try again."
     exit 1
 fi
 
@@ -117,10 +117,10 @@ fi
 # Run tests
 if [ "$DEBUG_MODE" = true ]; then
     # Debug mode doesn't abort on container exit
-    docker-compose -f docker-compose.test.yml --profile $PROFILE up --build
+    docker compose -f docker-compose.test.yml --profile $PROFILE up --build
 else
     # Normal mode aborts on container exit
-    docker-compose -f docker-compose.test.yml --profile $PROFILE up --build --abort-on-container-exit --exit-code-from test-$PROFILE
+    docker compose -f docker-compose.test.yml --profile $PROFILE up --build --abort-on-container-exit --exit-code-from test-$PROFILE
 fi
 
 # Check exit code

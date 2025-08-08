@@ -1,4 +1,4 @@
-name: tkx-hercules
+name: tkx-hercules-tk4
 
 services:
   tkx-hercules:
@@ -16,26 +16,3 @@ volumes:
   tk4-pch:
   tk4-jcl:
   tk4-log:
-  # TK5- volumes (patrickraths structure)
-  tk5-dasd-usr:
-  tk5-log:
-  tk5-tape:
-  tk5-prt:
-  tk5-pch:
-  tk5-jcl:
-  # Additional TK5- volumes for extended structure
-  tk5-tk5res:
-  tk5-tk5cat:
-  tk5-tk5dlb:
-  tk5-tk5001:
-  tk5-tk5002:
-  tk5-tso001:
-  tk5-tso002:
-  tk5-tso003:
-  tk5-work01:
-  tk5-work02:
-  tk5-work03:
-  tk5-work04:
-  tk5-int001:
-  tk5-page00:
-  tk5-spool0: 

@@ -2,6 +2,7 @@
 
 # TKX-Hercules Docker Build Script
 # This script builds the Docker image with proper tagging and testing
+# Now uses SDL-Hercules-390 submodule instead of building Hercules from source
 
 set -e  # Exit on any error
 
@@ -30,8 +31,15 @@ echo "======================================"
 echo "Image: ${IMAGE_NAME}"
 echo "GHCR Image: ${GHCR_IMAGE_NAME}"
 echo "Version: ${VERSION}"
-echo "Base: Alpine Linux 3.19"
+echo "Architecture: AMD64"
 echo ""
+
+# Check if submodules are initialized
+echo "🔍 Checking submodules..."
+if [ ! -d "external/sdl-hercules-390" ]; then
+    echo "❌ SDL-Hercules-390 submodule not found. Initializing submodules..."
+    git submodule update --init --recursive
+fi
 
 # Build the image with platform support
 echo "📦 Building Docker image..."

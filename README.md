@@ -1,51 +1,28 @@
-# TKX-Hercules
+# TKX-Hercules (TK4- only)
 
-A Docker containerized IBM MVS 3.8j mainframe emulator supporting both TK4- and TK5- systems using Hercules for educational mainframe computing and historical preservation.
+A Docker containerized IBM MVS 3.8j mainframe emulator featuring the TK4- system for educational mainframe computing and historical preservation.
 
 [![Docker Build](https://github.com/skunklabz/tkx-hercules/workflows/Build%20Docker%20Image/badge.svg)](https://github.com/skunklabz/tkx-hercules/actions)
 [![GitHub Container Registry](https://img.shields.io/badge/GHCR-ghcr.io%2Fskunklabz%2Ftkx--hercules-blue)](https://ghcr.io/skunklabz/tkx-hercules)
 
 ## Quick Start
 
-### Multi-Version Support
-
-This project supports both TK4- and TK5- MVS systems:
+### Quick Start (TK4-)
 
 ```bash
-# Run TK4- (default)
-make start-tk4
-
-# Run TK5-
-make start-tk5
-
-# Run TK5- External (AMD64 compatible)
-make start-tk5-external
-
-# Run TK5- with SDL-Hercules-390 (x86_64, Enhanced performance)
-docker compose -f versions/tk5/docker-compose.sdl-hercules.yml up -d
-
-# Or use Docker Compose directly
-MVS_VERSION=tk4 docker compose up -d  # TK4- system
-MVS_VERSION=tk5 docker compose up -d  # TK5- system
-MVS_VERSION=tk5-external docker compose up -d  # TK5- external system
+# Start TK4-
+make start
 ```
 
 ### Using GitHub Container Registry (Recommended)
 
 ```bash
-# Pull and run TK4- (default)
+# Pull and run TK4-
 docker run -d \
   --name tkx-hercules-tk4 \
   -p 3270:3270 \
   -p 8038:8038 \
   ghcr.io/skunklabz/tkx-hercules:tk4-latest
-
-# Pull and run TK5-
-docker run -d \
-  --name tkx-hercules-tk5 \
-  -p 3270:3270 \
-  -p 8038:8038 \
-  ghcr.io/skunklabz/tkx-hercules:tk5-latest
 ```
 
 ### Connect to the Mainframe
@@ -58,9 +35,9 @@ telnet localhost 3270
 open http://localhost:8038
 ```
 
-### ARM64 Compatibility
+### Architecture Support
 
-If you're running on ARM64 (Apple Silicon Macs, ARM servers), you may encounter symbol relocation errors. Use the AMD64 platform for better compatibility:
+This project is optimized for AMD64/x86_64 architecture. For ARM64 systems, the emulator will run through emulation with potentially reduced performance.
 
 ```bash
 # Force AMD64 platform for ARM64 systems
@@ -68,34 +45,10 @@ PLATFORM=linux/amd64 docker compose up -d
 
 # Or set environment variable
 export PLATFORM=linux/amd64
-make start-tk4  # or make start-tk5
+make start
 ```
 
-For detailed troubleshooting, see [ARM64 Troubleshooting Guide](docs/ARM64_TROUBLESHOOTING.md).
-
-## Version Comparison
-
-| Feature | TK4- | TK5- | TK5- (SDL-Hercules-390) |
-|---------|------|------|-------------------------|
-| **DASD Volumes** | 8 volumes | 15 volumes | 15 volumes |
-| **Hercules Version** | 4.4.1 | 4.60 (Hyperion) | SDL-Hercules-390 (Hyperion) |
-| **System Structure** | Traditional | Fully restructured | Fully restructured |
-| **New Features** | Basic MVS | ISPF 2.2, INTERCOMM, LUA370, SLIM, STF | ISPF 2.2, INTERCOMM, LUA370, SLIM, STF |
-| **Update Strategy** | Full system updates | Selective volume updates | Selective volume updates |
-| **Volume Isolation** | Shared volumes | Separate namespaces | Separate namespaces |
-| **Performance** | Standard | Standard | Enhanced (x86_64 optimized) |
-| **Build Time** | Fast | Fast | Slower (compiles from source) |
-
-## What are TK4- and TK5-?
-
-### TK4- (Turnkey 4-)
-TK4- is a pre-configured IBM MVS 3.8j system created by Jürgen Winkelmann, based on Volker Bandke's original TK3. It's designed for educational purposes and historical preservation of mainframe computing.
-
-### TK5- (Turnkey 5-)
-TK5- is the latest evolution by Rob Prins, featuring a streamlined architecture with 15 DASD volumes (reduced from 28 in TK4+) and enhanced functionality including modern tools and applications.
-
-### SDL-Hercules-390
-SDL-Hercules-390 is a modern, actively maintained fork of the Hercules emulator that provides enhanced performance and better compatibility. The TK5- SDL-Hercules-390 version compiles the emulator from source for optimal performance on x86_64 architecture.
+## About TK4-
 
 ### Features
 
@@ -104,25 +57,22 @@ SDL-Hercules-390 is a modern, actively maintained fork of the Hercules emulator 
 - **3270 Terminal Support**: Authentic mainframe terminal experience
 - **Web Console**: Modern web interface for system monitoring
 - **Educational Tools**: Pre-loaded with learning materials and examples
-- **Persistent Storage**: Volume isolation between versions
-- **Multi-Version Support**: Run TK4- and TK5- simultaneously
+- **Persistent Storage**: 8 volumes for TK4-
 
 ### System Specifications
 
 - **OS**: IBM MVS 3.8j Service Level 8505
-- **Emulator**: Hercules 4.4.1 (TK4-) / 4.60 (TK5-)
+- **Emulator**: Hercules 4.4.1 (TK4-)
 - **Base Image**: Ubuntu 22.04
 - **Architecture**: Multi-platform (x86_64, ARM64) (emulating System/370)
 - **Memory**: Configurable (default: 1-2GB)
-- **Storage**: 8 volumes (TK4-) / 15 volumes (TK5-)
+- **Storage**: 8 volumes (TK4-)
 
 ## Available Images
 
 ### GitHub Container Registry (GHCR)
 
 - **TK4- Latest**: `ghcr.io/skunklabz/tkx-hercules:tk4-latest`
-- **TK5- Latest**: `ghcr.io/skunklabz/tkx-hercules:tk5-latest`
-- **Versioned**: `ghcr.io/skunklabz/tkx-hercules:v1.2.0-tk4`, `ghcr.io/skunklabz/tkx-hercules:v1.2.0-tk5`
 
 ## Development
 
@@ -272,8 +222,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Acknowledgments
 
 - **TK4-**: The original Turnkey 4- system by Jürgen Winkelmann
-- **TK5-**: The latest evolution by Rob Prins
-- **Patrick Raths**: Docker implementation for TK5- (https://github.com/patrickraths/MVS-TK5)
 - **Hercules**: The mainframe emulator by Jay Maynard and contributors
 - **IBM**: For the original MVS 3.8j operating system
 - **Mainframe Community**: For preserving and sharing mainframe knowledge

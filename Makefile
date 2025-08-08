@@ -22,8 +22,6 @@ help:
 	@echo "  build-platform - Build for specific platform"
 	@echo "  build-multi  - Build multi-platform images (AMD64 + ARM64)"
 	@echo "  build-ghcr   - Build for GitHub Container Registry"
-	@echo "  fix-arm64    - Fix ARM64 compatibility issues"
-	@echo "  start-arm64  - Start with ARM64 workaround"
 	@echo ""
 	@echo "Registry Commands:"
 	@echo "  push-ghcr    - Build and push to GitHub Container Registry"
@@ -40,7 +38,6 @@ help:
 	@echo "Testing Commands:"
 	@echo "  test         - Run essential tests (core functionality)"
 	@echo "  test-quick   - Run quick validation"
-	@echo "  test-arm64   - Test ARM64 support"
 	@echo "  validate     - Validate exercise content"
 	@echo "  test-local   - Run full local test suite"
 	@echo "  test-ports   - Test ports and services (3270, 8038)"
@@ -111,14 +108,6 @@ build-ghcr:
 	@echo "Building for GitHub Container Registry..."
 	@./scripts/build/build-ghcr.sh --no-prompt
 
-fix-arm64:
-	@echo "Fixing ARM64 compatibility issues..."
-	@./scripts/build/fix-arm64.sh
-
-start-arm64:
-	@echo "Starting TKX-Hercules with ARM64 workaround..."
-	@./scripts/start-arm64.sh
-
 # Registry commands
 push-ghcr:
 	@echo "Building and pushing to GitHub Container Registry..."
@@ -172,7 +161,7 @@ test:
 	@echo "This tests:"
 	@echo "  - Exercise file structure"
 	@echo "  - Container startup and connectivity"
-	@echo "  - Basic mainframe functionality"
+  @echo "  - Basic mainframe functionality (TK4-)"
 	@./scripts/test/test-exercises.sh
 
 test-quick:
@@ -211,9 +200,7 @@ pre-commit:
 	@echo "This ensures your code is ready for remote push"
 	@./scripts/pre-commit.sh
 
-test-arm64:
-	@echo "Testing ARM64 support..."
-	@./scripts/test/test-arm64.sh
+
 
 validate:
 	@echo "Validating exercise content..."
@@ -279,68 +266,28 @@ ci-full: ci-lint ci-validate ci-test
 release-prep: test validate
 	@echo "Release preparation completed"
 
-# Multi-version support
+## TK4-only targets
 build-tk4:
-	@echo "Building TK4- version..."
-	@MVS_VERSION=tk4 docker compose build
-
-build-tk5:
-	@echo "Building TK5- version..."
-	@MVS_VERSION=tk5 docker compose build
-
-build-tk5-external:
-	@echo "Building TK5- External version..."
-	@MVS_VERSION=tk5-external docker compose build
+    @echo "Building TK4- version..."
+    @MVS_VERSION=tk4 docker compose build
 
 start-tk4:
-	@echo "Starting TK4- version..."
-	@MVS_VERSION=tk4 docker compose up -d
-
-start-tk5:
-	@echo "Starting TK5- version..."
-	@MVS_VERSION=tk5 docker compose up -d
-
-start-tk5-external:
-	@echo "Starting TK5- External version..."
-	@MVS_VERSION=tk5-external docker compose up -d
+    @echo "Starting TK4- version..."
+    @MVS_VERSION=tk4 docker compose up -d
 
 test-tk4:
-	@echo "Testing TK4- version..."
-	@MVS_VERSION=tk4 make test
-
-test-tk5:
-	@echo "Testing TK5- version..."
-	@MVS_VERSION=tk5 make test
-
-test-tk5-external:
-	@echo "Testing TK5- External version..."
-	@MVS_VERSION=tk5-external make test
+    @echo "Testing TK4- version..."
+    @MVS_VERSION=tk4 make test
 
 stop-tk4:
-	@echo "Stopping TK4- version..."
-	@MVS_VERSION=tk4 docker compose down
-
-stop-tk5:
-	@echo "Stopping TK5- version..."
-	@MVS_VERSION=tk5 docker compose down
-
-stop-tk5-external:
-	@echo "Stopping TK5- External version..."
-	@MVS_VERSION=tk5-external docker compose down
+    @echo "Stopping TK4- version..."
+    @MVS_VERSION=tk4 docker compose down
 
 logs-tk4:
-	@echo "Showing TK4- logs..."
-	@MVS_VERSION=tk4 docker compose logs -f
+    @echo "Showing TK4- logs..."
+    @MVS_VERSION=tk4 docker compose logs -f
 
-logs-tk5:
-	@echo "Showing TK5- logs..."
-	@MVS_VERSION=tk5 docker compose logs -f
-
-logs-tk5-external:
-	@echo "Showing TK5- External logs..."
-	@MVS_VERSION=tk5-external docker compose logs -f
-
-# Default version (TK4- for backward compatibility)
+# Default version (TK4-)
 build: build-tk4
 start: start-tk4
 stop: stop-tk4
@@ -359,28 +306,21 @@ info:
 	@echo "TKX-Hercules Project Information"
 	@echo "================================"
 	@echo "Version: $(VERSION)"
-	@echo "Mainframe: IBM MVS 3.8j (TK4- and TK5-)"
-	@echo "Emulator: Hercules"
+    @echo "Mainframe: IBM MVS 3.8j (TK4-)"
+	@echo "Emulator: SDL-Hercules-390 (Hyperion)"
 	@echo "Container: Docker"
 	@echo "Registry: GitHub Container Registry (ghcr.io)"
 	@echo ""
-	@echo "Available Versions:"
-	@echo "- TK4-: Original Turnkey 4- system (8 volumes)"
-	@echo "- TK5-: Enhanced Turnkey 5- system (15 volumes)"
-	@echo "- TK5- External: AMD64-compatible TK5- system (15 volumes)"
-	@echo ""
-	@echo "Usage:"
-	@echo "- make start-tk4: Start TK4- version (default)"
-	@echo "- make start-tk5: Start TK5- version"
-	@echo "- make start-tk5-external: Start TK5- External version (AMD64 compatible)"
-	@echo "- make build-tk4: Build TK4- image"
-	@echo "- make build-tk5: Build TK5- image"
-	@echo "- make build-tk5-external: Build TK5- External image"
+    @echo "Available Versions: TK4- only"
+    @echo ""
+    @echo "Usage:"
+    @echo "- make start-tk4: Start TK4- version (default)"
+    @echo "- make build-tk4: Build TK4- image"
 	@echo ""
 	@echo "Documentation:"
 	@echo "- README.md: Quick start guide"
 	@echo "- docs/TKX_MIGRATION_PLAN.md: Migration strategy"
-	@echo "- docs/TK5_TECHNICAL_SPECS.md: TK5- specifications"
+    @echo "- docs/SDL_HERCULES_MIGRATION.md: Migration notes"
 	@echo "- docs/ATTRIBUTIONS.md: Credits and acknowledgments"
 	@echo ""
 	@echo "Scripts:"

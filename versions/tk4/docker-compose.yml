@@ -1,15 +1,19 @@
 services:
   tkx-hercules:
     build:
-      context: .
+      context: ../..
       dockerfile: Dockerfile
-    image: tkx-hercules:tk4-latest
     platform: ${PLATFORM:-linux/amd64}
     container_name: tkx-hercules-tk4
+    stdin_open: true          # docker run -i
+    tty: true                 # docker run -t
+    cap_add:
+      - SYS_NICE
     ports:
       - "3270:3270"
       - "8038:8038"
     volumes:
+      # TK4- volume structure (8 volumes)
       - tk4-conf:/tk4-/conf
       - tk4-local_conf:/tk4-/local_conf
       - tk4-local_scripts:/tk4-/local_scripts
@@ -31,25 +35,7 @@ services:
       - TZ=UTC
       - HERCULES_VERSION=4.4.1
       - MVS_VERSION=3.8j-tk4
-    labels:
-      - "com.skunklabz.description=MVS 3.8j Turnkey 4- System on Hercules Mainframe Emulator"
-      - "com.skunklabz.version=1.2.0"
-      - "com.skunklabz.mvs-version=tk4"
-
-volumes:
-  tk4-conf:
-    driver: local
-  tk4-local_conf:
-    driver: local
-  tk4-local_scripts:
-    driver: local
-  tk4-prt:
-    driver: local
-  tk4-dasd:
-    driver: local
-  tk4-pch:
-    driver: local
-  tk4-jcl:
-    driver: local
-  tk4-log:
-    driver: local 
+      - EXPLICIT_LOG=#
+      - MAINSIZE=16
+      - CNSLPORT=3270
+      - HTTPPORT=8038 

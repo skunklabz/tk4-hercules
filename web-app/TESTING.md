@@ -148,7 +148,7 @@ To clean up Docker containers and volumes:
 npm run test:docker:clean
 
 # Or manually
-docker-compose -f docker-compose.test.yml down --volumes --remove-orphans
+docker compose -f docker-compose.test.yml down --volumes --remove-orphans
 ```
 
 ## CI/CD Integration

@@ -1,6 +1,3 @@
-[submodule "external/mvs-tk5"]
-	path = external/mvs-tk5
-	url = https://github.com/skunklabz/MVS-TK5.git
 [submodule "external/sdl-hercules-390"]
 	path = external/sdl-hercules-390
 	url = https://github.com/patrickraths/SDL-Hercules-390.git
