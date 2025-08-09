@@ -1,0 +1,26 @@
+{
+  "name": "tk4-hercules-lms",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Minimal LMS web app scaffolding for tests",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "jest",
+    "test:unit": "jest",
+    "test:unit:coverage": "jest --coverage",
+    "test:all": "jest"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
+
