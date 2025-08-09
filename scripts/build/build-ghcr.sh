@@ -5,8 +5,10 @@
 
 set -e  # Exit on any error
 
-# Read version from VERSION file
-VERSION=$(cat ../../VERSION | tr -d ' ')
+# Determine repo root and read version from VERSION file
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+VERSION=$(cat "$REPO_ROOT/VERSION" | tr -d ' ')
 
 # Configuration
 GHCR_IMAGE_NAME="ghcr.io/skunklabz/tk4-hercules"
@@ -27,8 +29,8 @@ if ! docker info | grep -q "ghcr.io"; then
     echo "Or set up authentication via GitHub Actions"
 fi
 
-# Build the image with multi-platform support
-echo "📦 Building Docker image for multiple platforms..."
+# Build the image for AMD64 only (project policy)
+echo "📦 Building Docker image for AMD64..."
 docker buildx create --use --name tk4-hercules-builder || true
 
 # Ask for confirmation before building and pushing
@@ -39,21 +41,21 @@ if [ "$1" != "--no-prompt" ]; then
         echo "⏭️  Skipping build and push."
         echo ""
         echo "📤 To build and push manually:"
-        echo "   docker buildx build --platform linux/amd64,linux/arm64 -t ${GHCR_LATEST_TAG} -t ${GHCR_VERSION_TAG} --push ."
+        echo "   docker buildx build --platform linux/amd64 -t ${GHCR_LATEST_TAG} -t ${GHCR_VERSION_TAG} --push ."
         exit 0
     fi
 fi
 
 # Build and push to GHCR
-echo "📤 Building and pushing to GitHub Container Registry..."
-docker buildx build --platform linux/amd64,linux/arm64 -t ${GHCR_LATEST_TAG} -t ${GHCR_VERSION_TAG} --push .
+echo "📤 Building and pushing to GitHub Container Registry (AMD64 only)..."
+docker buildx build --platform linux/amd64 -t ${GHCR_LATEST_TAG} -t ${GHCR_VERSION_TAG} --push .
 
 if [ $? -eq 0 ]; then
     echo "✅ Build and push completed successfully!"
     echo ""
-    echo "📋 Multi-platform images pushed:"
-    echo "   ${GHCR_LATEST_TAG} (linux/amd64, linux/arm64)"
-    echo "   ${GHCR_VERSION_TAG} (linux/amd64, linux/arm64)"
+    echo "📋 Images pushed:"
+    echo "   ${GHCR_LATEST_TAG} (linux/amd64)"
+    echo "   ${GHCR_VERSION_TAG} (linux/amd64)"
     
     echo "✅ Push completed successfully!"
     echo ""

@@ -6,8 +6,10 @@
 
 set -e  # Exit on any error
 
-# Read version from VERSION file
-VERSION=$(cat ../VERSION | tr -d ' ')
+# Determine repo root and read version from VERSION file
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+VERSION=$(cat "$REPO_ROOT/VERSION" | tr -d ' ')
 
 # Configuration
 IMAGE_NAME="skunklabz/tk4-hercules"
