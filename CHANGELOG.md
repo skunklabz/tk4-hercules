@@ -24,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Resolve release workflow failure by bumping version to avoid tag collision.
 
-## [1.2.0] - 2025-01-XX
+## [1.2.0] - 2025-08-01
 
 ### Added
 - **Version Management**: Centralized version control with VERSION file
@@ -38,7 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Repository References**: Updated all references to tk4-hercules
 - **Documentation Cleanup**: Removed outdated references and improved clarity
 
-## [1.1.1] - 2025-01-XX
+## [1.1.1] - 2025-07-31
 
 ### Fixed
 - Resolved GitHub release conflict for v1.1.0
@@ -91,40 +91,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated script paths in documentation
 - Fixed .gitignore to properly include scripts/build directory
 
-## [1.0.0] - 2024-01-XX
-
-### Added
-- Initial release of TK4-Hercules containerized mainframe
-- Hercules emulator with IBM MVS 3.8j (Turnkey 4-)
-- Docker containerization for easy deployment
-- Educational exercises and learning materials
-- 3270 terminal access and web console
-- Comprehensive testing suite
-- Build and validation scripts
-
-### Features
-- Multi-user mainframe environment
-- JCL job processing capabilities
-- TSO interactive sessions
-- File system operations
-- Programming environment (COBOL, FORTRAN, Assembler)
-- System administration tools
-- Networking capabilities (VTAM)
-- Database operations (VSAM)
-
-### Documentation
-- README.md with installation and usage instructions
-- LEARNING_GUIDE.md for educational content
-- Exercise tutorials and challenges
-- Testing documentation
-- Mainframe concept explanations
-
 ---
 
 ## Version History
 
+- **1.3.0**: Project simplification and structure cleanup (2025-08-09)
+- **1.2.2**: Release workflow fixes (2025-08-08)
+- **1.2.0**: TK4-only conversion and version management (2025-08-01)
+- **1.1.1**: SemVer implementation and release conflict resolution (2025-07-31)
 - **1.1.0**: Repository restructuring and documentation improvements (2025-07-27)
-- **1.0.0**: Initial release with basic mainframe functionality (2024-01-XX)
 
 ## Contributing
 
