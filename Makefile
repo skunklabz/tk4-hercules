@@ -1,7 +1,7 @@
 # TK4-Hercules Makefile
 # Common development tasks for the project
 
-.PHONY: help build build-platform start stop test validate clean docs build-ghcr push-ghcr version bump-patch bump-minor bump-major
+.PHONY: help build build-platform start stop test validate clean docs build-ghcr push-ghcr version bump-patch bump-minor bump-major squash-commits new-feature
 
 # Version management
 VERSION := $(shell cat VERSION)
@@ -47,6 +47,11 @@ help:
 	@echo "  clean        - Clean up containers and images"
 	@echo "  docs         - Generate documentation"
 	@echo "  lint         - Run linting checks"
+	@echo ""
+	@echo "Git Workflow Commands:"
+	@echo "  new-feature  - Create new feature branch"
+	@echo "  squash-commits - Squash multiple commits into one"
+	@echo "  push-feature - Push feature branch (with validation)"
 	@echo "  setup-hooks  - Install git hooks for automatic testing"
 	@echo ""
 	@echo "CI/CD Commands:"
@@ -258,4 +263,51 @@ info:
 	@echo "Scripts:"
 	@echo "- scripts/build/: Build scripts"
 	@echo "- scripts/test/: Test scripts"
-	@echo "- scripts/validation/: Validation scripts" 
+	@echo "- scripts/validation/: Validation scripts"
+
+# Development workflow helpers
+new-feature:
+	@read -p "Feature name (without feat/ prefix): " feature_name; \
+	git checkout main && \
+	git pull origin main && \
+	git checkout -b "feat/$$feature_name" && \
+	echo "✅ Created feature branch: feat/$$feature_name" && \
+	echo "💡 Remember to squash commits before pushing!"
+
+squash-commits:
+	@echo "🔄 Squashing commits on current branch..."
+	@current_branch=$$(git rev-parse --abbrev-ref HEAD); \
+	if [ "$$current_branch" = "main" ]; then \
+		echo "❌ Cannot squash commits on main branch"; \
+		exit 1; \
+	fi; \
+	commit_count=$$(git rev-list --count origin/main..HEAD); \
+	if [ "$$commit_count" -le 1 ]; then \
+		echo "✅ Already a single commit ($$commit_count commits)"; \
+	else \
+		echo "📝 Found $$commit_count commits to squash"; \
+		read -p "Enter single commit message: " commit_msg; \
+		git reset --soft origin/main && \
+		git commit -m "$$commit_msg" && \
+		echo "✅ Squashed $$commit_count commits into 1"; \
+	fi
+
+push-feature:
+	@current_branch=$$(git rev-parse --abbrev-ref HEAD); \
+	if [ "$$current_branch" = "main" ]; then \
+		echo "❌ Cannot push main branch directly"; \
+		exit 1; \
+	fi; \
+	commit_count=$$(git rev-list --count origin/main..HEAD); \
+	if [ "$$commit_count" -gt 1 ]; then \
+		echo "⚠️  Branch has $$commit_count commits. Consider squashing first:"; \
+		echo "   make squash-commits"; \
+		read -p "Push anyway? (y/N): " confirm; \
+		if [ "$$confirm" != "y" ] && [ "$$confirm" != "Y" ]; then \
+			echo "❌ Push cancelled"; \
+			exit 1; \
+		fi; \
+	fi; \
+	git push origin "$$current_branch" && \
+	echo "✅ Pushed $$current_branch" && \
+	echo "🔗 Create PR at: https://github.com/skunklabz/tk4-hercules/compare/$$current_branch" 

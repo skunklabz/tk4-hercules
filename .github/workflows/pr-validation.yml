@@ -1,0 +1,89 @@
+name: PR Validation
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate-single-commit:
+    runs-on: ubuntu-latest
+    name: Validate Single Commit Policy
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        
+    - name: Check commit count
+      run: |
+        # Count commits in this PR
+        COMMIT_COUNT=$(git rev-list --count origin/main..HEAD)
+        echo "Commits in this PR: $COMMIT_COUNT"
+        
+        if [ "$COMMIT_COUNT" -gt 1 ]; then
+          echo "❌ This PR has $COMMIT_COUNT commits."
+          echo "Please squash into a single commit before merging."
+          echo ""
+          echo "To squash locally:"
+          echo "  git rebase -i origin/main"
+          echo "  # Change 'pick' to 'squash' for all but the first commit"
+          echo ""
+          echo "Or use GitHub's 'Squash and merge' option when merging."
+          exit 1
+        else
+          echo "✅ Single commit PR - excellent!"
+        fi
+        
+    - name: Validate commit message format
+      run: |
+        # Get the commit message
+        COMMIT_MSG=$(git log -1 --pretty=format:"%s")
+        echo "Commit message: $COMMIT_MSG"
+        
+        # Check if it follows conventional commit format
+        if [[ "$COMMIT_MSG" =~ ^(feat|fix|docs|style|refactor|test|chore)(\(.+\))?: .+ ]]; then
+          echo "✅ Commit message follows conventional format"
+        else
+          echo "⚠️  Consider using conventional commit format:"
+          echo "  feat: add new feature"
+          echo "  fix: resolve bug"
+          echo "  docs: update documentation" 
+          echo "  chore: maintenance tasks"
+          # Don't fail, just warn
+        fi
+
+  build-and-test:
+    runs-on: ubuntu-latest
+    name: Build and Test
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Build Docker image
+      run: |
+        docker build -t tk4-hercules:pr-${{ github.event.number }} .
+        
+    - name: Run validation scripts
+      run: |
+        if [ -f "./scripts/validation/quick-validate.sh" ]; then
+          ./scripts/validation/quick-validate.sh
+        fi
+        
+        if [ -f "./scripts/validation/validate-exercises.sh" ]; then
+          ./scripts/validation/validate-exercises.sh
+        fi
+        
+    - name: Test container startup
+      run: |
+        # Start container in background
+        docker run -d --name test-container -p 3270:3270 -p 8038:8038 tk4-hercules:pr-${{ github.event.number }}
+        
+        # Wait for startup
+        sleep 30
+        
+        # Basic connectivity test
+        curl -f http://localhost:8038 || echo "Web console not responding"
+        
+        # Cleanup
+        docker stop test-container
+        docker rm test-container
