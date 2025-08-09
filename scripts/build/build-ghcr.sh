@@ -5,8 +5,10 @@
 
 set -e  # Exit on any error
 
-# Read version from VERSION file
-VERSION=$(cat ../../VERSION | tr -d ' ')
+# Determine repo root and read version from VERSION file
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+VERSION=$(cat "$REPO_ROOT/VERSION" | tr -d ' ')
 
 # Configuration
 GHCR_IMAGE_NAME="ghcr.io/skunklabz/tk4-hercules"
@@ -17,7 +19,7 @@ echo "🐳 Building TK4-Hercules for GitHub Container Registry"
 echo "======================================================"
 echo "GHCR Image: ${GHCR_IMAGE_NAME}"
 echo "Version: ${VERSION}"
-echo "Base: Alpine Linux 3.19"
+echo "Base: Ubuntu 22.04"
 echo ""
 
 # Check if we're logged into GHCR
@@ -27,8 +29,7 @@ if ! docker info | grep -q "ghcr.io"; then
     echo "Or set up authentication via GitHub Actions"
 fi
 
-# Build the image with multi-platform support
-echo "📦 Building Docker image for multiple platforms..."
+# Ensure buildx builder exists
 docker buildx create --use --name tk4-hercules-builder || true
 
 # Ask for confirmation before building and pushing
@@ -44,14 +45,14 @@ if [ "$1" != "--no-prompt" ]; then
     fi
 fi
 
-# Build and push to GHCR
-echo "📤 Building and pushing to GitHub Container Registry..."
+# Build and push to GHCR (multi-arch)
+echo "📤 Building and pushing to GitHub Container Registry (multi-arch)..."
 docker buildx build --platform linux/amd64,linux/arm64 -t ${GHCR_LATEST_TAG} -t ${GHCR_VERSION_TAG} --push .
 
 if [ $? -eq 0 ]; then
     echo "✅ Build and push completed successfully!"
     echo ""
-    echo "📋 Multi-platform images pushed:"
+    echo "📋 Images pushed:"
     echo "   ${GHCR_LATEST_TAG} (linux/amd64, linux/arm64)"
     echo "   ${GHCR_VERSION_TAG} (linux/amd64, linux/arm64)"
     

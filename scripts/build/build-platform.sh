@@ -5,8 +5,10 @@
 
 set -e  # Exit on any error
 
-# Read version from VERSION file
-VERSION=$(cat ../../VERSION | tr -d ' ')
+# Determine repo root and read version from VERSION file
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+VERSION=$(cat "$REPO_ROOT/VERSION" | tr -d ' ')
 
 # Configuration
 IMAGE_NAME="skunklabz/tk4-hercules"
@@ -24,16 +26,15 @@ echo ""
 PLATFORM=$(uname -m)
 echo "🔍 Detected platform: ${PLATFORM}"
 
-# Determine build platform
+# Select build platform based on detected arch; allow override via DOCKER_DEFAULT_PLATFORM
 if [[ "$PLATFORM" == "arm64" || "$PLATFORM" == "aarch64" ]]; then
-    echo "🍎 Apple Silicon detected - building for native linux/arm64"
-    BUILD_PLATFORM="linux/arm64"
-    PLATFORM_SUFFIX="-arm64"
+  BUILD_PLATFORM="linux/arm64"
+  echo "🧬 Using ARM64 build platform"
 else
-    echo "🖥️  x86_64 detected - building for native platform"
-    BUILD_PLATFORM="linux/amd64"
-    PLATFORM_SUFFIX=""
+  BUILD_PLATFORM="linux/amd64"
+  echo "🧬 Using AMD64 build platform"
 fi
+PLATFORM_SUFFIX=""
 
 # Build the image with appropriate platform
 echo "📦 Building Docker image for ${BUILD_PLATFORM}..."

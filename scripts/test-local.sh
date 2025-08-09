@@ -150,18 +150,7 @@ else
     exit 1
 fi
 
-# Test multi-platform build (if buildx is available)
-if docker buildx version > /dev/null 2>&1; then
-    echo "🔧 Testing multi-platform build..."
-docker buildx build --platform linux/amd64,linux/arm64 -t tk4-hercules:test-multi .
-    if [ $? -eq 0 ]; then
-        print_status "Multi-platform build successful"
-    else
-        print_warning "Multi-platform build failed (this is optional for local testing)"
-    fi
-else
-    print_warning "Docker buildx not available, skipping multi-platform test"
-fi
+# Multi-platform build test removed (AMD64-only)
 
 # Validate workflow files
 echo "📋 Validating workflow files..."

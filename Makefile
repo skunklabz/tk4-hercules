@@ -1,7 +1,7 @@
 # TK4-Hercules Makefile
 # Common development tasks for the project
 
-.PHONY: help build build-platform build-multi start stop test test-arm64 validate clean docs build-ghcr push-ghcr version bump-patch bump-minor bump-major
+.PHONY: help build build-platform start stop test validate clean docs build-ghcr push-ghcr version bump-patch bump-minor bump-major
 
 # Version management
 VERSION := $(shell cat VERSION)
@@ -19,8 +19,7 @@ help:
 	@echo ""
 	@echo "Build Commands:"
 	@echo "  build        - Build the Docker container"
-	@echo "  build-platform - Build for specific platform"
-	@echo "  build-multi  - Build multi-platform images (AMD64 + ARM64)"
+	@echo "  build-platform - Build for AMD64 platform"
 	@echo "  build-ghcr   - Build for GitHub Container Registry"
 	@echo ""
 	@echo "Registry Commands:"
@@ -100,9 +99,7 @@ build-platform:
 	@echo "Building for specific platform..."
 	@./scripts/build/build-platform.sh
 
-build-multi:
-	@echo "Building multi-platform images..."
-	@./scripts/build/build-multi-platform.sh
+
 
 build-ghcr:
 	@echo "Building for GitHub Container Registry..."

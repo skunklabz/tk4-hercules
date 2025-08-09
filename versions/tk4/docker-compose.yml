@@ -3,7 +3,6 @@ services:
     build:
       context: ../..
       dockerfile: Dockerfile
-    platform: ${PLATFORM:-linux/amd64}
     container_name: tk4-hercules
     stdin_open: true          # docker run -i
     tty: true                 # docker run -t
