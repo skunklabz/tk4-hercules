@@ -12,7 +12,7 @@ env:
   IMAGE_NAME: skunklabz/tk4-hercules
 
 jobs:
-  build-tk4:
+  build:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -37,55 +37,7 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Build and push TK4 Docker image (multi-arch)
-      uses: docker/build-push-action@v5
-      with:
-        context: ./versions/tk4
-        platforms: linux/amd64,linux/arm64
-        push: true
-        tags: |
-          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:tk4-latest
-          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:tk4
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
-
-    - name: Test TK4 container
-      run: |
-        echo "Testing TK4 container startup..."
-        docker run --rm -d --name test-tk4 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:tk4-latest
-        sleep 5
-        docker ps | grep test-tk4 || (docker logs test-tk4; exit 1)
-        docker stop test-tk4 || echo "Container already stopped"
-        echo "✅ TK4 container test passed"
-
-  # TK5 build removed for TK4-only repo
-
-  build-main:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      with:
-        submodules: recursive
-
-    - name: Set up QEMU (multi-arch emulation)
-      uses: docker/setup-qemu-action@v3
-
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
-
-    - name: Log in to Container Registry
-      uses: docker/login-action@v3
-      with:
-        registry: ${{ env.REGISTRY }}
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Build and push main Docker image (multi-arch)
+    - name: Build and push Docker image (multi-arch, all tags)
       uses: docker/build-push-action@v5
       with:
         context: .
@@ -94,14 +46,16 @@ jobs:
         tags: |
           ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
           ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:main
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:tk4
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:tk4-latest
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
-    - name: Test main container
+    - name: Smoke test container
       run: |
-        echo "Testing main container startup..."
-        docker run --rm -d --name test-main ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+        echo "Testing container startup..."
+        docker run --rm -d --name test-tk4 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
         sleep 5
-        docker ps | grep test-main || (docker logs test-main; exit 1)
-        docker stop test-main || echo "Container already stopped"
-        echo "✅ Main container test passed" 
+        docker ps | grep test-tk4 || (docker logs test-tk4; exit 1)
+        docker stop test-tk4 || echo "Container already stopped"
+        echo "✅ Container smoke test passed"
