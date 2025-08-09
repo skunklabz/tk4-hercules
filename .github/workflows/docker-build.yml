@@ -24,6 +24,9 @@ jobs:
       with:
         submodules: recursive
 
+    - name: Set up QEMU (multi-arch emulation)
+      uses: docker/setup-qemu-action@v3
+
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
@@ -34,11 +37,11 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Build and push TK4 Docker image
+    - name: Build and push TK4 Docker image (multi-arch)
       uses: docker/build-push-action@v5
       with:
         context: ./versions/tk4
-        platforms: linux/amd64
+        platforms: linux/amd64,linux/arm64
         push: true
         tags: |
           ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:tk4-latest
@@ -69,6 +72,9 @@ jobs:
       with:
         submodules: recursive
 
+    - name: Set up QEMU (multi-arch emulation)
+      uses: docker/setup-qemu-action@v3
+
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
@@ -79,11 +85,11 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Build and push main Docker image
+    - name: Build and push main Docker image (multi-arch)
       uses: docker/build-push-action@v5
       with:
         context: .
-        platforms: linux/amd64
+        platforms: linux/amd64,linux/arm64
         push: true
         tags: |
           ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest

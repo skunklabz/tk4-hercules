@@ -33,15 +33,24 @@ echo "======================================"
 echo "Image: ${IMAGE_NAME}"
 echo "GHCR Image: ${GHCR_IMAGE_NAME}"
 echo "Version: ${VERSION}"
-echo "Architecture: AMD64"
+DETECTED_ARCH=$(uname -m)
+if [[ "$DETECTED_ARCH" == "arm64" || "$DETECTED_ARCH" == "aarch64" ]]; then
+    BUILD_PLATFORM="linux/arm64"
+    ARCH_LABEL="ARM64"
+else
+    BUILD_PLATFORM="linux/amd64"
+    ARCH_LABEL="AMD64"
+fi
+
+echo "Architecture: ${ARCH_LABEL} (build platform: ${BUILD_PLATFORM})"
 echo ""
 
 # Check if submodules are initialized
 echo "🔍 Checking submodules..."
 
 # Build the image with platform support
-echo "📦 Building Docker image..."
-docker build --platform linux/amd64 -t ${LATEST_TAG} -t ${VERSION_TAG} .
+echo "📦 Building Docker image for ${BUILD_PLATFORM}..."
+docker build --platform ${BUILD_PLATFORM} -t ${LATEST_TAG} -t ${VERSION_TAG} .
 
 if [ $? -eq 0 ]; then
     echo "✅ Build completed successfully!"

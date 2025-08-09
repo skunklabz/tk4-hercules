@@ -19,7 +19,7 @@ echo "🐳 Building TK4-Hercules for GitHub Container Registry"
 echo "======================================================"
 echo "GHCR Image: ${GHCR_IMAGE_NAME}"
 echo "Version: ${VERSION}"
-echo "Base: Alpine Linux 3.19"
+echo "Base: Ubuntu 22.04"
 echo ""
 
 # Check if we're logged into GHCR
@@ -29,8 +29,7 @@ if ! docker info | grep -q "ghcr.io"; then
     echo "Or set up authentication via GitHub Actions"
 fi
 
-# Build the image for AMD64 only (project policy)
-echo "📦 Building Docker image for AMD64..."
+# Ensure buildx builder exists
 docker buildx create --use --name tk4-hercules-builder || true
 
 # Ask for confirmation before building and pushing
@@ -41,21 +40,21 @@ if [ "$1" != "--no-prompt" ]; then
         echo "⏭️  Skipping build and push."
         echo ""
         echo "📤 To build and push manually:"
-        echo "   docker buildx build --platform linux/amd64 -t ${GHCR_LATEST_TAG} -t ${GHCR_VERSION_TAG} --push ."
+        echo "   docker buildx build --platform linux/amd64,linux/arm64 -t ${GHCR_LATEST_TAG} -t ${GHCR_VERSION_TAG} --push ."
         exit 0
     fi
 fi
 
-# Build and push to GHCR
-echo "📤 Building and pushing to GitHub Container Registry (AMD64 only)..."
-docker buildx build --platform linux/amd64 -t ${GHCR_LATEST_TAG} -t ${GHCR_VERSION_TAG} --push .
+# Build and push to GHCR (multi-arch)
+echo "📤 Building and pushing to GitHub Container Registry (multi-arch)..."
+docker buildx build --platform linux/amd64,linux/arm64 -t ${GHCR_LATEST_TAG} -t ${GHCR_VERSION_TAG} --push .
 
 if [ $? -eq 0 ]; then
     echo "✅ Build and push completed successfully!"
     echo ""
     echo "📋 Images pushed:"
-    echo "   ${GHCR_LATEST_TAG} (linux/amd64)"
-    echo "   ${GHCR_VERSION_TAG} (linux/amd64)"
+    echo "   ${GHCR_LATEST_TAG} (linux/amd64, linux/arm64)"
+    echo "   ${GHCR_VERSION_TAG} (linux/amd64, linux/arm64)"
     
     echo "✅ Push completed successfully!"
     echo ""

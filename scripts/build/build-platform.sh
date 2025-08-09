@@ -26,9 +26,14 @@ echo ""
 PLATFORM=$(uname -m)
 echo "🔍 Detected platform: ${PLATFORM}"
 
-# Force AMD64 builds only
-echo "🖥️  Forcing AMD64 build platform (project policy)"
-BUILD_PLATFORM="linux/amd64"
+# Select build platform based on detected arch; allow override via DOCKER_DEFAULT_PLATFORM
+if [[ "$PLATFORM" == "arm64" || "$PLATFORM" == "aarch64" ]]; then
+  BUILD_PLATFORM="linux/arm64"
+  echo "🧬 Using ARM64 build platform"
+else
+  BUILD_PLATFORM="linux/amd64"
+  echo "🧬 Using AMD64 build platform"
+fi
 PLATFORM_SUFFIX=""
 
 # Build the image with appropriate platform
