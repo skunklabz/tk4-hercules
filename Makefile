@@ -93,7 +93,7 @@ bump-major:
 # Build commands
 build:
 	@echo "Building TK4-Hercules container..."
-	@./scripts/build/build.sh
+	@docker compose build
 
 build-platform:
 	@echo "Building for specific platform..."
@@ -118,36 +118,17 @@ login-ghcr:
 # Container management
 start:
 	@echo "Starting TK4-Hercules mainframe..."
-	@echo "Building local image if needed..."
-	@docker build --platform linux/amd64 -t tk4-hercules:latest .
-	@echo "Starting container with local image..."
-	@docker run -d --name tk4-hercules \
-		--platform linux/amd64 \
-		-p 3270:3270 \
-		-p 8038:8038 \
-		-v tk4-conf:/tk4-/conf \
-		-v tk4-local_conf:/tk4-/local_conf \
-		-v tk4-local_scripts:/tk4-/local_scripts \
-		-v tk4-prt:/tk4-/prt \
-		-v tk4-dasd:/tk4-/dasd \
-		-v tk4-pch:/tk4-/pch \
-		-v tk4-jcl:/tk4-/jcl \
-		-v tk4-log:/tk4-/log \
-		--restart unless-stopped \
-		--memory=2g \
-		--cpus=2.0 \
-        tk4-hercules:latest
+	@docker compose up -d
 
 stop:
 	@echo "Stopping TK4-Hercules mainframe..."
-	@docker stop tk4-hercules 2>/dev/null || true
-	@docker rm tk4-hercules 2>/dev/null || true
+	@docker compose down
 
 restart: stop start
 	@echo "Restarted TK4-Hercules mainframe"
 
 logs:
-	@docker logs -f tk4-hercules
+	@docker compose logs -f
 
 shell:
 	@docker exec -it tk4-hercules /bin/bash
@@ -234,12 +215,6 @@ dev-clean: stop clean
 	@echo "Development environment cleaned"
 
 # CI/CD helpers
-ci-test: build test
-	@echo "CI tests completed"
-
-ci-validate: validate
-	@echo "CI validation completed"
-
 ci-lint:
 	@echo "Running CI linting checks..."
 	@shellcheck scripts/**/*.sh || true
@@ -255,40 +230,6 @@ ci-lint:
 	@echo "Validating YAML files..."
 	@docker compose config
 	@echo "✅ CI linting checks completed"
-
-ci-full: ci-lint ci-validate ci-test
-	@echo "✅ Full CI pipeline completed"
-
-# Release helpers
-release-prep: test validate
-	@echo "Release preparation completed"
-
-## TK4-only targets
-build-tk4:
-	@echo "Building TK4- version..."
-	@MVS_VERSION=tk4 docker compose build
-
-start-tk4:
-	@echo "Starting TK4- version..."
-	@MVS_VERSION=tk4 docker compose up -d
-
-test-tk4:
-	@echo "Testing TK4- version..."
-	@MVS_VERSION=tk4 make test
-
-stop-tk4:
-	@echo "Stopping TK4- version..."
-	@MVS_VERSION=tk4 docker compose down
-
-logs-tk4:
-	@echo "Showing TK4- logs..."
-	@MVS_VERSION=tk4 docker compose logs -f
-
-# Default version (TK4-)
-build: build-tk4
-start: start-tk4
-stop: stop-tk4
-logs: logs-tk4
 
 # Utility commands
 status:
@@ -307,12 +248,6 @@ info:
 	@echo "Emulator: Hercules"
 	@echo "Container: Docker"
 	@echo "Registry: GitHub Container Registry (ghcr.io)"
-	@echo ""
-	@echo "Available Versions: TK4- only"
-	@echo ""
-	@echo "Usage:"
-	@echo "- make start-tk4: Start TK4- version (default)"
-	@echo "- make build-tk4: Build TK4- image"
 	@echo ""
 	@echo "Documentation:"
 	@echo "- README.md: Quick start guide"

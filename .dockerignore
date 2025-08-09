@@ -23,7 +23,6 @@ scripts/
 Makefile
 
 # Configuration files (mounted at runtime)
-config/
 docker-compose.yml
 docker-compose.*.yml
 
