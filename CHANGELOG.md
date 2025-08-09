@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.2] - 2025-08-08
+
+### Fixed
+- Resolve release workflow failure by bumping version to avoid tag collision.
+
 ## [1.2.0] - 2025-01-XX
 
 ### Added
