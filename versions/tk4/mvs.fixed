@@ -1,48 +1,37 @@
 #!/bin/bash
 #**********************************************************************
 #***                                                                ***
-#*** Script:  mvs (AMD64-only version)                              ***
+#*** Script:  mvs.fixed                                             ***
 #***                                                                ***
-#*** Purpose: IPL OS/VS2-MVS 3.8j (TK4- unattended operations)      ***
+#*** Purpose: Fixed MVS startup script for TK4- in Docker          ***
 #***                                                                ***
-#*** Updated: 2024/07/31 - Simplified for AMD64 only                ***
+#*** Updated: 2025-01-27                                            ***
 #***                                                                ***
 #**********************************************************************
-#
-# set environment - AMD64 only
-#
-arch=64
-HERCULES_BIN="./hercules/linux/64/bin/hercules"
 
-system=`uname -s | awk '{print tolower($0)}'`
-case $system in
-linux)
-   force_arch=
-   export PATH=hercules/$system/$arch/bin:$PATH
-   export LD_LIBRARY_PATH=hercules/$system/$arch/lib:hercules/$system/$arch/lib/hercules:$LD_LIBRARY_PATH
-   ;;
-darwin)
-   force_arch=
-   export PATH=hercules/$system/bin:$PATH
-   export DYLD_LIBRARY_PATH=hercules/$system/lib:hercules/$system/lib/hercules:$DYLD_LIBRARY_PATH
-   ;;
-*)
-   echo "System $system not supported."
-   exit
-   ;;
-esac
+set -e
 
-MODE=`head -1 unattended/mode 2>/dev/null`
-DAEMON="-d"
-if [[ $MODE == 'CONSOLE' ]]; then unset DAEMON; fi
+echo "=== TK4- MVS Startup ==="
+echo "Current directory: $(pwd)"
+echo "Architecture: $(uname -m)"
 
-#
-# source configuration variables
-#
-if [ -f local_conf/tk4-.parm ]; then . local_conf/tk4-.parm; fi
+# Check if we're in the right directory
+if [ ! -f "./hercules/linux/64/bin/hercules" ]; then
+    echo "ERROR: Hercules binary not found!"
+    exit 1
+fi
 
-#
-# IPL OS/VS2-MVS 3.8j
-#
-export HERCULES_RC=scripts/ipl.rc
-$force_arch $HERCULES_BIN $DAEMON -f conf/tk4-.cnf >log/3033.log 
+# Make sure Hercules is executable
+chmod +x ./hercules/linux/64/bin/hercules
+
+# Check if mvs script exists
+if [ ! -f "./mvs" ]; then
+    echo "ERROR: mvs script not found!"
+    exit 1
+fi
+
+# Make sure mvs script is executable
+chmod +x ./mvs
+
+echo "Starting MVS with TK4- configuration..."
+exec ./mvs 

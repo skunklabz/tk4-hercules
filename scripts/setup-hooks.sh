@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Setup git hooks for tkx-hercules
+# Setup git hooks for tk4-hercules
 # Installs pre-commit hook for automatic testing
 
 set -e

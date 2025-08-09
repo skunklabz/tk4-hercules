@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# TKX-Hercules Exercise Validation Script
+# TK4-Hercules Exercise Validation Script
 # Quick validation of exercise files and content without running mainframe
 
 # Don't exit on error, handle them gracefully
@@ -17,7 +17,7 @@ TESTS_PASSED=0
 TESTS_FAILED=0
 TESTS_SKIPPED=0
 
-echo "🔍 TKX-Hercules Exercise Validation"
+echo "🔍 TK4-Hercules Exercise Validation"
 echo "==================================="
 echo "Validating exercise files and content..."
 echo ""
@@ -55,7 +55,7 @@ test_exercise_structure() {
         "examples/02-file-systems.md"
         "examples/03-first-jcl-job.md"
         "examples/challenges/01-multi-step-jobs.md"
-        "versions/tk4/Dockerfile"
+        "Dockerfile"
     )
     
     for file in "${required_files[@]}"; do
@@ -307,7 +307,7 @@ main() {
     
     # Check if we're in the right directory
     if [ ! -d "examples" ]; then
-        echo -e "${RED}❌ Error: Must run from tkx-hercules project root${NC}"
+echo -e "${RED}❌ Error: Must run from tk4-hercules project root${NC}"
         exit 1
     fi
     

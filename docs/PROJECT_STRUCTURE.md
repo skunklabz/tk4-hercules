@@ -1,15 +1,15 @@
 # Project Structure Documentation
 
-This document provides a detailed explanation of the TKX-Hercules project structure and organization.
+This document provides a detailed explanation of the TK4-Hercules project structure and organization.
 
 ## Overview
 
-The TKX-Hercules project follows a well-organized structure that separates concerns and makes the codebase maintainable and scalable. The structure is designed to support both educational content and technical implementation.
+The TK4-Hercules project follows a well-organized structure that separates concerns and makes the codebase maintainable and scalable. The structure is designed to support both educational content and technical implementation.
 
 ## Directory Structure
 
 ```
-tkx-hercules/
+tk4-hercules/
 ├── .github/                    # GitHub-specific files
 │   ├── ISSUE_TEMPLATE/        # Issue templates
 │   ├── PULL_REQUEST_TEMPLATE/ # PR templates
@@ -206,4 +206,4 @@ When moving from the old structure to this new structure:
 - Easy to extend with additional educational content
 - Maintains organization as complexity grows
 
-This structure provides a solid foundation for the TKX-Hercules project while maintaining clarity and organization as it continues to grow and evolve. 
+This structure provides a solid foundation for the TK4-Hercules project while maintaining clarity and organization as it continues to grow and evolve.

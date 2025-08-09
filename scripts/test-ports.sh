@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Port and service testing script for tkx-hercules
+# Port and service testing script for tk4-hercules
 # Tests 3270 terminal and web console functionality
 
 set -e
@@ -133,15 +133,15 @@ main() {
     print_info "Starting port and service tests..."
     
     # Check if container is running
-    if ! docker ps | grep -q tkx-hercules; then
-    print_info "No running tkx-hercules container found. Starting one for testing..."
+if ! docker ps | grep -q tk4-hercules; then
+  print_info "No running tk4-hercules container found. Starting one for testing..."
         
         # Start container for testing
-        docker run -d --name test-tk4-ports \
+  docker run -d --name test-tk4-ports \
             --platform linux/amd64 \
             -p 3270:3270 \
             -p 8038:8038 \
-            tkx-hercules:latest 2>/dev/null || {
+    tk4-hercules:latest 2>/dev/null || {
             print_error "Failed to start test container"
             exit 1
         }
@@ -153,8 +153,8 @@ main() {
         CONTAINER_NAME="test-tk4-ports"
         CLEANUP=true
     else
-        print_info "Using existing tkx-hercules container"
-CONTAINER_NAME="tkx-hercules"
+  print_info "Using existing tk4-hercules container"
+  CONTAINER_NAME="tk4-hercules"
         CLEANUP=false
     fi
     
@@ -171,7 +171,7 @@ CONTAINER_NAME="tkx-hercules"
     # Show container status
     echo ""
     print_info "Container status:"
-    docker ps | grep tkx-hercules || true
+docker ps | grep tk4-hercules || true
     
     # Show container logs (last 10 lines)
     echo ""

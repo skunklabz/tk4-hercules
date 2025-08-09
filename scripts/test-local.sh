@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Local testing script for tkx-hercules
+# Local testing script for tk4-hercules
 # Mirrors the CI/CD workflow for local validation
 
 set -e
@@ -39,8 +39,8 @@ fi
 print_status "Docker is running"
 
 # Check if we're in the right directory
-if [ ! -f "versions/tk4/Dockerfile" ]; then
-    print_error "Dockerfile not found in versions/tk4/. Please run this script from the project root."
+if [ ! -f "Dockerfile" ]; then
+    print_error "Dockerfile not found in project root. Please run this script from the project root."
     exit 1
 fi
 
@@ -48,7 +48,7 @@ print_status "Project structure looks good"
 
 # Build the Docker image
 echo "🐳 Building Docker image..."
-docker build --platform linux/amd64 -t tkx-hercules:tk4-test versions/tk4/
+docker build --platform linux/amd64 -t tk4-hercules:tk4-test .
 
 if [ $? -eq 0 ]; then
     print_status "Docker image built successfully"
@@ -70,7 +70,7 @@ docker run -d --name $CONTAINER_NAME \
     --platform linux/amd64 \
     -p 3270:3270 \
     -p 8038:8038 \
-    tkx-hercules:tk4-test
+    tk4-hercules:tk4-test
 
 # Wait for container to start and services to be ready
 echo "⏳ Waiting for services to start..."
@@ -153,7 +153,7 @@ fi
 # Test multi-platform build (if buildx is available)
 if docker buildx version > /dev/null 2>&1; then
     echo "🔧 Testing multi-platform build..."
-    docker buildx build --platform linux/amd64,linux/arm64 -t tkx-hercules:test-multi .
+docker buildx build --platform linux/amd64,linux/arm64 -t tk4-hercules:test-multi .
     if [ $? -eq 0 ]; then
         print_status "Multi-platform build successful"
     else

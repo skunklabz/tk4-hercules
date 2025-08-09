@@ -1,6 +1,6 @@
-# TKX-Hercules Testing Guide
+# TK4-Hercules Testing Guide
 
-This document describes the testing strategy for the TKX-Hercules project, which has been simplified to focus on essential functionality while maintaining quality assurance.
+This document describes the testing strategy for the TK4-Hercules project, which has been simplified to focus on essential functionality while maintaining quality assurance.
 
 ## Test Structure Overview
 

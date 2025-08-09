@@ -9,36 +9,20 @@ This project builds upon the work of many contributors in the mainframe emulatio
 - **Jürgen Winkelmann** - Creator of MVS Turnkey 4- (TK4-)
 - **TK4- Community** - Contributors who enhanced TK4- with various usermods and improvements
 
-### TK5- System
-- **Rob Prins** - Creator of MVS Turnkey 5 (TK5-)
-- **Thomas Armstrong** - Co-author of TK5- Introduction and User Manual
-- **TK5- Community** - Contributors who developed usermods and enhancements
-
-### Docker Implementation
-- **[patrickraths/MVS-TK5](https://github.com/patrickraths/MVS-TK5)** - Existing TK5- Docker implementation that influenced our approach
-  - **Patrick Raths** - Creator of the Docker implementation for TK5- and SDL-Hercules-390 base image
-  - **SDL-Hercules-390** - Base image approach and configuration strategies
+### Notes
+This repository is now TK4-only.
 
 ## Technical Components
 
 ### Hercules Emulator
 - **Jay Maynard** - Original Hercules creator
 - **SDL-Hercules Team** - Modern Hercules implementation
-- **Hyperion Hercules** - SDL 4.60 version used in TK5-
 
 ### MVS 3.8j System
 - **IBM** - Original MVS 3.8j operating system
 - **MVS Community** - Preservation and documentation efforts
 
-### Software Packages in TK5-
-- **Wally Maclaughlin** - ISPF 2.2
-- **Rob Kemme** - Skybird Test Facility (STF)
-- **Ed Liss** - Source Library Manager (SLIM), Archiver Extensions
-- **Mike Rayborn** - LUA370, HTTPD server
-- **Larry Belmontes** - VSI (VSAM data set Information)
-- **Greg Price** - REVIEW/RFE updates
-- **Bob Polmanter** - NJE38 updates
-- **Jim Morrison** - 3375/3380/3390 DASD support usermods
+ 
 
 ## Migration and Utilities
 
@@ -63,17 +47,14 @@ This project builds upon the work of many contributors in the mainframe emulatio
 
 While we build upon the work of others, our project adds:
 
-1. **Multi-Version Support** - Simultaneous TK4- and TK5- support
-2. **Docker Volume Strategy** - Complete volume isolation between versions
-3. **Educational Focus** - Comparison and learning materials
-4. **Migration Path** - Tools and documentation for version transitions
-5. **Future-Proofing** - Architecture for additional MVS versions
+1. **Docker Volume Strategy** - Persistent storage for TK4-
+2. **Educational Focus** - Learning materials and examples
 
 ## License Compliance
 
 This project respects the licenses of all incorporated works:
 
-- **TK4- and TK5-** - Educational use and preservation
+- **TK4-** - Educational use and preservation
 - **Hercules** - Open source emulator
 - **patrickraths/MVS-TK5** - MIT License (as indicated in their repository)
 - **IBM MVS 3.8j** - Historical preservation and educational use
@@ -85,8 +66,6 @@ When referencing our work, please include:
 ```markdown
 This project builds upon:
 - TK4- by Jürgen Winkelmann
-- TK5- by Rob Prins  
-- Docker implementation by Patrick Raths (https://github.com/patrickraths/MVS-TK5)
 - Hercules emulator by Jay Maynard and SDL team
 ```
 
