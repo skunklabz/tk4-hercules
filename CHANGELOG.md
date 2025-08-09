@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2025-08-09
+
+### Changed
+- Refactored the project to simplify the build process and remove unnecessary components.
+- Collapsed the `versions/` directory into the root, making the project a single-version setup.
+- Updated the `Makefile` to use standard `docker compose` commands.
+- The `Dockerfile` was cleaned up and now starts the application by default.
+
+### Removed
+- Removed the `web-app/` directory, which was an unused component.
+- Removed the `.cursor/` IDE-specific directory.
+
 ## [1.2.2] - 2025-08-08
 
 ### Fixed

@@ -2,9 +2,44 @@ name: tk4-hercules
 
 services:
   tk4-hercules:
-    extends:
-      file: ./versions/${MVS_VERSION:-tk4}/docker-compose.yml
-      service: tk4-hercules
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tk4-hercules
+    stdin_open: true          # docker run -i
+    tty: true                 # docker run -t
+    cap_add:
+      - SYS_NICE
+    ports:
+      - "3270:3270"
+      - "8038:8038"
+    volumes:
+      # TK4- volume structure (8 volumes)
+      - tk4-conf:/tk4-/conf
+      - tk4-local_conf:/tk4-/local_conf
+      - tk4-local_scripts:/tk4-/local_scripts
+      - tk4-prt:/tk4-/prt
+      - tk4-dasd:/tk4-/dasd
+      - tk4-pch:/tk4-/pch
+      - tk4-jcl:/tk4-/jcl
+      - tk4-log:/tk4-/log
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '2.0'
+        reservations:
+          memory: 1G
+          cpus: '1.0'
+    environment:
+      - TZ=UTC
+      - HERCULES_VERSION=4.4.1
+      - MVS_VERSION=3.8j-tk4
+      - EXPLICIT_LOG=#
+      - MAINSIZE=16
+      - CNSLPORT=3270
+      - HTTPPORT=8038
 
 volumes:
   # TK4- volumes
