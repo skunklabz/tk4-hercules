@@ -51,11 +51,29 @@ jobs:
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
-    - name: Smoke test container
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [linux/amd64, linux/arm64]
+    steps:
+    - name: Set up QEMU (multi-arch emulation)
+      uses: docker/setup-qemu-action@v3
+
+    - name: Log in to Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Smoke test on ${{ matrix.platform }}
       run: |
-        echo "Testing container startup..."
-        docker run --rm -d --name test-tk4 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+        echo "Testing container on ${{ matrix.platform }}..."
+        docker run --rm -d --platform ${{ matrix.platform }} --name test-tk4 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
         sleep 5
         docker ps | grep test-tk4 || (docker logs test-tk4; exit 1)
         docker stop test-tk4 || echo "Container already stopped"
-        echo "✅ Container smoke test passed"
+        echo "✅ Container smoke test passed on ${{ matrix.platform }}"
