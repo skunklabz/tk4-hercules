@@ -6,7 +6,7 @@ on:
 
 jobs:
   validate-single-commit:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     name: Validate Single Commit Policy
     
     steps:
@@ -53,7 +53,7 @@ jobs:
         fi
 
   build-and-test:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     name: Build and Test
     
     steps:
