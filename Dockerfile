@@ -47,7 +47,7 @@ VOLUME [ "conf", "local_conf", "local_scripts", "prt", "dasd", "pch", "jcl", "lo
 EXPOSE 3270 8038
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=300s --retries=3 \
-    CMD ps aux | grep -v grep | grep mvs || exit 1
+    CMD ps aux | grep -v grep | grep hercules || exit 1
 
 RUN echo '#!/bin/bash' > startup.sh && \
     echo 'set -e' >> startup.sh && \

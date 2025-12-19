@@ -5,7 +5,7 @@
 #***                                                                ***
 #*** Purpose: Fixed MVS startup script for TK4- in Docker          ***
 #***                                                                ***
-#*** Updated: 2025-01-27                                            ***
+#*** Updated: 2025-12-19                                            ***
 #***                                                                ***
 #**********************************************************************
 
@@ -24,14 +24,20 @@ fi
 # Make sure Hercules is executable
 chmod +x ./hercules/linux/64/bin/hercules
 
-# Check if mvs script exists
-if [ ! -f "./mvs" ]; then
-    echo "ERROR: mvs script not found!"
+# Locate the configuration file
+# TK4- distribution typically has config at conf/tk4-.cnf
+CONFIG_FILE=""
+if [ -f "./conf/tk4-.cnf" ]; then
+    CONFIG_FILE="conf/tk4-.cnf"
+elif [ -f "./tk4-.cnf" ]; then
+    CONFIG_FILE="tk4-.cnf"
+else
+    echo "ERROR: TK4- configuration file not found!"
+    echo "Looked in: ./conf/tk4-.cnf and ./tk4-.cnf"
     exit 1
 fi
 
-# Make sure mvs script is executable
-chmod +x ./mvs
-
-echo "Starting MVS with TK4- configuration..."
-exec ./mvs 
+echo "Starting Hercules with TK4- MVS configuration: ${CONFIG_FILE}..."
+# Start Hercules with the TK4- configuration
+# Using exec to replace the shell process with hercules
+exec ./hercules/linux/64/bin/hercules -f "${CONFIG_FILE}" 
