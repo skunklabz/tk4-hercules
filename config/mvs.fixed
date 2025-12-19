@@ -24,13 +24,21 @@ fi
 # Make sure Hercules is executable
 chmod +x ./hercules/linux/64/bin/hercules
 
-# Check if configuration file exists
-if [ ! -f "./conf/tk4-.cnf" ]; then
+# Locate the configuration file
+# TK4- distribution typically has config at conf/tk4-.cnf
+CONFIG_FILE=""
+if [ -f "./conf/tk4-.cnf" ]; then
+    CONFIG_FILE="conf/tk4-.cnf"
+elif [ -f "./tk4-.cnf" ]; then
+    CONFIG_FILE="tk4-.cnf"
+else
     echo "ERROR: TK4- configuration file not found!"
+    echo "Looked in: ./conf/tk4-.cnf and ./tk4-.cnf"
     exit 1
 fi
 
-echo "Starting Hercules with TK4- MVS configuration..."
+echo "Starting Hercules with TK4- MVS configuration: ${CONFIG_FILE}..."
 # Start Hercules with the TK4- configuration
 # Using exec to replace the shell process with hercules
-exec ./hercules/linux/64/bin/hercules -f conf/tk4-.cnf
+exec ./hercules/linux/64/bin/hercules -f "${CONFIG_FILE}"
+
