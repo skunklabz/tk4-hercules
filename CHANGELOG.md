@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.1] - 2025-12-19
+
+### Fixed
+- Fixed infinite recursion in Docker entrypoint script
+- Removed failing smoke test job from workflow
+- Removed single-commit validation rule from PR workflow to improve development experience
+
+### Changed
+- Implemented single-commit workflow enforcement with enhanced pre-push hooks
+- Updated CHANGELOG.md dates to align with cleaned git history
+
+### Added
+- Comprehensive development workflow documentation
+- Makefile helpers for feature branch management
+- Enhanced pre-push hook that blocks direct main pushes
+- GitHub Actions PR validation for commit count
+
 ## [1.3.0] - 2025-08-09
 
 ### Changed
@@ -95,6 +112,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Version History
 
+- **1.3.1**: Docker entrypoint fixes and workflow improvements (2025-12-19)
 - **1.3.0**: Project simplification and structure cleanup (2025-08-09)
 - **1.2.2**: Release workflow fixes (2025-08-08)
 - **1.2.0**: TK4-only conversion and version management (2025-08-01)
