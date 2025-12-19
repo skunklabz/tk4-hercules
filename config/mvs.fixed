@@ -33,4 +33,5 @@ fi
 echo "Starting Hercules with TK4- MVS configuration..."
 # Start Hercules with the TK4- configuration
 # Using exec to replace the shell process with hercules
-exec ./hercules/linux/64/bin/hercules -f conf/tk4-.cnf 
+exec ./hercules/linux/64/bin/hercules -f conf/tk4-.cnf
+ 
