@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.3.1] - 2025-12-19
+## [1.3.1] - 2024-12-19
 
 ### Fixed
 - Fixed infinite recursion in Docker entrypoint script
@@ -112,7 +112,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Version History
 
-- **1.3.1**: Docker entrypoint fixes and workflow improvements (2025-12-19)
+- **1.3.1**: Docker entrypoint fixes and workflow improvements (2024-12-19)
 - **1.3.0**: Project simplification and structure cleanup (2025-08-09)
 - **1.2.2**: Release workflow fixes (2025-08-08)
 - **1.2.0**: TK4-only conversion and version management (2025-08-01)
