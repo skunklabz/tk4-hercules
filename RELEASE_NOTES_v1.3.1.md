@@ -1,6 +1,6 @@
 # Release Notes for v1.3.1
 
-**Release Date:** December 19, 2024
+**Release Date:** December 19, 2025
 
 **Docker Image:** `ghcr.io/skunklabz/tk4-hercules:v1.3.1`
 
