@@ -1,0 +1,17 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Logs
+*.log
+
+# Docker
+docker-compose.override.yml
+
+# TK4- distribution (downloaded during build)
+tk4-*.zip

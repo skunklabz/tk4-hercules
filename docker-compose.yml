@@ -1,0 +1,19 @@
+services:
+  tk4-hercules:
+    build: .
+    container_name: tk4-hercules
+    stdin_open: true
+    tty: true
+    ports:
+      - "3270:3270"
+      - "8038:8038"
+    volumes:
+      - tk4-conf:/tk4-/conf
+      - tk4-dasd:/tk4-/dasd
+      - tk4-log:/tk4-/log
+    restart: unless-stopped
+
+volumes:
+  tk4-conf:
+  tk4-dasd:
+  tk4-log:

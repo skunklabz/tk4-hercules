@@ -1,21 +1,39 @@
-FROM ubuntu:18.04 as builder
+# TK4-Hercules Docker Image
 
-RUN apt-get update && apt-get install -yq unzip
-WORKDIR /tk4-/
-ADD http://wotho.ethz.ch/tk4-/tk4-_v1.00_current.zip /tk4-/
-RUN unzip tk4-_v1.00_current.zip && \
-    rm -rf /tk4-/tk4-_v1.00_current.zip
-RUN echo "CONSOLE">/tk4-/unattended/mode
-RUN rm -rf /tk4-/hercules/darwin && \
-    rm -rf /tk4-/hercules/windows && \
-    rm -rf /tk4-/hercules/source 
+FROM ubuntu:22.04 AS builder
 
-FROM ubuntu:18.04
-MAINTAINER Ken Godoy - skunklabz
-LABEL version="1.00"
-LABEL description="OS/VS2 MVS 3.8j Service Level 8505, Tur(n)key Level 4- Version 1.00"
-WORKDIR /tk4-/
-COPY --from=builder /tk4-/ .
-VOLUME [ "/tk4-/conf","/tk4-/local_conf","/tk4-/local_scripts","/tk4-/prt","/tk4-/dasd","/tk4-/pch","/tk4-/jcl","tk4-/log" ]
-CMD ["/tk4-/mvs"]
+RUN apt-get update && apt-get install -y \
+    wget \
+    unzip \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /tk4-
+
+RUN wget --no-check-certificate -O tk4.zip https://wotho.pebble-beach.ch/tk4-/tk4-_v1.00_current.zip && \
+    unzip tk4.zip && \
+    rm tk4.zip
+
+FROM ubuntu:22.04
+
+RUN apt-get update && apt-get install -y \
+    bash \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /tk4-
+
+COPY --from=builder /tk4- .
+
+RUN chmod +x hercules/linux/64/bin/hercules && \
+    mv mvs mvs.original
+
+COPY scripts/startup.sh .
+RUN chmod +x startup.sh
+
+RUN mkdir -p conf dasd log
+VOLUME ["/tk4-/conf", "/tk4-/dasd", "/tk4-/log"]
+
 EXPOSE 3270 8038
+
+CMD ["./startup.sh"]
+
